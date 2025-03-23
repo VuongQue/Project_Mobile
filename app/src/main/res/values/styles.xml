@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="SearchViewStyle">
+        <item name="android:textColor">#FFFFFF</item> <!-- Màu chữ trắng -->
+        <item name="android:textColorHint">#888888</item> <!-- Màu chữ gợi ý xám -->
+    </style>
+</resources>
