@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1F1F1F"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="start">
+
+        <!-- Logo -->
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/ic_logo"
+            android:layout_gravity="start" />
+
+        <!-- Welcome Text -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Welcome to ...!"
+            android:textSize="35sp"
+            android:textColor="@color/white"
+            android:fontFamily="sans-serif"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="The Best Parking Solution for Students"
+            android:textSize="17sp"
+            android:textColor="@color/white"
+            android:layout_marginBottom="50dp"
+            android:layout_marginLeft="10dp"/>
+
+        <!-- Input MSSV -->
+        <EditText
+            android:id="@+id/inputMSSV"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="MSSV"
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:textColorHint="#8a8a8a"
+            android:background="@drawable/edittext_border"
+            android:padding="12dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"/>
+
+
+        <!-- Password -->
+        <EditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:hint="Password"
+            android:textSize="14sp"
+            android:inputType="textPassword"
+            android:textColor="@color/white"
+            android:textColorHint="#8a8a8a"
+            android:background="@drawable/edittext_border"
+            android:padding="12dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="10dp"/>
+
+        <!-- Remember Me & Forgot Password -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:paddingHorizontal="16dp">
+
+            <CheckBox
+                android:id="@+id/cbRememberMe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Remember me"
+                android:textColor="#8a8a8a"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/tvForgotPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Forgot Password?"
+                android:textColor="#8a8a8a"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:gravity="end"/>
+        </LinearLayout>
+
+
+        <!-- Sign In Button -->
+        <Button
+            android:id="@+id/btnSignIn"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="SIGN IN"
+            android:textColor="@color/white"
+            android:backgroundTint="@null"
+            android:background="@drawable/gradient_background"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="20dp"/>
+
+
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="OR SIGN IN WITH"-->
+<!--            android:textColor="#8a8a8a"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            android:layout_gravity="center"/>-->
+
+<!--        -->
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:gravity="center"-->
+<!--            android:layout_marginTop="10dp">-->
+
+<!--            <ImageView-->
+<!--                android:layout_width="50dp"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:src="@drawable/ic_facebook"-->
+<!--                android:layout_margin="8dp"/>-->
+
+<!--            <ImageView-->
+<!--                android:layout_width="50dp"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:src="@drawable/ic_google"-->
+<!--                android:layout_margin="8dp"/>-->
+
+<!--            <ImageView-->
+<!--                android:layout_width="50dp"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:src="@drawable/ic_twitter"-->
+<!--                android:layout_margin="8dp"/>-->
+<!--        </LinearLayout>-->
+
+        <!-- Sign Up Redirect -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:id="@+id/tvDontHaveAccount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DON’T HAVE AN ACCOUNT?"
+                android:textColor="#8a8a8a"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/tvSignUpNow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" SIGN UP NOW"
+                android:textColor="#7ED957"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:clickable="true"
+                android:focusable="true"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>
