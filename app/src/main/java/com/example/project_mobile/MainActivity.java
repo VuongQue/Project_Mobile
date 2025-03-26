@@ -1,6 +1,6 @@
 package com.example.project_mobile;
 
-import android.media.Image;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
@@ -8,8 +8,6 @@ import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,7 +30,22 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        SwitchActivity();
+
         BottomNavigationBarProcess();
+    }
+
+    private void SwitchActivity() {
+        final LinearLayout payment = findViewById(R.id.payment);
+        final LinearLayout booking = findViewById(R.id.booking);
+
+        booking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, ParkingActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void BottomNavigationBarProcess() {
