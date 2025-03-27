@@ -38,11 +38,19 @@ public class MainActivity extends AppCompatActivity {
     private void SwitchActivity() {
         final LinearLayout payment = findViewById(R.id.payment);
         final LinearLayout booking = findViewById(R.id.booking);
+        final LinearLayout history = findViewById(R.id.history);
 
         booking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, ParkingActivity.class);
+                startActivity(intent);
+            }
+        });
+        history.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
                 startActivity(intent);
             }
         });
