@@ -14,15 +14,25 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.FragmentManager;
+
+import com.example.project_mobile.adapter.ViewPager2Adapter;
+import com.example.project_mobile.databinding.ActivityMainBinding;
+import com.example.project_mobile.databinding.BottomNavBinding;
 
 public class MainActivity extends AppCompatActivity {
-
+    private ActivityMainBinding binding;
+    private BottomNavBinding bottomNavBinding;
+    private ViewPager2Adapter viewPager2Adapter;
     private int selectedTab = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        bottomNavBinding = BottomNavBinding.bind(binding.bottomNav.getRoot());
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -30,146 +40,59 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        SwitchActivity();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        viewPager2Adapter = new ViewPager2Adapter(fragmentManager, getLifecycle());
+        binding.viewPager2.setAdapter(viewPager2Adapter);
 
         BottomNavigationBarProcess();
     }
 
-    private void SwitchActivity() {
-        final LinearLayout payment = findViewById(R.id.payment);
-        final LinearLayout booking = findViewById(R.id.booking);
-        final LinearLayout history = findViewById(R.id.history);
-
-        booking.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, ParkingActivity.class);
-                startActivity(intent);
-            }
-        });
-        history.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, HistoryActivity.class);
-                startActivity(intent);
-            }
-        });
-    }
-
     private void BottomNavigationBarProcess() {
-        final LinearLayout homeLayout = findViewById(R.id.homeLayout);
-        final LinearLayout stateLayout = findViewById(R.id.stateLayout);
-        final LinearLayout profileLayout = findViewById(R.id.profileLayout);
-        final LinearLayout settingsLayout = findViewById(R.id.settingsLayout);
+        LinearLayout[] layouts = {
+                bottomNavBinding.homeLayout,
+                bottomNavBinding.stateLayout,
+                bottomNavBinding.profileLayout,
+                bottomNavBinding.settingsLayout
+        };
 
-        final ImageView homeImg = findViewById(R.id.homeImg);
-        final ImageView stateImg = findViewById(R.id.stateImg);
-        final ImageView profileImg = findViewById(R.id.profileImg);
-        final ImageView settingsImg = findViewById(R.id.settingsImg);
+        TextView[] texts = {
+                bottomNavBinding.homeTxt,
+                bottomNavBinding.stateTxt,
+                bottomNavBinding.profileTxt,
+                bottomNavBinding.settingsTxt
+        };
 
-        final TextView homeTxt = findViewById(R.id.homeTxt);
-        final TextView stateTxt = findViewById(R.id.stateTxt);
-        final TextView profileTxt = findViewById(R.id.profileTxt);
-        final TextView settingsTxt = findViewById(R.id.settingsTxt);
+        for (int i = 0; i < layouts.length; i++) {
+            final int index = i; //
+            final int selectedIndex = i + 1; //
 
-        homeLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (selectedTab != 1) {
-                    stateTxt.setVisibility(View.GONE);
-                    profileTxt.setVisibility(View.GONE);
-                    settingsTxt.setVisibility(View.GONE);
+            layouts[i].setOnClickListener(view -> {
+                if (selectedTab != selectedIndex) {
+                    resetTabs(texts, layouts);
+                    texts[index].setVisibility(View.VISIBLE);
+                    layouts[index].setBackgroundResource(R.drawable.selected_icon);
+                    animateView(layouts[index]);
+                    selectedTab = selectedIndex;
 
-                    stateLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-                    profileLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-                    settingsLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-
-                    homeTxt.setVisibility(View.VISIBLE);
-                    homeLayout.setBackgroundResource(R.drawable.selected_icon);
-
-                    ScaleAnimation scaleAnimation = new ScaleAnimation(0.8f, 1.0f, 1f, 1f, Animation.RELATIVE_TO_SELF, 1.0f, Animation.RELATIVE_TO_SELF, 0.0f);
-                    scaleAnimation.setDuration(200);
-                    scaleAnimation.setFillAfter(true);
-                    homeLayout.startAnimation(scaleAnimation);
-
-                    selectedTab = 1;
+                    binding.viewPager2.setCurrentItem(index, true);
                 }
-            }
-        });
-
-        stateLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (selectedTab != 2) {
-                    homeTxt.setVisibility(View.GONE);
-                    profileTxt.setVisibility(View.GONE);
-                    settingsTxt.setVisibility(View.GONE);
-
-                    homeLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-                    profileLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-                    settingsLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-
-                    stateTxt.setVisibility(View.VISIBLE);
-                    stateLayout.setBackgroundResource(R.drawable.selected_icon);
-
-                    ScaleAnimation scaleAnimation = new ScaleAnimation(0.8f, 1.0f, 1f, 1f, Animation.RELATIVE_TO_SELF, 1.0f, Animation.RELATIVE_TO_SELF, 0.0f);
-                    scaleAnimation.setDuration(200);
-                    scaleAnimation.setFillAfter(true);
-                    stateLayout.startAnimation(scaleAnimation);
-
-                    selectedTab = 2;
-                }
-            }
-        });
-
-        profileLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (selectedTab != 3) {
-                    stateTxt.setVisibility(View.GONE);
-                    homeTxt.setVisibility(View.GONE);
-                    settingsTxt.setVisibility(View.GONE);
-
-                    stateLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-                    homeLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-                    settingsLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-
-                    profileTxt.setVisibility(View.VISIBLE);
-                    profileLayout.setBackgroundResource(R.drawable.selected_icon);
-
-                    ScaleAnimation scaleAnimation = new ScaleAnimation(0.8f, 1.0f, 1f, 1f, Animation.RELATIVE_TO_SELF, 1.0f, Animation.RELATIVE_TO_SELF, 0.0f);
-                    scaleAnimation.setDuration(200);
-                    scaleAnimation.setFillAfter(true);
-                    profileLayout.startAnimation(scaleAnimation);
-
-                    selectedTab = 3;
-                }
-            }
-        });
-
-        settingsLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (selectedTab != 4) {
-                    stateTxt.setVisibility(View.GONE);
-                    profileTxt.setVisibility(View.GONE);
-                    homeTxt.setVisibility(View.GONE);
-
-                    stateLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-                    profileLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-                    homeLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-
-                    settingsTxt.setVisibility(View.VISIBLE);
-                    settingsLayout.setBackgroundResource(R.drawable.selected_icon);
-
-                    ScaleAnimation scaleAnimation = new ScaleAnimation(0.8f, 1.0f, 1f, 1f, Animation.RELATIVE_TO_SELF, 1.0f, Animation.RELATIVE_TO_SELF, 0.0f);
-                    scaleAnimation.setDuration(200);
-                    scaleAnimation.setFillAfter(true);
-                    settingsLayout.startAnimation(scaleAnimation);
-
-                    selectedTab = 4;
-                }
-            }
-        });
+            });
+        }
+    }
+    private void resetTabs(TextView[] texts, LinearLayout[] layouts) {
+        for (int i = 0; i < layouts.length; i++) {
+            texts[i].setVisibility(View.GONE);
+            layouts[i].setBackgroundColor(getResources().getColor(android.R.color.transparent));
+        }
+    }
+    private void animateView(View view) {
+        ScaleAnimation scaleAnimation = new ScaleAnimation(
+                0.8f, 1.0f, 1f, 1f,
+                Animation.RELATIVE_TO_SELF, 1.0f,
+                Animation.RELATIVE_TO_SELF, 0.0f
+        );
+        scaleAnimation.setDuration(200);
+        scaleAnimation.setFillAfter(true);
+        view.startAnimation(scaleAnimation);
     }
 }
