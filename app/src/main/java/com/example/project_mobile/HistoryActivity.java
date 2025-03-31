@@ -1,6 +1,8 @@
 package com.example.project_mobile;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -15,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_mobile.adapter.ParkingLotAdapter;
 import com.example.project_mobile.adapter.SessionAdapter;
+import com.example.project_mobile.databinding.ActivityHistoryBinding;
+import com.example.project_mobile.databinding.ActivityMainBinding;
 import com.example.project_mobile.model.ParkingLot;
 import com.example.project_mobile.model.Session;
 
@@ -24,27 +28,39 @@ import java.util.Date;
 import java.util.List;
 
 public class HistoryActivity extends AppCompatActivity {
-    private RecyclerView recyclerView;
     private SessionAdapter adapter;
     private List<Session> sessionList;
-    ImageButton btnBack;
+    ActivityHistoryBinding binding;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_parking);
+        setContentView(R.layout.activity_history);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        binding = ActivityHistoryBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        Mapping();
         Load();
+        SwitchActivity();
+    }
+    public void SwitchActivity() {
+
+        binding.btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HistoryActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void Load() {
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
         sessionList = new ArrayList<>();
         adapter = new SessionAdapter(this, sessionList, new SessionAdapter.OnItemClickListener() {
@@ -53,7 +69,7 @@ public class HistoryActivity extends AppCompatActivity {
                 Toast.makeText(HistoryActivity.this, "Selected: " + session.getId(), Toast.LENGTH_SHORT).show();
             }
         });
-        recyclerView.setAdapter(adapter);
+        binding.recyclerView.setAdapter(adapter);
 
         sessionList.clear();
         sessionList.add(new Session(1, "SV001", "A1", new Date(2025 - 1900, 2, 9, 8, 30), new Date(2025 - 1900, 2, 9, 18, 45), false, 4000));
@@ -62,10 +78,5 @@ public class HistoryActivity extends AppCompatActivity {
         sessionList.add(new Session(4, "SV004", "D4", new Date(2025 - 1900, 2, 12, 10, 5), new Date(2025 - 1900, 2, 12, 16, 40), true, 5500));
 
         adapter.notifyDataSetChanged();
-    }
-
-    private void Mapping() {
-        btnBack = findViewById(R.id.btnBack);
-        recyclerView = findViewById(R.id.recyclerView);
     }
 }

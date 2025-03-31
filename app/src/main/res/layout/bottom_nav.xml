@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardElevation="8dp"
-    app:cardCornerRadius="10dp"
     android:background="@drawable/gradient_background"
     android:padding="5dp">
     <LinearLayout
@@ -17,7 +16,7 @@
         android:padding="10dp"
         android:elevation="10dp"
         android:gravity="center"
-        android:background="#333333"
+        android:background="#121212"
         android:layout_alignParentBottom="true"
         tools:targetApi="lollipop"
         xmlns:android="http://schemas.android.com/apk/res/android">

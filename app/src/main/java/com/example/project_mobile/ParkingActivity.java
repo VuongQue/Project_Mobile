@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_mobile.adapter.ParkingLotAdapter;
+import com.example.project_mobile.databinding.ActivityParkingBinding;
 import com.example.project_mobile.model.ParkingLot;
 
 import java.util.ArrayList;
@@ -30,13 +31,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ParkingActivity extends AppCompatActivity {
-    AutoCompleteTextView actvArea, actvRow, actvPos;
-    private RecyclerView recyclerView;
     private ParkingLotAdapter adapter;
     private ArrayAdapter<String> areaAdapter, rowAdapter, posAdapter;
     private List<String> areaList, rowList, posList;
 
-    ImageButton btnBack;
+    ActivityParkingBinding binding;
     private List<ParkingLot> parkingLotList;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,33 +48,28 @@ public class ParkingActivity extends AppCompatActivity {
             return insets;
         });
 
-        Mapping();
+        binding = ActivityParkingBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
         SwitchActivity();
         Load();
         Filter();
 
     }
 
-    public void Mapping() {
-        btnBack = findViewById(R.id.btnBack);
-        actvArea = findViewById(R.id.actvArea);
-        actvRow = findViewById(R.id.actvRow);
-        actvPos = findViewById(R.id.actvPos);
-        recyclerView = findViewById(R.id.recyclerView);
-    }
 
     public void Filter() {
         areaAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, areaList);
         rowAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, rowList);
         posAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, posList);
 
-        actvArea.setAdapter(areaAdapter);
-        actvRow.setAdapter(rowAdapter);
-        actvPos.setAdapter(posAdapter);
+        binding.actvArea.setAdapter(areaAdapter);
+        binding.actvRow.setAdapter(rowAdapter);
+        binding.actvPos.setAdapter(posAdapter);
 
-        actvArea.addTextChangedListener(filterWatcher);
-        actvRow.addTextChangedListener(filterWatcher);
-        actvPos.addTextChangedListener(filterWatcher);
+        binding.actvArea.addTextChangedListener(filterWatcher);
+        binding.actvRow.addTextChangedListener(filterWatcher);
+        binding.actvPos.addTextChangedListener(filterWatcher);
 
     }
 
@@ -93,9 +87,9 @@ public class ParkingActivity extends AppCompatActivity {
     };
 
     public void updateLists() {
-        String selectedArea = actvArea.getText().toString().trim();
-        String selectedRow = actvRow.getText().toString().trim();
-        String selectedPos = actvPos.getText().toString().trim();
+        String selectedArea = binding.actvArea.getText().toString().trim();
+        String selectedRow = binding.actvRow.getText().toString().trim();
+        String selectedPos = binding.actvPos.getText().toString().trim();
 
         // Lọc danh sách theo điều kiện
         List<ParkingLot> filteredList = parkingLotList.stream()
@@ -110,7 +104,7 @@ public class ParkingActivity extends AppCompatActivity {
                 Toast.makeText(ParkingActivity.this, "Selected: " + parkingLot.getName(), Toast.LENGTH_SHORT).show();
             }
         });
-        recyclerView.setAdapter(adapter);
+        binding.recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
         // Lấy danh sách bãi, hàng, vị trí sau khi lọc
@@ -137,7 +131,7 @@ public class ParkingActivity extends AppCompatActivity {
         areaList  = new ArrayList<>();
         rowList = new ArrayList<>();
         posList = new ArrayList<>();
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        binding.recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
         parkingLotList = new ArrayList<>();
         adapter = new ParkingLotAdapter(this, parkingLotList, new ParkingLotAdapter.OnItemClickListener() {
@@ -146,7 +140,7 @@ public class ParkingActivity extends AppCompatActivity {
                 Toast.makeText(ParkingActivity.this, "Selected: " + parkingLot.getName(), Toast.LENGTH_SHORT).show();
             }
         });
-        recyclerView.setAdapter(adapter);
+        binding.recyclerView.setAdapter(adapter);
 
         parkingLotList.clear();
         parkingLotList.add(new ParkingLot("A", "D", "01", "Available"));
@@ -161,7 +155,7 @@ public class ParkingActivity extends AppCompatActivity {
 
     public void SwitchActivity() {
 
-        btnBack.setOnClickListener(new View.OnClickListener() {
+        binding.btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ParkingActivity.this, MainActivity.class);
