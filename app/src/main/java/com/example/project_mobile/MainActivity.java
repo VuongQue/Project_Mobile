@@ -1,11 +1,9 @@
 package com.example.project_mobile;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -16,25 +14,27 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
 
-import com.example.project_mobile.adapter.ViewPager2Adapter;
+import com.example.project_mobile.adapter.SwitchFragmentAdapter;
 import com.example.project_mobile.databinding.ActivityMainBinding;
 import com.example.project_mobile.databinding.BottomNavBinding;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private BottomNavBinding bottomNavBinding;
-    private ViewPager2Adapter viewPager2Adapter;
+    private SwitchFragmentAdapter switchFragmentAdapter;
     private int selectedTab = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         bottomNavBinding = BottomNavBinding.bind(binding.bottomNav.getRoot());
@@ -46,8 +46,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        viewPager2Adapter = new ViewPager2Adapter(fragmentManager, getLifecycle());
-        binding.viewPager2.setAdapter(viewPager2Adapter);
+        switchFragmentAdapter = new SwitchFragmentAdapter(fragmentManager, getLifecycle());
+        binding.viewPager2.setAdapter(switchFragmentAdapter);
 
         BottomNavigationBarProcess();
     }
@@ -55,14 +55,14 @@ public class MainActivity extends AppCompatActivity {
     private void BottomNavigationBarProcess() {
         LinearLayout[] layouts = {
                 bottomNavBinding.homeLayout,
-                bottomNavBinding.stateLayout,
+                bottomNavBinding.notificationLayout,
                 bottomNavBinding.profileLayout,
                 bottomNavBinding.settingsLayout
         };
 
         TextView[] texts = {
                 bottomNavBinding.homeTxt,
-                bottomNavBinding.stateTxt,
+                bottomNavBinding.notificationTxt,
                 bottomNavBinding.profileTxt,
                 bottomNavBinding.settingsTxt
         };

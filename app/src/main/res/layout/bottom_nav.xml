@@ -40,7 +40,7 @@
                 android:id="@+id/homeTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Home"
+                android:text="Trang chủ"
                 android:layout_marginStart="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/white"
@@ -48,7 +48,7 @@
 
         </LinearLayout>
         <LinearLayout
-            android:id="@+id/stateLayout"
+            android:id="@+id/notificationLayout"
             android:background="@android:color/transparent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -57,17 +57,17 @@
             android:gravity="center"
             android:layout_weight="1">
             <ImageView
-                android:id="@+id/stateImg"
+                android:id="@+id/notificationImg"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:adjustViewBounds="true"
-                android:src="@drawable/ic_stats" />
+                android:src="@drawable/ic_notification" />
             <TextView
-                android:id="@+id/stateTxt"
+                android:id="@+id/notificationTxt"
                 android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="State"
+                android:text="Thông bao"
                 android:layout_marginStart="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/white"
@@ -95,7 +95,7 @@
                 android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Profile"
+                android:text="Cá nhân"
                 android:layout_marginStart="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/white"
@@ -123,7 +123,7 @@
                 android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Settings"
+                android:text="Cài đặt"
                 android:layout_marginStart="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/white"

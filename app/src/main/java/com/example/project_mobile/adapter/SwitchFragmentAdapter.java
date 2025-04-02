@@ -7,10 +7,12 @@ import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.project_mobile.fragment.HomeFragment;
+import com.example.project_mobile.fragment.NotificationFragment;
 import com.example.project_mobile.fragment.ProfileFragment;
+import com.example.project_mobile.fragment.SettingsFragment;
 
-public class ViewPager2Adapter extends FragmentStateAdapter {
-    public ViewPager2Adapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
+public class SwitchFragmentAdapter extends FragmentStateAdapter {
+    public SwitchFragmentAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
         super(fragmentManager, lifecycle);
     }
 
@@ -20,14 +22,12 @@ public class ViewPager2Adapter extends FragmentStateAdapter {
         switch (position) {
             case 0:
                 return new HomeFragment();
-//            case 1:
-//                return new ProfileFragment();
+            case 1:
+                return new NotificationFragment();
             case 2:
                 return new ProfileFragment();
-//            case 3:
-//                return new DanhGiaFragment();
-//            case 4:
-//                return new CancleFragment();
+            case 3:
+                return new SettingsFragment();
             default:
                 return new HomeFragment();
         }
