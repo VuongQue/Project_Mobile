@@ -32,7 +32,7 @@
                 android:id="@+id/txtTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Phí gửi xe"
+                android:text="@string/fee"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"/>

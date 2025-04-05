@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:text="Thông báo"
+        android:text="@string/notification"
         android:textColor="@android:color/white"
         android:textSize="32sp"
         android:textStyle="bold"

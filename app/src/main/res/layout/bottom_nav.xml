@@ -17,9 +17,7 @@
         android:elevation="10dp"
         android:gravity="center"
         android:background="#121212"
-        android:layout_alignParentBottom="true"
-        tools:targetApi="lollipop"
-        xmlns:android="http://schemas.android.com/apk/res/android">
+        android:layout_alignParentBottom="true">
 
         <LinearLayout
             android:id="@+id/homeLayout"
@@ -40,7 +38,7 @@
                 android:id="@+id/homeTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Trang chủ"
+                android:text="@string/home"
                 android:layout_marginStart="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/white"
@@ -67,7 +65,7 @@
                 android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Thông bao"
+                android:text="@string/notification"
                 android:layout_marginStart="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/white"
@@ -95,7 +93,7 @@
                 android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cá nhân"
+                android:text="@string/profile"
                 android:layout_marginStart="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/white"
@@ -123,7 +121,7 @@
                 android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cài đặt"
+                android:text="@string/settings"
                 android:layout_marginStart="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/white"

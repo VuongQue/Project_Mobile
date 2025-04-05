@@ -17,11 +17,17 @@ import androidx.fragment.app.FragmentManager;
 import com.example.project_mobile.adapter.SwitchFragmentAdapter;
 import com.example.project_mobile.databinding.ActivityMainBinding;
 import com.example.project_mobile.databinding.BottomNavBinding;
+import com.example.project_mobile.storage.PreferenceManager;
+import com.example.project_mobile.utils.SetUp;
+
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private BottomNavBinding bottomNavBinding;
     private SwitchFragmentAdapter switchFragmentAdapter;
+    private PreferenceManager preferenceManager;
+    static public SetUp setUp;
     private int selectedTab = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +50,12 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        preferenceManager = new PreferenceManager(this);
+
+        setUp = new SetUp(this);
+
+        // Load ngôn ngữ đã lưu từ SharedPreferences
+        setUp.loadLocale();
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         switchFragmentAdapter = new SwitchFragmentAdapter(fragmentManager, getLifecycle());
@@ -51,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationBarProcess();
     }
+    // Hàm thay đổi ngôn ngữ
+
 
     private void BottomNavigationBarProcess() {
         LinearLayout[] layouts = {

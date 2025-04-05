@@ -38,11 +38,10 @@
         app:layout_constraintTop_toBottomOf="@+id/avatar">
 
 
-        <!-- About Me Section -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="About Me"
+            android:text="@string/your_info"
             android:textColor="@android:color/white"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -94,7 +93,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Username"
+                            android:text="@string/username"
                             android:textColor="#B3B3B3"
                             android:textSize="16sp" />
                     </LinearLayout>
@@ -214,7 +213,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Username"
+                            android:text="@string/phone_number"
                             android:textColor="#B3B3B3"
                             android:textSize="16sp" />
                     </LinearLayout>
@@ -274,7 +273,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Key"
+                            android:text="@string/key"
                             android:textColor="#B3B3B3"
                             android:textSize="16sp" />
                     </LinearLayout>

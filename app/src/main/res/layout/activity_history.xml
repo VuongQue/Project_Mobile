@@ -33,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Lịch sử"
+                android:text="@string/history"
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold" />

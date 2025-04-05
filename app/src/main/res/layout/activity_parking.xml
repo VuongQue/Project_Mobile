@@ -33,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Đặt chỗ"
+                android:text="@string/book"
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -52,7 +52,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Bãi xe">
+                android:hint="@string/area">
 
                 <AutoCompleteTextView
                     android:id="@+id/actvArea"
@@ -69,7 +69,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Hàng xe"
+                android:hint="@string/row"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp">
 
@@ -88,7 +88,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Vị trí">
+                android:hint="@string/position">
 
                 <AutoCompleteTextView
                     android:id="@+id/actvPos"
@@ -110,7 +110,7 @@
     <com.google.android.material.button.MaterialButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Book"
+        android:text="@string/book"
         android:background="@drawable/gradient_button"
         app:backgroundTint="@null"
         android:layout_marginBottom="16dp"
