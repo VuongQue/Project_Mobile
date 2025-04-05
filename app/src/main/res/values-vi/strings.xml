@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">Project_Mobile</string>
+
+    <string name="home">Trang chủ</string>
+    <string name="notification">Thông báo</string>
+    <string name="profile">Cá nhân</string>
+    <string name="settings">Cài đặt</string>
+
+    <string name="history">Lịch sử</string>
+
+    <string name="book">Đặt chỗ</string>
+    <string name="area">Bãi xe</string>
+    <string name="row">Hàng xe</string>
+    <string name="position">Vị trí</string>
+
+    <string name="welcome_back">Xin chào</string>
+    <string name="parking_the_car">🚴 Đang gửi xe</string>
+    <string name="parking_location">Vị trí xe</string>
+    <string name="payment">Thanh toán</string>
+    <string name="more">Xem thêm</string>
+    <string name="parking_lot_status">Tình trạng bãi xe</string>
+
+    <string name="your_info">Thông tin của bạn...</string>
+    <string name="username">Tên đăng nhập</string>
+    <string name="phone_number">Số điện thoại</string>
+    <string name="key">Từ khóa</string>
+
+    <string name="fee">Phí</string>
+    <string name="paid">Đã thanh toán</string>
+    <string name="not_paid">Chưa thanh toán</string>
+
+    <string name="language">Ngôn ngữ</string>
+    <string name="volume">Âm thanh</string>
+    <string name="theme">Chủ đề</string>
+    <string name="dark_mode">Chế độ tối</string>
+    <string name="light_mode">Chế độ sáng</string>
+    <string name="language_choice">Việt Nam</string>
+
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
