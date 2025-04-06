@@ -1,5 +1,6 @@
 package com.example.project_mobile;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private int selectedTab = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
@@ -56,10 +59,16 @@ public class MainActivity extends AppCompatActivity {
 
         // Load ngôn ngữ đã lưu từ SharedPreferences
         setUp.loadLocale();
+        setUp.loadTheme();
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         switchFragmentAdapter = new SwitchFragmentAdapter(fragmentManager, getLifecycle());
         binding.viewPager2.setAdapter(switchFragmentAdapter);
+        // Lấy tab đã chọn trước khi recreate
+        SharedPreferences tabPref = getSharedPreferences("tabState", MODE_PRIVATE);
+        selectedTab = tabPref.getInt("currentTab", 1); // mặc định là tab 1 (Home)
+        binding.viewPager2.setCurrentItem(selectedTab - 1, false); // ViewPager index từ 0
+
 
         BottomNavigationBarProcess();
     }

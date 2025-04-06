@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#121212"
+    android:background="?attr/colorBackground"
     tools:context=".fragment.SettingsFragment">
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:text="Ten Nguoi Dung"
         android:layout_margin="32dp"
-        android:textColor="@android:color/white"
+        android:textColor="?attr/textColor"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/avatar"
@@ -43,7 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/settings"
-            android:textColor="@android:color/white"
+            android:textColor="?attr/textColor"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -85,7 +85,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/language_choice"
-                            android:textColor="#FFFFFF"
+                            android:textColor="?attr/textColor"
                             android:textSize="18sp" />
 
                         <TextView
@@ -146,7 +146,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/volume"
-                            android:textColor="#FFFFFF"
+                            android:textColor="?attr/textColor"
                             android:textSize="18sp" />
 
                         <TextView
@@ -213,7 +213,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/dark_mode"
-                            android:textColor="#FFFFFF"
+                            android:textColor="?attr/textColor"
                             android:textSize="18sp" />
 
                         <TextView

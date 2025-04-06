@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#1F1F1F"
+    android:background="?attr/colorBackground"
     android:id="@+id/login"
     android:padding="16dp">
 
@@ -111,8 +111,8 @@
             android:text="SIGN IN"
             android:textColor="@color/white"
             app:cornerRadius="16dp"
-            android:background="@drawable/gradient_background"
-            android:foreground="@drawable/gradient_background" />
+            android:background="@drawable/gradient_button"
+            app:backgroundTint="@null" />
 
 
         <!--        <TextView-->
