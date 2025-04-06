@@ -2,8 +2,11 @@ package com.example.project_mobile.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.util.DisplayMetrics;
+
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.example.project_mobile.storage.PreferenceManager;
 
@@ -39,4 +42,26 @@ public class SetUp {
         // Lưu ngôn ngữ đã chọn
         preferenceManager.setLanguage(lang);
     }
+
+    // Hàm thiết lập theme theo chế độ đã lưu (gọi ở MainActivity)
+    public void loadTheme() {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("settings", Context.MODE_PRIVATE);
+        boolean darkModeOn = sharedPreferences.getBoolean("darkMode", false);
+        AppCompatDelegate.setDefaultNightMode(
+                darkModeOn ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO
+        );
+    }
+
+    // Hàm thay đổi chế độ sáng/tối và lưu vào SharedPreferences
+    public void setMode(boolean isDark) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("settings", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("darkMode", isDark);
+        editor.apply();
+
+        AppCompatDelegate.setDefaultNightMode(
+                isDark ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO
+        );
+    }
+
 }
