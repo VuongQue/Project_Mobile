@@ -1,7 +1,5 @@
 package com.example.project_mobile.model;
 
-import java.sql.Time;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 public class Session {
@@ -10,7 +8,7 @@ public class Session {
     private String position;
     private Date timeIn;
     private Date timeOut;
-    private boolean isPaid;
+    private long idPayment;
     private float fee;
 
     public long getId() {
@@ -53,12 +51,12 @@ public class Session {
         this.timeOut = timeOut;
     }
 
-    public boolean isPaid() {
-        return isPaid;
+    public long getIdPayment() {
+        return idPayment;
     }
 
-    public void setPaid(boolean paid) {
-        isPaid = paid;
+    public void setIdPayment(long idPayment) {
+        idPayment = idPayment;
     }
 
     public float getFee() {
@@ -69,13 +67,13 @@ public class Session {
         this.fee = fee;
     }
 
-    public Session(long id, String mssv, String position, Date timeIn, Date timeOut, boolean isPaid, float fee) {
+    public Session(long id, String mssv, String position, Date timeIn, Date timeOut, long idPayment, float fee) {
         this.id = id;
         this.mssv = mssv;
         this.position = position;
         this.timeIn = timeIn;
         this.timeOut = timeOut;
-        this.isPaid = isPaid;
+        this.idPayment = idPayment;
         this.fee = fee;
     }
 }

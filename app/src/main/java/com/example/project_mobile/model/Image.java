@@ -1,6 +1,6 @@
 package com.example.project_mobile.model;
 
-public class Images {
+public class Image {
     private int imagesId;
 
     public int getImagesId() {
@@ -11,7 +11,7 @@ public class Images {
         this.imagesId = imagesId;
     }
 
-    public Images(int imagesId) {
+    public Image(int imagesId) {
         this.imagesId = imagesId;
     }
 }

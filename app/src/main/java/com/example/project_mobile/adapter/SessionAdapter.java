@@ -51,7 +51,7 @@ public class SessionAdapter extends RecyclerView.Adapter<SessionAdapter.SessionV
         if (session != null) {
             holder.txtTimeIn.setText(session.getTimeIn()+"");
             holder.txtFee.setText(session.getFee()+"đ");
-            holder.txtPaid.setText(session.isPaid() ? "Paid" : "Unpaid");
+            holder.txtPaid.setText(session.getIdPayment() > 0 ? "Paid" : "Unpaid");
         }
         holder.itemView.setOnClickListener(v -> onItemClickListener.onItemClick(session));
     }

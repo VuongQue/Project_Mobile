@@ -10,27 +10,24 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.project_mobile.HistoryActivity;
 import com.example.project_mobile.ParkingActivity;
 import com.example.project_mobile.R;
 import com.example.project_mobile.adapter.SliderAdapter;
 import com.example.project_mobile.databinding.FragmentHomeBinding;
-import com.example.project_mobile.model.Images;
+import com.example.project_mobile.model.Image;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
 import com.smarteist.autoimageslider.SliderView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import me.relex.circleindicator.CircleIndicator3;
-
 public class HomeFragment extends Fragment {
 
     FragmentHomeBinding binding;
     private SliderAdapter adapter;
-    private List<Images> imagesList;
+    private List<Image> imageList;
     private ArrayList<Integer> arrayList;
 
     public HomeFragment() {
