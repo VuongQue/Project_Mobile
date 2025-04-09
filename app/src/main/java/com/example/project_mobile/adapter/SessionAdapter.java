@@ -1,7 +1,6 @@
 package com.example.project_mobile.adapter;
 
 import android.content.Context;
-import android.icu.text.SimpleDateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,18 +8,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.project_mobile.R;
-import com.example.project_mobile.model.ParkingLot;
 import com.example.project_mobile.model.Session;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
 
 public class SessionAdapter extends RecyclerView.Adapter<SessionAdapter.SessionViewHolder> {
     private Context context;
@@ -49,7 +39,7 @@ public class SessionAdapter extends RecyclerView.Adapter<SessionAdapter.SessionV
     public void onBindViewHolder(@NonNull SessionViewHolder holder, int position) {
         Session session = sessionList.get(position);
         if (session != null) {
-            holder.txtTimeIn.setText(session.getTimeIn()+"");
+            holder.txtTimeIn.setText(session.getCheckIn()+"");
             holder.txtFee.setText(session.getFee()+"đ");
             holder.txtPaid.setText(session.getIdPayment() > 0 ? "Paid" : "Unpaid");
         }

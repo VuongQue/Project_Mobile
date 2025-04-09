@@ -4,10 +4,11 @@ import java.util.Date;
 
 public class Session {
     private long id;
-    private String mssv;
+    private String username;
     private String position;
-    private Date timeIn;
-    private Date timeOut;
+    private String licensePlate;
+    private Date checkIn;
+    private Date checkOut;
     private long idPayment;
     private float fee;
 
@@ -19,12 +20,12 @@ public class Session {
         this.id = id;
     }
 
-    public String getMssv() {
-        return mssv;
+    public String getUsername() {
+        return username;
     }
 
-    public void setMssv(String mssv) {
-        this.mssv = mssv;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPosition() {
@@ -35,20 +36,28 @@ public class Session {
         this.position = position;
     }
 
-    public Date getTimeIn() {
-        return timeIn;
+    public String getLicensePlate() {
+        return licensePlate;
     }
 
-    public void setTimeIn(Date timeIn) {
-        this.timeIn = timeIn;
+    public void setLicensePlate(String licensePlate) {
+        this.licensePlate = licensePlate;
     }
 
-    public Date getTimeOut() {
-        return timeOut;
+    public Date getCheckIn() {
+        return checkIn;
     }
 
-    public void setTimeOut(Date timeOut) {
-        this.timeOut = timeOut;
+    public void setCheckIn(Date checkIn) {
+        this.checkIn = checkIn;
+    }
+
+    public Date getCheckOut() {
+        return checkOut;
+    }
+
+    public void setCheckOut(Date checkOut) {
+        this.checkOut = checkOut;
     }
 
     public long getIdPayment() {
@@ -67,12 +76,13 @@ public class Session {
         this.fee = fee;
     }
 
-    public Session(long id, String mssv, String position, Date timeIn, Date timeOut, long idPayment, float fee) {
+    public Session(long id, String username, String position, String licensePlate, Date checkIn, Date checkOut, long idPayment, float fee) {
         this.id = id;
-        this.mssv = mssv;
+        this.username = username;
         this.position = position;
-        this.timeIn = timeIn;
-        this.timeOut = timeOut;
+        this.licensePlate = licensePlate;
+        this.checkIn = checkIn;
+        this.checkOut = checkOut;
         this.idPayment = idPayment;
         this.fee = fee;
     }

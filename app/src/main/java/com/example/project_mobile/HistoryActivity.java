@@ -72,10 +72,10 @@ public class HistoryActivity extends AppCompatActivity {
         binding.recyclerView.setAdapter(adapter);
 
         sessionList.clear();
-        sessionList.add(new Session(1, "SV001", "A1", new Date(2025 - 1900, 2, 9, 8, 30), new Date(2025 - 1900, 2, 9, 18, 45), -1, 4000));
-        sessionList.add(new Session(2, "SV002", "B2", new Date(2025 - 1900, 2, 10, 9, 15), new Date(2025 - 1900, 2, 10, 17, 30), 123, 5000));
-        sessionList.add(new Session(3, "SV003", "C3", new Date(2025 - 1900, 2, 11, 7, 50), new Date(2025 - 1900, 2, 11, 20, 10), -1, 4500));
-        sessionList.add(new Session(4, "SV004", "D4", new Date(2025 - 1900, 2, 12, 10, 5), new Date(2025 - 1900, 2, 12, 16, 40), 1234, 5500));
+        sessionList.add(new Session(1, "SV001", "A1", "67-A7 5687", new Date(2025 - 1900, 2, 9, 8, 30), new Date(2025 - 1900, 2, 9, 18, 45), -1, 4000));
+        sessionList.add(new Session(2, "SV002", "B2", "67-A7 5687", new Date(2025 - 1900, 2, 10, 9, 15), new Date(2025 - 1900, 2, 10, 17, 30), 123, 5000));
+        sessionList.add(new Session(3, "SV003", "C3", "67-A7 5687", new Date(2025 - 1900, 2, 11, 7, 50), new Date(2025 - 1900, 2, 11, 20, 10), -1, 4500));
+        sessionList.add(new Session(4, "SV004", "D4", "67-A7 5687", new Date(2025 - 1900, 2, 12, 10, 5), new Date(2025 - 1900, 2, 12, 16, 40), 1234, 5500));
 
         adapter.notifyDataSetChanged();
     }
