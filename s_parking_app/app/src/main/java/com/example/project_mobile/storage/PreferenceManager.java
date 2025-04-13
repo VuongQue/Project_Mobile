@@ -5,12 +5,12 @@ import android.content.SharedPreferences;
 
 public class PreferenceManager {
 
-    private static final String PREF_SETTINGS = "Settings";
+    private static final String PREFS = "app_prefs";
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
 
     public PreferenceManager(Context context) {
-        sharedPreferences = context.getSharedPreferences(PREF_SETTINGS, Context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
     }
 
@@ -19,9 +19,9 @@ public class PreferenceManager {
         editor.putString("My_Lang", language);
         editor.apply();
     }
-
     // Lấy ngôn ngữ đã lưu
     public String getLanguage() {
         return sharedPreferences.getString("My_Lang", "en"); // mặc định là tiếng Anh
     }
+
 }

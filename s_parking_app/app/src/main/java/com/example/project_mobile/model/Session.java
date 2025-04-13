@@ -5,7 +5,7 @@ import java.util.Date;
 public class Session {
     private long id;
     private String username;
-    private String position;
+    private long idParking;
     private String licensePlate;
     private Date checkIn;
     private Date checkOut;
@@ -28,12 +28,12 @@ public class Session {
         this.username = username;
     }
 
-    public String getPosition() {
-        return position;
+    public long getIdParking() {
+        return idParking;
     }
 
-    public void setPosition(String position) {
-        this.position = position;
+    public void setIdParking(long idParking) {
+        this.idParking = idParking;
     }
 
     public String getLicensePlate() {
@@ -76,10 +76,10 @@ public class Session {
         this.fee = fee;
     }
 
-    public Session(long id, String username, String position, String licensePlate, Date checkIn, Date checkOut, long idPayment, float fee) {
+    public Session(long id, String username, long idParking, String licensePlate, Date checkIn, Date checkOut, long idPayment, float fee) {
         this.id = id;
         this.username = username;
-        this.position = position;
+        this.idParking = idParking;
         this.licensePlate = licensePlate;
         this.checkIn = checkIn;
         this.checkOut = checkOut;

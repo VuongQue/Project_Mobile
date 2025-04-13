@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -23,12 +24,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_mobile.adapter.ParkingLotAdapter;
+import com.example.project_mobile.api.ApiClient;
+import com.example.project_mobile.api.ApiService;
 import com.example.project_mobile.databinding.ActivityParkingBinding;
 import com.example.project_mobile.model.ParkingLot;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ParkingActivity extends AppCompatActivity {
     private ParkingLotAdapter adapter;
@@ -127,7 +134,6 @@ public class ParkingActivity extends AppCompatActivity {
     }
 
     public void Load() {
-
         areaList  = new ArrayList<>();
         rowList = new ArrayList<>();
         posList = new ArrayList<>();
@@ -142,14 +148,26 @@ public class ParkingActivity extends AppCompatActivity {
         });
         binding.recyclerView.setAdapter(adapter);
 
-        parkingLotList.clear();
-        parkingLotList.add(new ParkingLot("A", "D", "01", "Available"));
-        parkingLotList.add(new ParkingLot("A", "E", "02", "Booked"));
-        parkingLotList.add(new ParkingLot("A", "F", "03", "Unavailable"));
-        parkingLotList.add(new ParkingLot("B", "D", "04", "Available"));
-        parkingLotList.add(new ParkingLot("B", "G", "05", "Booked"));
+        ApiService apiService = ApiClient.getInstance(getApplicationContext());
+        apiService.getAllParkingLots().enqueue(new Callback<List<ParkingLot>>() {
+            @Override
+            public void onResponse(Call<List<ParkingLot>> call, Response<List<ParkingLot>> response) {
+                if (response.isSuccessful() & response.body() != null)
+                {
+                    parkingLotList.clear(); // Clear dữ liệu cũ
+                    parkingLotList.addAll(response.body()); // Add dữ liệu mới
+                    adapter.notifyDataSetChanged();
+                }
+                else {
+                    Log.e("API_ERROR", "Code: " + response.code());
+                }
+            }
 
-        adapter.notifyDataSetChanged();
+            @Override
+            public void onFailure(Call<List<ParkingLot>> call, Throwable t) {
+                Log.e("API_ERROR", "Failed to fetch data", t);
+            }
+        });
 
     }
 
