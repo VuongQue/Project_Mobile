@@ -11,6 +11,7 @@ public class Session {
     private Date checkOut;
     private long idPayment;
     private float fee;
+    private String type;
 
     public long getId() {
         return id;
@@ -76,7 +77,15 @@ public class Session {
         this.fee = fee;
     }
 
-    public Session(long id, String username, long idParking, String licensePlate, Date checkIn, Date checkOut, long idPayment, float fee) {
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Session(long id, String username, long idParking, String licensePlate, Date checkIn, Date checkOut, long idPayment, float fee, String type) {
         this.id = id;
         this.username = username;
         this.idParking = idParking;
@@ -85,5 +94,6 @@ public class Session {
         this.checkOut = checkOut;
         this.idPayment = idPayment;
         this.fee = fee;
+        this.type = type;
     }
 }

@@ -2,6 +2,7 @@ package com.example.project_mobile;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -17,8 +18,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_mobile.adapter.ParkingLotAdapter;
 import com.example.project_mobile.adapter.SessionAdapter;
+import com.example.project_mobile.api.ApiClient;
+import com.example.project_mobile.api.ApiService;
 import com.example.project_mobile.databinding.ActivityHistoryBinding;
 import com.example.project_mobile.databinding.ActivityMainBinding;
+import com.example.project_mobile.dto.UsernameRequest;
 import com.example.project_mobile.model.ParkingLot;
 import com.example.project_mobile.model.Session;
 
@@ -26,6 +30,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class HistoryActivity extends AppCompatActivity {
     private SessionAdapter adapter;
@@ -71,11 +79,27 @@ public class HistoryActivity extends AppCompatActivity {
         });
         binding.recyclerView.setAdapter(adapter);
 
-        sessionList.clear();
-        sessionList.add(new Session(1, "SV001", 0, "67-A7 5687", new Date(2025 - 1900, 2, 9, 8, 30), new Date(2025 - 1900, 2, 9, 18, 45), -1, 4000));
-        sessionList.add(new Session(2, "SV002", 1, "67-A7 5687", new Date(2025 - 1900, 2, 10, 9, 15), new Date(2025 - 1900, 2, 10, 17, 30), 123, 5000));
-        sessionList.add(new Session(3, "SV003", 2, "67-A7 5687", new Date(2025 - 1900, 2, 11, 7, 50), new Date(2025 - 1900, 2, 11, 20, 10), -1, 4500));
-        sessionList.add(new Session(4, "SV004", 3, "67-A7 5687", new Date(2025 - 1900, 2, 12, 10, 5), new Date(2025 - 1900, 2, 12, 16, 40), 1234, 5500));
+        ApiService apiService = ApiClient.getInstance(getApplicationContext());
+        String username = getSharedPreferences("LoginDetails", MODE_PRIVATE).getString("Username", "");
+        apiService.getSession(new UsernameRequest(username)).enqueue(new Callback<List<Session>>() {
+            @Override
+            public void onResponse(Call<List<Session>> call, Response<List<Session>> response) {
+                if (response.isSuccessful() & response.body() != null)
+                {
+                    sessionList.clear(); // Clear dữ liệu cũ
+                    sessionList.addAll(response.body()); // Add dữ liệu mới
+                    adapter.notifyDataSetChanged();
+                }
+                else {
+                    Log.e("API_ERROR", "Code: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Session>> call, Throwable t) {
+                Log.e("API_ERROR", "Failed to fetch data", t);
+            }
+        });
 
         adapter.notifyDataSetChanged();
     }

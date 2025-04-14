@@ -1,6 +1,6 @@
 package com.example.s_parking.implement;
 
-import com.example.s_parking.dto.request.ParkingLotRequest;
+import com.example.s_parking.dto.response.ParkingLotResponse;
 import com.example.s_parking.entity.ParkingLot;
 import com.example.s_parking.repository.ParkingLotRepository;
 import com.example.s_parking.service.ParkingLotService;
@@ -21,8 +21,8 @@ public class ParkingLotImp implements ParkingLotService {
     }
 
     @Override
-    public ParkingLotRequest convertToDto(ParkingLot entity) {
-        return ParkingLotRequest.builder()
+    public ParkingLotResponse convertToDto(ParkingLot entity) {
+        return ParkingLotResponse.builder()
                 .id(entity.getId())
                 .row(entity.getRow())
                 .pos(entity.getPos())
@@ -32,7 +32,7 @@ public class ParkingLotImp implements ParkingLotService {
     }
 
     @Override
-    public List<ParkingLotRequest> convertAllToDto(List<ParkingLot> list) {
+    public List<ParkingLotResponse> convertAllToDto(List<ParkingLot> list) {
         return list.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());

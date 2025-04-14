@@ -2,7 +2,9 @@ package com.example.project_mobile.api;
 
 import com.example.project_mobile.dto.AuthResponse;
 import com.example.project_mobile.dto.LoginRequest;
+import com.example.project_mobile.dto.UsernameRequest;
 import com.example.project_mobile.model.ParkingLot;
+import com.example.project_mobile.model.Session;
 import com.example.project_mobile.model.User;
 
 import java.util.List;
@@ -19,6 +21,9 @@ public interface ApiService {
 
     @POST("auth/login")
     Call<AuthResponse> login(@Body LoginRequest request);
+
+    @POST("sessions/user")
+    Call<List<Session>> getSession(@Body UsernameRequest request);
 
 }
 

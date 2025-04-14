@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/user")
 public class UserController {
 
-    @PreAuthorize("#id == authentication.name or hasRole('ADMIN')")
+    @PreAuthorize("#username == authentication.name or hasRole('ADMIN')")
     @GetMapping("/profile/{username}")
     public String getProfile(@PathVariable String username) {
         return "Profile of user " + username;

@@ -1,11 +1,10 @@
 package com.example.s_parking.controller;
 
-import com.example.s_parking.dto.request.ParkingLotRequest;
+import com.example.s_parking.dto.response.ParkingLotResponse;
 import com.example.s_parking.entity.ParkingLot;
-import com.example.s_parking.repository.ParkingLotRepository;
 import com.example.s_parking.service.ParkingLotService;
-import com.example.s_parking.utils.Specifications;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,8 +19,13 @@ public class ParkingLotController {
     @GetMapping("/all")
     public ResponseEntity<?> getAllParkingLots() {
         List<ParkingLot> parkingLots = parkingLotService.getAllParkingLots();
-        List<ParkingLotRequest> parkingLotRequests = parkingLotService.convertAllToDto(parkingLots);
-        return ResponseEntity.ok(parkingLotRequests);
+        List<ParkingLotResponse> parkingLotResponses = parkingLotService.convertAllToDto(parkingLots);
+        if (parkingLotResponses == null || parkingLotResponses.isEmpty()) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("Không tìm dữ liệu");
+        }
+        return ResponseEntity.ok(parkingLotResponses);
     }
 
     /*@PostMapping("/filter")

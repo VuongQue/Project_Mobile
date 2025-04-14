@@ -1,5 +1,6 @@
 package com.example.s_parking.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,6 +21,7 @@ public class Session {
     private LocalDateTime checkIn;
     private LocalDateTime checkOut;
     private String licensePlate;
+    private String type;
     private float fee;
 
     @ManyToOne
@@ -33,5 +35,6 @@ public class Session {
     @ManyToOne
     @JoinColumn(name = "idPayment")
     private Payment payment;
+
 }
 

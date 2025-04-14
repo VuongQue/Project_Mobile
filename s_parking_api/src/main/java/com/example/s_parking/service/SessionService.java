@@ -1,6 +1,6 @@
 package com.example.s_parking.service;
 
-import com.example.s_parking.dto.response.SessionBasicInfo;
+import com.example.s_parking.dto.response.SessionResponse;
 import com.example.s_parking.entity.Session;
 
 import java.util.List;
@@ -12,5 +12,10 @@ public interface SessionService {
     Session createSession(Session session);
     Session updateSession(Long id, Session session);
     void deleteSession(Long id);
-    public List<SessionBasicInfo> getSessionsByUsername(String username);
+
+    List<Session> getSessionByUsername(String username);
+
+    List<SessionResponse> convertAllToDto(List<Session> list);
+
+    SessionResponse convertToDto(Session entity);
 }

@@ -54,7 +54,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
-        boolean success = userService.register(request.username, request.password, request.role);
+        boolean success = userService.register(request.getUsername(), request.getPassword(), request.getRole());
 
         if (success) {
             return ResponseEntity.ok("User registered successfully");

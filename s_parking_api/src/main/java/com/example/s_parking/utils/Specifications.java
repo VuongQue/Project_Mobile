@@ -1,23 +1,23 @@
 package com.example.s_parking.utils;
 
-import com.example.s_parking.dto.request.ParkingLotRequest;
+import com.example.s_parking.dto.response.ParkingLotResponse;
 import com.example.s_parking.entity.ParkingLot;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
 public class Specifications {
-    public static Specification<ParkingLot> ParkingLotFilterBy(ParkingLotRequest request) {
+    public static Specification<ParkingLot> ParkingLotFilterBy(ParkingLotResponse request) {
         return (root, query, cb) -> {
             Predicate predicate = cb.conjunction();
 
-            if (request.area != null && !request.area.isEmpty()) {
-                predicate = cb.and(predicate, cb.equal(root.get("area"), request.area));
+            if (request.getArea() != null && !request.getArea().isEmpty()) {
+                predicate = cb.and(predicate, cb.equal(root.get("area"), request.getArea()));
             }
-            if (request.row != null && !request.row.isEmpty()) {
-                predicate = cb.and(predicate, cb.equal(root.get("row"), request.row));
+            if (request.getRow() != null && !request.getRow().isEmpty()) {
+                predicate = cb.and(predicate, cb.equal(root.get("row"), request.getRow()));
             }
-            if (request.pos != null && !request.pos.isEmpty()) {
-                predicate = cb.and(predicate, cb.equal(root.get("pos"), request.pos));
+            if (request.getPos() != null && !request.getPos().isEmpty()) {
+                predicate = cb.and(predicate, cb.equal(root.get("pos"), request.getPos()));
             }
 
             return predicate;

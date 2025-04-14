@@ -1,6 +1,6 @@
 package com.example.s_parking.implement;
 
-import com.example.s_parking.dto.response.SessionBasicInfo;
+import com.example.s_parking.dto.response.SessionResponse;
 import com.example.s_parking.entity.Session;
 import com.example.s_parking.repository.SessionRepository;
 import com.example.s_parking.service.SessionService;
@@ -47,17 +47,35 @@ public class SessionImp implements SessionService {
     }
 
     @Override
-    public List<SessionBasicInfo> getSessionsByUsername(String username) {
-        List<Session> sessions = sessionRepository.findByUser_Username(username);
-        return sessions.stream().map(session -> new SessionBasicInfo(
-                session.getId(),
-                session.getUser().getUsername(),
-                session.getParking().getLocation(),
-                session.getCheckIn(),
-                session.getCheckOut(),
-                session.getLicensePlate(),
-                session.getFee(),
-                session.getPayment().getId()
-        )).collect(Collectors.toList());
+    public List<Session> getSessionByUsername(String username) {
+        return sessionRepository.findByUserUsername(username);
     }
+
+    @Override
+    public List<SessionResponse> convertAllToDto(List<Session> list) {
+        return list.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+    @Override
+    public SessionResponse convertToDto(Session entity) {
+        return SessionResponse.builder()
+                .id(entity.getId())
+                .checkIn(entity.getCheckIn())
+                .checkOut(entity.getCheckOut())
+                .type(entity.getType())
+                .licensePlate(entity.getLicensePlate())
+                .fee(entity.getFee())
+                .username(
+                        entity.getUser() != null ? entity.getUser().getUsername() : null
+                )
+                .idParking(
+                        entity.getParking() != null ? entity.getParking().getId() : null
+                )
+                .idPayment(
+                        entity.getPayment() != null ? entity.getPayment().getId() : null
+                )
+                .build();
+    }
+
 }
