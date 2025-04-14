@@ -42,7 +42,7 @@
 
         <!-- Input MSSV -->
         <EditText
-            android:id="@+id/inputMSSV"
+            android:id="@+id/etUsername"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginStart="16dp"

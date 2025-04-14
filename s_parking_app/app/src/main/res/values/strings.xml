@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">Project_Mobile</string>
+    <string name="login_success">Login Success</string>
+    <string name="error_field_required">Thi field cannot be empty</string>
+    <string name="error_invalid_email">Invalid email format</string>
+    <string name="error_invalid_password">Password must be longer than 4 characters</string>
 
     <string name="home">Home</string>
     <string name="notification">Notification</string>

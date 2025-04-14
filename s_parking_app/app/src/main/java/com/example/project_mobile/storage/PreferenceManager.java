@@ -4,24 +4,39 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class PreferenceManager {
-
-    private static final String PREFS = "app_prefs";
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
+    Context context;
 
     public PreferenceManager(Context context) {
-        sharedPreferences = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
+        this.context = context;
     }
 
     // Lưu ngôn ngữ vào SharedPreferences
     public void setLanguage(String language) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("Settings", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor = sharedPreferences.edit();
         editor.putString("My_Lang", language);
         editor.apply();
     }
     // Lấy ngôn ngữ đã lưu
     public String getLanguage() {
-        return sharedPreferences.getString("My_Lang", "en"); // mặc định là tiếng Anh
+        SharedPreferences sharedPreferences = context.getSharedPreferences("Settings", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("My_Lang", "en");
     }
 
+    public void saveloginDetails(String username, String password, boolean status){
+        SharedPreferences sharedPreferences = context.getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("Username", username);
+        editor.putString("Password", password);
+        editor.putBoolean("Status", status);
+        editor.apply();
+    }
+
+    public void saveToken(String token) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("Token", token);
+        editor.apply();
+    }
 }

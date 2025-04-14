@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">Project_Mobile</string>
+    <string name="login_success">Đăng nhập thành công</string>
+    <string name="error_field_required">Trường này không được rỗng</string>
+    <string name="error_invalid_email">Email không đúng định dạng</string>
+    <string name="error_invalid_password">Mật khẩu phải lớn hơn 4 ký tự</string>
 
     <string name="home">Trang chủ</string>
     <string name="notification">Thông báo</string>
