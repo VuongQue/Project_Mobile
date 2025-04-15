@@ -4,26 +4,25 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.project_mobile.R;
-import com.example.project_mobile.model.ParkingLot;
+import com.example.project_mobile.dto.ParkingLotResponse;
 import java.util.List;
 
 public class ParkingLotAdapter extends RecyclerView.Adapter<ParkingLotAdapter.ViewHolder> {
     private Context context;
-    private List<ParkingLot> parkingLotList;
+    private List<ParkingLotResponse> parkingLotResponseList;
     private OnItemClickListener onItemClickListener;
 
     public interface OnItemClickListener {
-        void onItemClick(ParkingLot parkingLot);
+        void onItemClick(ParkingLotResponse parkingLotResponse);
     }
 
-    public ParkingLotAdapter(Context context, List<ParkingLot> parkingLotList, OnItemClickListener listener) {
+    public ParkingLotAdapter(Context context, List<ParkingLotResponse> parkingLotResponseList, OnItemClickListener listener) {
         this.context = context;
-        this.parkingLotList = parkingLotList;
+        this.parkingLotResponseList = parkingLotResponseList;
         this.onItemClickListener = listener;
     }
 
@@ -36,23 +35,23 @@ public class ParkingLotAdapter extends RecyclerView.Adapter<ParkingLotAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ParkingLot parkingLot = parkingLotList.get(position);
-        holder.txtName.setText(parkingLot.getName());
+        ParkingLotResponse parkingLotResponse = parkingLotResponseList.get(position);
+        holder.txtName.setText(parkingLotResponse.getName());
 
-        if ("Unavailable".equals(parkingLot.getStatus())) {
+        if ("Unavailable".equals(parkingLotResponse.getStatus())) {
             holder.vStatus.setBackgroundResource(R.color.red);
-        } else if ("Available".equals(parkingLot.getStatus())) {
+        } else if ("Available".equals(parkingLotResponse.getStatus())) {
             holder.vStatus.setBackgroundResource(R.color.green);
         } else {
             holder.vStatus.setBackgroundResource(R.color.gray);
         }
 
-        holder.itemView.setOnClickListener(v -> onItemClickListener.onItemClick(parkingLot));
+        holder.itemView.setOnClickListener(v -> onItemClickListener.onItemClick(parkingLotResponse));
     }
 
     @Override
     public int getItemCount() {
-        return parkingLotList.size();
+        return parkingLotResponseList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

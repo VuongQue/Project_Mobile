@@ -6,12 +6,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -20,14 +15,12 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_mobile.adapter.ParkingLotAdapter;
 import com.example.project_mobile.api.ApiClient;
 import com.example.project_mobile.api.ApiService;
 import com.example.project_mobile.databinding.ActivityParkingBinding;
-import com.example.project_mobile.model.ParkingLot;
+import com.example.project_mobile.dto.ParkingLotResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +36,7 @@ public class ParkingActivity extends AppCompatActivity {
     private List<String> areaList, rowList, posList;
 
     ActivityParkingBinding binding;
-    private List<ParkingLot> parkingLotList;
+    private List<ParkingLotResponse> parkingLotResponseList;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
@@ -99,7 +92,7 @@ public class ParkingActivity extends AppCompatActivity {
         String selectedPos = binding.actvPos.getText().toString().trim();
 
         // Lọc danh sách theo điều kiện
-        List<ParkingLot> filteredList = parkingLotList.stream()
+        List<ParkingLotResponse> filteredList = parkingLotResponseList.stream()
                 .filter(lot -> (selectedArea.isEmpty() || lot.getArea().equalsIgnoreCase(selectedArea)) &&
                         (selectedRow.isEmpty() || lot.getRow().equalsIgnoreCase(selectedRow)) &&
                         (selectedPos.isEmpty() || lot.getPos().equalsIgnoreCase(selectedPos)))
@@ -107,17 +100,17 @@ public class ParkingActivity extends AppCompatActivity {
 
         adapter = new ParkingLotAdapter(this, filteredList, new ParkingLotAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(ParkingLot parkingLot) {
-                Toast.makeText(ParkingActivity.this, "Selected: " + parkingLot.getName(), Toast.LENGTH_SHORT).show();
+            public void onItemClick(ParkingLotResponse parkingLotResponse) {
+                Toast.makeText(ParkingActivity.this, "Selected: " + parkingLotResponse.getName(), Toast.LENGTH_SHORT).show();
             }
         });
         binding.recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
         // Lấy danh sách bãi, hàng, vị trí sau khi lọc
-        areaList = filteredList.stream().map(ParkingLot::getArea).distinct().collect(Collectors.toList());
-        rowList = filteredList.stream().map(ParkingLot::getRow).distinct().collect(Collectors.toList());
-        posList = filteredList.stream().map(ParkingLot::getPos).distinct().collect(Collectors.toList());
+        areaList = filteredList.stream().map(ParkingLotResponse::getArea).distinct().collect(Collectors.toList());
+        rowList = filteredList.stream().map(ParkingLotResponse::getRow).distinct().collect(Collectors.toList());
+        posList = filteredList.stream().map(ParkingLotResponse::getPos).distinct().collect(Collectors.toList());
 
         // Cập nhật dữ liệu cho Adapter
         areaAdapter.clear();
@@ -139,23 +132,23 @@ public class ParkingActivity extends AppCompatActivity {
         posList = new ArrayList<>();
         binding.recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
-        parkingLotList = new ArrayList<>();
-        adapter = new ParkingLotAdapter(this, parkingLotList, new ParkingLotAdapter.OnItemClickListener() {
+        parkingLotResponseList = new ArrayList<>();
+        adapter = new ParkingLotAdapter(this, parkingLotResponseList, new ParkingLotAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(ParkingLot parkingLot) {
-                Toast.makeText(ParkingActivity.this, "Selected: " + parkingLot.getName(), Toast.LENGTH_SHORT).show();
+            public void onItemClick(ParkingLotResponse parkingLotResponse) {
+                Toast.makeText(ParkingActivity.this, "Selected: " + parkingLotResponse.getName(), Toast.LENGTH_SHORT).show();
             }
         });
         binding.recyclerView.setAdapter(adapter);
 
         ApiService apiService = ApiClient.getInstance(getApplicationContext());
-        apiService.getAllParkingLots().enqueue(new Callback<List<ParkingLot>>() {
+        apiService.getAllParkingLots().enqueue(new Callback<List<ParkingLotResponse>>() {
             @Override
-            public void onResponse(Call<List<ParkingLot>> call, Response<List<ParkingLot>> response) {
+            public void onResponse(Call<List<ParkingLotResponse>> call, Response<List<ParkingLotResponse>> response) {
                 if (response.isSuccessful() & response.body() != null)
                 {
-                    parkingLotList.clear(); // Clear dữ liệu cũ
-                    parkingLotList.addAll(response.body()); // Add dữ liệu mới
+                    parkingLotResponseList.clear(); // Clear dữ liệu cũ
+                    parkingLotResponseList.addAll(response.body()); // Add dữ liệu mới
                     adapter.notifyDataSetChanged();
                 }
                 else {
@@ -164,7 +157,7 @@ public class ParkingActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<ParkingLot>> call, Throwable t) {
+            public void onFailure(Call<List<ParkingLotResponse>> call, Throwable t) {
                 Log.e("API_ERROR", "Failed to fetch data", t);
             }
         });

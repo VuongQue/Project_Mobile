@@ -40,6 +40,8 @@
     <string name="light_mode">Chế độ sáng</string>
     <string name="language_choice">Việt Nam</string>
 
+    <string name="save">Lưu</string>
+    <string name="reload">Tải lại</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -5,16 +5,16 @@ import java.util.Date;
 import java.util.Locale;
 
 public class Notification {
-    private int id;
+    private Long id;
     private String title;
     private String message;
     private Date createdAt;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -47,7 +47,7 @@ public class Notification {
         return dateFormat.format(createdAt);
     }
 
-    public Notification(int id, String title, String message, Date createdAt) {
+    public Notification(Long id, String title, String message, Date createdAt) {
         this.id = id;
         this.title = title;
         this.message = message;

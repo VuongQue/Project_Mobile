@@ -1,5 +1,7 @@
 package com.example.s_parking.implement;
 
+import com.example.s_parking.dto.response.SessionResponse;
+import com.example.s_parking.dto.response.UserInfoResponse;
 import com.example.s_parking.entity.User;
 import com.example.s_parking.repository.UserRepository;
 import com.example.s_parking.service.UserService;
@@ -68,5 +70,20 @@ public class UserImp implements UserService{
 
         userRepository.save(user);
         return true;
+    }
+    @Override
+    public Optional<User> getUserInfo(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public UserInfoResponse convertToDto(User entity) {
+        return UserInfoResponse.builder()
+                .username(entity.getUsername())
+                .fullname(entity.getFullname())
+                .email(entity.getEmail())
+                .phone(entity.getPhone())
+                .securityKey(entity.getSecurity_key())
+                .build();
     }
 }

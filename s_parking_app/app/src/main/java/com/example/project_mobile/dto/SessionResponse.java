@@ -1,23 +1,23 @@
-package com.example.project_mobile.model;
+package com.example.project_mobile.dto;
 
 import java.util.Date;
 
-public class Session {
-    private long id;
+public class SessionResponse {
+    private Long id;
     private String username;
-    private long idParking;
+    private Long idParking;
     private String licensePlate;
     private Date checkIn;
     private Date checkOut;
-    private long idPayment;
+    private Long idPayment;
     private float fee;
     private String type;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -29,11 +29,11 @@ public class Session {
         this.username = username;
     }
 
-    public long getIdParking() {
+    public Long getIdParking() {
         return idParking;
     }
 
-    public void setIdParking(long idParking) {
+    public void setIdParking(Long idParking) {
         this.idParking = idParking;
     }
 
@@ -61,12 +61,12 @@ public class Session {
         this.checkOut = checkOut;
     }
 
-    public long getIdPayment() {
+    public Long getIdPayment() {
         return idPayment;
     }
 
-    public void setIdPayment(long idPayment) {
-        idPayment = idPayment;
+    public void setIdPayment(Long idPayment) {
+        this.idPayment = idPayment;
     }
 
     public float getFee() {
@@ -85,7 +85,7 @@ public class Session {
         this.type = type;
     }
 
-    public Session(long id, String username, long idParking, String licensePlate, Date checkIn, Date checkOut, long idPayment, float fee, String type) {
+    public SessionResponse(Long id, String username, Long idParking, String licensePlate, Date checkIn, Date checkOut, Long idPayment, float fee, String type) {
         this.id = id;
         this.username = username;
         this.idParking = idParking;

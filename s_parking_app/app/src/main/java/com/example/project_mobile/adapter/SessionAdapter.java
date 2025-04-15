@@ -8,22 +8,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.project_mobile.R;
-import com.example.project_mobile.model.Session;
+import com.example.project_mobile.dto.SessionResponse;
 
 import java.util.List;
 
 public class SessionAdapter extends RecyclerView.Adapter<SessionAdapter.SessionViewHolder> {
     private Context context;
-    private List<Session> sessionList;
+    private List<SessionResponse> sessionResponseList;
     private OnItemClickListener onItemClickListener;
 
     public interface OnItemClickListener {
-        void onItemClick(Session session);
+        void onItemClick(SessionResponse sessionResponse);
     }
 
-    public SessionAdapter(Context context, List<Session> sessionList, SessionAdapter.OnItemClickListener listener) {
+    public SessionAdapter(Context context, List<SessionResponse> sessionResponseList, SessionAdapter.OnItemClickListener listener) {
         this.context = context;
-        this.sessionList = sessionList;
+        this.sessionResponseList = sessionResponseList;
         this.onItemClickListener = listener;
     }
 
@@ -37,18 +37,18 @@ public class SessionAdapter extends RecyclerView.Adapter<SessionAdapter.SessionV
 
     @Override
     public void onBindViewHolder(@NonNull SessionViewHolder holder, int position) {
-        Session session = sessionList.get(position);
-        if (session != null) {
-            holder.txtTimeIn.setText(session.getCheckIn()+"");
-            holder.txtFee.setText(session.getFee()+"đ");
-            holder.txtPaid.setText(session.getIdPayment() > 0 ? "Paid" : "Unpaid");
+        SessionResponse sessionResponse = sessionResponseList.get(position);
+        if (sessionResponse != null) {
+            holder.txtTimeIn.setText(sessionResponse.getCheckIn()+"");
+            holder.txtFee.setText(sessionResponse.getFee()+"đ");
+            holder.txtPaid.setText(sessionResponse.getIdPayment() > 0 ? "Paid" : "Unpaid");
         }
-        holder.itemView.setOnClickListener(v -> onItemClickListener.onItemClick(session));
+        holder.itemView.setOnClickListener(v -> onItemClickListener.onItemClick(sessionResponse));
     }
 
     @Override
     public int getItemCount() {
-        return sessionList != null ? sessionList.size() : 0;
+        return sessionResponseList != null ? sessionResponseList.size() : 0;
     }
 
     public static class SessionViewHolder extends RecyclerView.ViewHolder {

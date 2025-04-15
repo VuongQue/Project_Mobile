@@ -22,6 +22,7 @@ public class User {
     private String role;
     private String fullname;
     private String email;
+    private String phone;
     private String security_key;
     private boolean isActivate;
 }

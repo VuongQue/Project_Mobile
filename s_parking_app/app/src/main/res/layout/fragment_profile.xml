@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/txtName"
+        android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Ten Nguoi Dung"
@@ -46,7 +46,6 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <!-- Info Items -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -143,6 +142,7 @@
                         android:paddingStart="8dp">
 
                         <TextView
+                            android:id="@+id/tvEmail"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="22110412@student.hcmute.edu.vn"
@@ -194,8 +194,6 @@
                         android:padding="8dp"
                         android:src="@drawable/ic_phone"
                         android:background="@drawable/bg_icon"/>
-
-                    <!-- Thông tin Username -->
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_weight="1"
@@ -204,6 +202,7 @@
                         android:paddingStart="8dp">
 
                         <TextView
+                            android:id="@+id/tvPhone"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="036***544"
@@ -246,7 +245,6 @@
                     android:gravity="start"
                     android:orientation="horizontal">
 
-                    <!-- Avatar -->
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
@@ -255,7 +253,6 @@
                         android:src="@drawable/ic_key"
                         android:background="@drawable/bg_icon"/>
 
-                    <!-- Thông tin Username -->
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_weight="1"
@@ -264,6 +261,7 @@
                         android:paddingStart="8dp">
 
                         <TextView
+                            android:id="@+id/tvKey"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="HelloMiEm"
@@ -297,4 +295,16 @@
 
         </LinearLayout>
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btnReload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/reload"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.95" />
 </androidx.constraintlayout.widget.ConstraintLayout>

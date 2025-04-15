@@ -58,10 +58,10 @@ public class NotificationFragment extends Fragment {
         binding.recyclerView.setAdapter(adapter);
 
         notificationList.clear();
-        notificationList.add(new Notification(1, "Thông báo 1", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", new Date(2025 - 1900, 2, 9, 8, 30)));
-        notificationList.add(new Notification(2, "Thông báo 2", "bbbbbbbbbbbbbb", new Date(2025 - 1900, 2, 10, 9, 15)));
-        notificationList.add(new Notification(3, "Thông báo 3", "cccccccccccccccc", new Date(2025 - 1900, 2, 11, 7, 50)));
-        notificationList.add(new Notification(4, "Thông báo 4", "ddddddddddddd", new Date(2025 - 1900, 2, 12, 10, 5)));
+        notificationList.add(new Notification(1L, "Thông báo 1", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", new Date(2025 - 1900, 2, 9, 8, 30)));
+        notificationList.add(new Notification(2L, "Thông báo 2", "bbbbbbbbbbbbbb", new Date(2025 - 1900, 2, 10, 9, 15)));
+        notificationList.add(new Notification(3L, "Thông báo 3", "cccccccccccccccc", new Date(2025 - 1900, 2, 11, 7, 50)));
+        notificationList.add(new Notification(4L, "Thông báo 4", "ddddddddddddd", new Date(2025 - 1900, 2, 12, 10, 5)));
 
         adapter.notifyDataSetChanged();
     }

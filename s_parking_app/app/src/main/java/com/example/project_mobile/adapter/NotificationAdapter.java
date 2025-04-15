@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_mobile.R;
 import com.example.project_mobile.model.Notification;
-import com.example.project_mobile.model.ParkingLot;
 
 import java.util.List;
 
