@@ -2,6 +2,8 @@ package com.example.project_mobile.api;
 
 import com.example.project_mobile.dto.AuthResponse;
 import com.example.project_mobile.dto.LoginRequest;
+import com.example.project_mobile.dto.MyCurrentSessionResponse;
+import com.example.project_mobile.dto.ParkingAreaResponse;
 import com.example.project_mobile.dto.UserInfoResponse;
 import com.example.project_mobile.dto.UsernameRequest;
 import com.example.project_mobile.dto.ParkingLotResponse;
@@ -27,6 +29,12 @@ public interface ApiService {
 
     @POST("user/profile")
     Call<UserInfoResponse> getUserInfo(@Body UsernameRequest request);
+
+    @POST("sessions/my-current-session")
+    Call<MyCurrentSessionResponse> getMyCurrentSession(@Body UsernameRequest request);
+
+    @GET("parking-area/all")
+    Call<List<ParkingAreaResponse>> getParkingAreas();
 
 }
 

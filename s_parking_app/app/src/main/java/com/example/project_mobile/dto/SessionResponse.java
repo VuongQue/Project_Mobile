@@ -1,14 +1,16 @@
 package com.example.project_mobile.dto;
 
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.Optional;
 
 public class SessionResponse {
     private Long id;
     private String username;
     private Long idParking;
     private String licensePlate;
-    private Date checkIn;
-    private Date checkOut;
+    private LocalDateTime checkIn;
+    private LocalDateTime checkOut;
     private Long idPayment;
     private float fee;
     private String type;
@@ -45,24 +47,24 @@ public class SessionResponse {
         this.licensePlate = licensePlate;
     }
 
-    public Date getCheckIn() {
+    public LocalDateTime getCheckIn() {
         return checkIn;
     }
 
-    public void setCheckIn(Date checkIn) {
+    public void setCheckIn(LocalDateTime checkIn) {
         this.checkIn = checkIn;
     }
 
-    public Date getCheckOut() {
+    public LocalDateTime getCheckOut() {
         return checkOut;
     }
 
-    public void setCheckOut(Date checkOut) {
+    public void setCheckOut(LocalDateTime checkOut) {
         this.checkOut = checkOut;
     }
 
     public Long getIdPayment() {
-        return idPayment;
+        return idPayment != null ? idPayment : -1;
     }
 
     public void setIdPayment(Long idPayment) {
@@ -85,7 +87,7 @@ public class SessionResponse {
         this.type = type;
     }
 
-    public SessionResponse(Long id, String username, Long idParking, String licensePlate, Date checkIn, Date checkOut, Long idPayment, float fee, String type) {
+    public SessionResponse(Long id, String username, Long idParking, String licensePlate, LocalDateTime checkIn, LocalDateTime checkOut, Long idPayment, float fee, String type) {
         this.id = id;
         this.username = username;
         this.idParking = idParking;

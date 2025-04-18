@@ -1,6 +1,7 @@
 package com.example.s_parking.controller;
 
 import com.example.s_parking.dto.request.UsernameRequest;
+import com.example.s_parking.dto.response.MyCurrentSessionResponse;
 import com.example.s_parking.dto.response.SessionResponse;
 import com.example.s_parking.entity.Session;
 import com.example.s_parking.service.SessionService;
@@ -43,5 +44,22 @@ public class SessionController {
                     .body("Không tìm thấy phiên làm việc nào cho người dùng: " + username);
         }
         return ResponseEntity.ok(sessionResponses);
+    }
+
+    @PostMapping("/my-current-session")
+    public ResponseEntity<?> getMyCurrentSession(@RequestBody UsernameRequest request, Authentication authentication) {
+        String username = request.getUsername();
+        String currentUser = authentication.getName(); // username đăng nhập hiện tại
+
+        if (!username.equals(currentUser)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("Bạn không có quyền truy cập thông tin của người dùng khác!");
+        }
+        Session session = sessionService.getMyCurrentSession(username);
+        MyCurrentSessionResponse myCurrentSessionResponse = sessionService.convertToDTO(session);
+        if (myCurrentSessionResponse == null ) {
+            myCurrentSessionResponse = new MyCurrentSessionResponse();
+        }
+        return ResponseEntity.ok(myCurrentSessionResponse);
     }
 }

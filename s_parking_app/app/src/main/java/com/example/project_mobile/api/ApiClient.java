@@ -3,8 +3,11 @@ package com.example.project_mobile.api;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.example.project_mobile.utils.LocalDateTimeDeserializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import java.time.LocalDateTime;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -25,6 +28,7 @@ public class ApiClient {
             };
 
             Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer())
                     .setDateFormat("yyyy-MM-dd'T'HH:mm:ss") // Format y hệt như JSON từ backend
                     .create();
 

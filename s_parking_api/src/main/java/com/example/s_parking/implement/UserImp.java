@@ -80,7 +80,7 @@ public class UserImp implements UserService{
     public UserInfoResponse convertToDto(User entity) {
         return UserInfoResponse.builder()
                 .username(entity.getUsername())
-                .fullname(entity.getFullname())
+                .fullName(entity.getFullname())
                 .email(entity.getEmail())
                 .phone(entity.getPhone())
                 .securityKey(entity.getSecurity_key())

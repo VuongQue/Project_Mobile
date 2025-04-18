@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -71,7 +72,7 @@ public class ProfileFragment extends Fragment {
 
     private void Load() {
         try {
-            binding.tvName.setText(sharedPreferences.getString("Fullname", ""));
+            binding.tvName.setText(sharedPreferences.getString("FullName", ""));
             binding.tvEmail.setText(sharedPreferences.getString("Email", ""));
             binding.tvPhone.setText(sharedPreferences.getString("Phone", ""));
             binding.tvKey.setText(sharedPreferences.getString("Security_Key", ""));

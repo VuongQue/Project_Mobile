@@ -1,5 +1,6 @@
 package com.example.s_parking.service;
 
+import com.example.s_parking.dto.response.MyCurrentSessionResponse;
 import com.example.s_parking.dto.response.SessionResponse;
 import com.example.s_parking.entity.Session;
 
@@ -18,4 +19,8 @@ public interface SessionService {
     List<SessionResponse> convertAllToDto(List<Session> list);
 
     SessionResponse convertToDto(Session entity);
+
+    MyCurrentSessionResponse convertToDTO(Session entity);
+
+    Session getMyCurrentSession(String username);
 }
