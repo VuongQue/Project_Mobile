@@ -19,6 +19,7 @@
 
     <string name="welcome_back">Welcome back</string>
     <string name="parking_the_car">🚴 Parking the car</string>
+    <string name="no_parking">...</string>
     <string name="parking_location">Parking location</string>
     <string name="payment">Payment</string>
     <string name="more">More</string>

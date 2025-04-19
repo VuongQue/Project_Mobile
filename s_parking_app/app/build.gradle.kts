@@ -48,7 +48,10 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.logging.interceptor)
+    implementation(libs.core)
+    implementation(libs.zxing.android.embedded)
     testImplementation(libs.junit)
+    implementation(libs.jbcrypt)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 }

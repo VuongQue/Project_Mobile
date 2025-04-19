@@ -32,7 +32,7 @@
         app:layout_constraintTop_toBottomOf="@id/avatar" />
 
     <TextView
-        android:id="@+id/userName"
+        android:id="@+id/fullName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -50,8 +50,8 @@
         android:text="@string/parking_the_car"
         android:textColor="?attr/textColor"
         android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="@id/userName"
-        app:layout_constraintTop_toBottomOf="@id/userName" />
+        app:layout_constraintStart_toStartOf="@id/fullName"
+        app:layout_constraintTop_toBottomOf="@id/fullName" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
@@ -296,66 +296,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         app:layout_constraintTop_toBottomOf="@+id/tvParkingLotStatus"/>
-<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--        android:id="@+id/constraintLayout"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_margin="16dp"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/tvParkingLotStatus"-->
-<!--        tools:layout_editor_absoluteX="16dp">-->
-
-<!--        <ProgressBar-->
-<!--            android:id="@+id/progressBar1"-->
-<!--            style="?android:attr/progressBarStyleHorizontal"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="0dp"-->
-<!--            android:background="@android:color/transparent"-->
-<!--            android:indeterminate="false"-->
-<!--            android:max="100"-->
-<!--            android:progress="40"-->
-<!--            android:progressDrawable="@drawable/circular_progress"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintDimensionRatio="1:1"-->
-<!--            app:layout_constraintEnd_toStartOf="@id/progressBar2"-->
-<!--            app:layout_constraintWidth_percent="0.33"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent" />-->
-
-<!--        <ProgressBar-->
-<!--            android:id="@+id/progressBar2"-->
-<!--            style="?android:attr/progressBarStyleHorizontal"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="0dp"-->
-<!--            android:background="@android:color/transparent"-->
-<!--            android:indeterminate="false"-->
-<!--            android:max="100"-->
-<!--            android:progress="30"-->
-<!--            android:progressDrawable="@drawable/circular_progress"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintDimensionRatio="1:1"-->
-<!--            app:layout_constraintEnd_toStartOf="@id/progressBar3"-->
-<!--            app:layout_constraintWidth_percent="0.33"-->
-<!--            app:layout_constraintStart_toEndOf="@id/progressBar1"-->
-<!--            app:layout_constraintTop_toTopOf="parent" />-->
-
-<!--        <ProgressBar-->
-<!--            android:id="@+id/progressBar3"-->
-<!--            style="?android:attr/progressBarStyleHorizontal"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="0dp"-->
-<!--            android:background="@android:color/transparent"-->
-<!--            android:indeterminate="false"-->
-<!--            android:max="100"-->
-<!--            android:progress="30"-->
-<!--            android:progressDrawable="@drawable/circular_progress"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintDimensionRatio="1:1"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintWidth_percent="0.33"-->
-<!--            app:layout_constraintStart_toEndOf="@id/progressBar2"-->
-<!--            app:layout_constraintTop_toTopOf="parent" />-->
-
-<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
 
     <View
         android:id="@+id/line2"
@@ -378,7 +318,7 @@
         app:layout_constraintTop_toBottomOf="@+id/line2" />
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="400dp"
         android:orientation="vertical"
         android:layout_margin="16dp"
         app:layout_constraintTop_toBottomOf="@+id/tvNotification">

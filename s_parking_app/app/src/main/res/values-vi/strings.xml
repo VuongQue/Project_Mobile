@@ -18,7 +18,8 @@
     <string name="position">Vị trí</string>
 
     <string name="welcome_back">Xin chào</string>
-    <string name="parking_the_car">🚴 Đang gửi xe</string>
+    <string name="parking_the_car">🚴 Đang gửi xe...</string>
+    <string name="no_parking">...</string>
     <string name="parking_location">Vị trí xe</string>
     <string name="payment">Thanh toán</string>
     <string name="more">Xem thêm</string>

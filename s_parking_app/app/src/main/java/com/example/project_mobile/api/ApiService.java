@@ -8,6 +8,7 @@ import com.example.project_mobile.dto.UserInfoResponse;
 import com.example.project_mobile.dto.UsernameRequest;
 import com.example.project_mobile.dto.ParkingLotResponse;
 import com.example.project_mobile.dto.SessionResponse;
+import com.example.project_mobile.model.Image;
 
 import java.util.List;
 
@@ -35,6 +36,9 @@ public interface ApiService {
 
     @GET("parking-area/all")
     Call<List<ParkingAreaResponse>> getParkingAreas();
+
+    @GET("img/all")
+    Call<List<Image>> getNotificationImg();
 
 }
 

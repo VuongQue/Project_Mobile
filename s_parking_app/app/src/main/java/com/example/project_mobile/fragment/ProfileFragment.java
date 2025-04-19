@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.project_mobile.R;
 import com.example.project_mobile.api.ApiClient;
 import com.example.project_mobile.api.ApiService;
 import com.example.project_mobile.databinding.FragmentProfileBinding;
@@ -29,6 +30,7 @@ public class ProfileFragment extends Fragment {
 
     FragmentProfileBinding binding;
     SharedPreferences sharedPreferences;
+    private boolean isKeyVisible = false;
 
     public ProfileFragment() {
     }
@@ -68,6 +70,20 @@ public class ProfileFragment extends Fragment {
                 LoadFromAPI();
             }
         });
+        binding.icHidden.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Kiểm tra trạng thái hiện tại của mật khẩu
+                if (isKeyVisible) {
+                    binding.etKey.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);  // Chế độ ẩn
+                    binding.icHidden.setImageResource(R.drawable.white_hidden);  // Thay đổi icon mắt (Ví dụ: mắt mở)
+                } else {
+                    binding.etKey.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);  // Chế độ hiện
+                    binding.icHidden.setImageResource(R.drawable.white_eye);  // Thay đổi icon mắt (Ví dụ: mắt đóng)
+                }
+                isKeyVisible = !isKeyVisible;  // Đổi trạng thái
+            }
+        });
     }
 
     private void Load() {
@@ -75,7 +91,7 @@ public class ProfileFragment extends Fragment {
             binding.tvName.setText(sharedPreferences.getString("FullName", ""));
             binding.tvEmail.setText(sharedPreferences.getString("Email", ""));
             binding.tvPhone.setText(sharedPreferences.getString("Phone", ""));
-            binding.tvKey.setText(sharedPreferences.getString("Security_Key", ""));
+            binding.etKey.setText(sharedPreferences.getString("Security_Key", ""));
 
         } catch (IllegalStateException ex) {
             Log.e("ProfileFragment", "Activity is null (requireActivity threw), fallback to safe handling.");

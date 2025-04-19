@@ -5,20 +5,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.project_mobile.R;
+import com.example.project_mobile.model.Image;
 import com.smarteist.autoimageslider.SliderViewAdapter;
 
 import java.util.ArrayList;
 
 public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderHolder> {
     private Context context;
-    private ArrayList<Integer> arrayList;
+    private ArrayList<Image> imagesList;
 
-    public SliderAdapter(Context context, ArrayList<Integer> arrayList) {
+    public SliderAdapter(Context context, ArrayList<Image> imagesList) {
         this.context = context;
-        this.arrayList = arrayList;
+        this.imagesList = imagesList;
     }
 
     @Override
@@ -29,12 +31,12 @@ public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderHolder>
 
     @Override
     public void onBindViewHolder(SliderHolder viewHolder, int position) {
-        Glide.with(context).load(arrayList.get(position)).into(viewHolder.imageView);
+        Glide.with(context).load(imagesList.get(position).getLink()).into(viewHolder.imageView);
     }
 
     @Override
     public int getCount() {
-        return arrayList.size();
+        return imagesList.size();
     }
 
     public class SliderHolder extends SliderViewAdapter.ViewHolder {

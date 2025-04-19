@@ -1,5 +1,7 @@
 [versions]
 agp = "8.9.1"
+core = "3.4.1"
+jbcrypt = "0.4"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
@@ -13,9 +15,12 @@ circleindicator = "2.1.6"
 retrofit = "2.9.0"
 sliderImage = "1.4.0"
 glide = "4.15.1"
+zxingAndroidEmbedded = "4.2.0"
 
 [libraries]
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
+core = { module = "com.google.zxing:core", version.ref = "core" }
+jbcrypt = { module = "org.mindrot:jbcrypt", version.ref = "jbcrypt" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -29,6 +34,7 @@ circleindicator = { group = "me.relex", name = "circleindicator", version.ref = 
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 sliderImage = {group = "com.github.smarteist", name = "Android-Image-Slider", version.ref = "sliderImage"}
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide"}
+zxing-android-embedded = { module = "com.journeyapps:zxing-android-embedded", version.ref = "zxingAndroidEmbedded" }
 
 
 [plugins]
