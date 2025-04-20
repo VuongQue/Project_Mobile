@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,6 +37,7 @@ import com.example.project_mobile.dto.MyCurrentSessionResponse;
 import com.example.project_mobile.dto.ParkingAreaResponse;
 import com.example.project_mobile.dto.UsernameRequest;
 import com.example.project_mobile.model.Image;
+import com.example.project_mobile.socket.WebSocketManager;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
 import com.smarteist.autoimageslider.SliderView;
@@ -169,6 +171,7 @@ public class HomeFragment extends Fragment {
                     parkingAreaResponseArrayList.addAll(response.body());
 
                     parkingAreaAdapter.notifyDataSetChanged();
+                    startWebSocketUpdates();
 
                 } else {
                     Log.e("API_ERROR", "Code: " + response.code());
@@ -181,7 +184,33 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+    private void startWebSocketUpdates() {
+        WebSocketManager<ParkingAreaResponse> socket =
+                new WebSocketManager<>(ParkingAreaResponse.class, "/topic/parkingArea");
 
+        socket.connect(new WebSocketManager.OnMessageCallback<ParkingAreaResponse>() {
+            @Override
+            public void onMessage(ParkingAreaResponse updatedArea) {
+                requireActivity().runOnUiThread(() -> {
+                    boolean updated = false;
+                    for (int i = 0; i < parkingAreaResponseArrayList.size(); i++) {
+                        ParkingAreaResponse current = parkingAreaResponseArrayList.get(i);
+                        if (current.getIdArea().equals(updatedArea.getIdArea())) {
+                            parkingAreaResponseArrayList.set(i, updatedArea);
+                            updated = true;
+                            break;
+                        }
+                    }
+
+                    // Nếu không có trong list, thêm mới (optional)
+                    if (!updated) {
+                        parkingAreaResponseArrayList.add(updatedArea);
+                    }
+                    parkingAreaAdapter.notifyDataSetChanged();
+                });
+            }
+        });
+    }
     private void loadCurrentSession() {
         String username = requireActivity().getSharedPreferences("LoginDetails", MODE_PRIVATE).getString("Username", "");
         ApiService apiService = ApiClient.getInstance(getContext());

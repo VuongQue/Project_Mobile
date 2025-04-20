@@ -53,6 +53,10 @@ dependencies {
     testImplementation(libs.junit)
     implementation(libs.jbcrypt)
     implementation(libs.cloudinary.cloudinary.android)
+    implementation(libs.stompprotocolandroid)
+    implementation(libs.java.websocket)
+    implementation(libs.rxjava)
+    implementation(libs.rxandroid)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 }

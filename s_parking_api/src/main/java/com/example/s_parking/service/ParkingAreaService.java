@@ -11,4 +11,6 @@ public interface ParkingAreaService {
     ParkingAreaResponse convertToDto(ParkingArea entity);
 
     List<ParkingAreaResponse> convertAllToDto(List<ParkingArea> list);
+
+    void updateParkingArea(ParkingArea area);
 }

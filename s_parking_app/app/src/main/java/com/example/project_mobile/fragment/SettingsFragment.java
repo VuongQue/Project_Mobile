@@ -1,10 +1,12 @@
 package com.example.project_mobile.fragment;
 
+import static android.content.Context.MODE_PRIVATE;
 import static com.example.project_mobile.MainActivity.setUp;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.example.project_mobile.databinding.FragmentSettingsBinding;
 import com.example.project_mobile.utils.SetUp;
 
@@ -47,6 +50,25 @@ public class SettingsFragment extends Fragment {
 
 
         return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        sharedPreferences = requireActivity().getSharedPreferences("UserInfo", MODE_PRIVATE);
+        binding.tvName.setText(sharedPreferences.getString("FullName", ""));
+        String avatarUrl = sharedPreferences.getString("Avatar_Url", ""); // Lấy URL từ SharedPreferences
+
+        if (!avatarUrl.isEmpty()) {
+            Glide.with(getContext())
+                    .load(Uri.parse(avatarUrl))  // Tải ảnh từ URL
+                    .into(binding.avatar);  // Gán vào ImageView
+        } else {
+            // Nếu không có URL hợp lệ, có thể sử dụng ảnh mặc định
+            Glide.with(getContext())
+                    .load(android.R.drawable.sym_def_app_icon)  // Sử dụng ảnh mặc định từ drawable
+                    .into(binding.avatar);
+        }
     }
 
     private void setupLanguageSpinner() {

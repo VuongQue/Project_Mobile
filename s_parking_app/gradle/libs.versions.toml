@@ -2,6 +2,7 @@
 agp = "8.9.1"
 cloudinaryAndroidVersion = "2.3.1"
 core = "3.4.1"
+javaWebsocket = "1.5.2"
 jbcrypt = "0.4"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -14,8 +15,11 @@ constraintlayout = "2.2.1"
 circleimageview = "3.1.0"
 circleindicator = "2.1.6"
 retrofit = "2.9.0"
+rxandroid = "2.1.1"
+rxjava = "2.2.21"
 sliderImage = "1.4.0"
 glide = "4.15.1"
+stompprotocolandroid = "1.6.6"
 zxingAndroidEmbedded = "4.2.0"
 
 
@@ -23,6 +27,7 @@ zxingAndroidEmbedded = "4.2.0"
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 cloudinary-cloudinary-android = { module = "com.cloudinary:cloudinary-android", version.ref = "cloudinaryAndroidVersion" }
 core = { module = "com.google.zxing:core", version.ref = "core" }
+java-websocket = { module = "org.java-websocket:Java-WebSocket", version.ref = "javaWebsocket" }
 jbcrypt = { module = "org.mindrot:jbcrypt", version.ref = "jbcrypt" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -35,8 +40,11 @@ constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayo
 circleimageview = {group = "de.hdodenhof", name = "circleimageview", version.ref = "circleimageview"}
 circleindicator = { group = "me.relex", name = "circleindicator", version.ref = "circleindicator"}
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+rxandroid = { module = "io.reactivex.rxjava2:rxandroid", version.ref = "rxandroid" }
+rxjava = { module = "io.reactivex.rxjava2:rxjava", version.ref = "rxjava" }
 sliderImage = {group = "com.github.smarteist", name = "Android-Image-Slider", version.ref = "sliderImage"}
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide"}
+stompprotocolandroid = { module = "com.github.NaikSoftware:StompProtocolAndroid", version.ref = "stompprotocolandroid" }
 zxing-android-embedded = { module = "com.journeyapps:zxing-android-embedded", version.ref = "zxingAndroidEmbedded" }
 
 

@@ -5,6 +5,7 @@ import com.example.s_parking.entity.ParkingArea;
 import com.example.s_parking.repository.ParkingAreaRepository;
 import com.example.s_parking.service.ParkingAreaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +17,9 @@ public class ParkingAreaImp implements ParkingAreaService {
 
     @Autowired
     private ParkingAreaRepository parkingAreaRepository;
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
     @Override
     public List<ParkingArea> getParkingAreas() {
@@ -38,4 +42,12 @@ public class ParkingAreaImp implements ParkingAreaService {
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
+
+
+    @Override
+    public void updateParkingArea(ParkingArea area) {
+        // cập nhật vào DB xong → push ra socket
+        messagingTemplate.convertAndSend("/topic/parking-area", area);
+    }
+
 }
