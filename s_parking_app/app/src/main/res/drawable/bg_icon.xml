@@ -10,7 +10,7 @@
     <!-- Màu nền mặc định -->
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="#333333"/>
+            <solid android:color="?attr/backgroundIconColor"/>
             <corners android:radius="8dp"/>
         </shape>
     </item>

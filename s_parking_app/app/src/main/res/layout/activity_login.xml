@@ -28,7 +28,7 @@
             android:layout_marginTop="10dp"
             android:fontFamily="sans-serif"
             android:text="Welcome to ...!"
-            android:textColor="@color/white"
+            android:textColor="?attr/textColor"
             android:textSize="35sp" />
 
         <TextView
@@ -37,7 +37,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginBottom="50dp"
             android:text="The Best Parking Solution for Students"
-            android:textColor="@color/white"
+            android:textColor="?attr/textColor"
             android:textSize="17sp" />
 
         <!-- Input MSSV -->
