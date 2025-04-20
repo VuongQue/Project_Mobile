@@ -6,6 +6,7 @@ public class UserInfoResponse {
     private String email;
     private String phone;
     private String securityKey;
+    private String avatarUrl;
 
     public UserInfoResponse() {
 
@@ -51,11 +52,20 @@ public class UserInfoResponse {
         this.securityKey = securityKey;
     }
 
-    public UserInfoResponse(String username, String fullName, String email, String phone, String securityKey) {
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
+
+    public UserInfoResponse(String username, String fullName, String email, String phone, String securityKey, String avatarUrl) {
         this.username = username;
         this.fullName = fullName;
         this.email = email;
         this.phone = phone;
         this.securityKey = securityKey;
+        this.avatarUrl = avatarUrl;
     }
 }

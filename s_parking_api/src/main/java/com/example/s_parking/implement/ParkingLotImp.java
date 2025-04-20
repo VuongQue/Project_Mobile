@@ -57,4 +57,9 @@ public class ParkingLotImp implements ParkingLotService {
     public void deleteParkingLot(Long id) {
 
     }
+
+    @Override
+    public Optional<ParkingLot> getSlot() {
+        return parkingLotRepository.findFirstByStatus("Available");
+    }
 }

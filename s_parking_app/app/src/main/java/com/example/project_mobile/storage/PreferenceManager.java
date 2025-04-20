@@ -45,10 +45,11 @@ public class PreferenceManager {
     public void saveUserInfo(UserInfoResponse userInfoResponse) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("UserInfo", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("Fullname", userInfoResponse.getFullName());
+        editor.putString("FullName", userInfoResponse.getFullName());
         editor.putString("Email", userInfoResponse.getEmail());
         editor.putString("Phone", userInfoResponse.getPhone());
         editor.putString("Security_Key", userInfoResponse.getSecurityKey());
+        editor.putString("Avatar_Url", userInfoResponse.getAvatarUrl());
         editor.putBoolean("isLoaded", true);
         editor.apply();
     }

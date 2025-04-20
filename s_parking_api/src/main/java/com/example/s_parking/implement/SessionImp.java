@@ -1,5 +1,6 @@
 package com.example.s_parking.implement;
 
+import com.example.s_parking.dto.response.MyCurrentSessionResponse;
 import com.example.s_parking.dto.response.SessionResponse;
 import com.example.s_parking.entity.Session;
 import com.example.s_parking.repository.SessionRepository;
@@ -76,6 +77,24 @@ public class SessionImp implements SessionService {
                         entity.getPayment() != null ? entity.getPayment().getId() : null
                 )
                 .build();
+    }
+
+    @Override
+    public MyCurrentSessionResponse convertToDTO(Session entity) {
+        return MyCurrentSessionResponse.builder()
+                .id(entity.getId())
+                .checkIn(entity.getCheckIn())
+                .checkOut(entity.getCheckOut())
+                .type(entity.getType())
+                .licensePlate(entity.getLicensePlate())
+                .fee(entity.getFee())
+                .location(entity.getParking().getLocation())
+                .build();
+    }
+
+    @Override
+    public Session getMyCurrentSession(String username) {
+        return sessionRepository.findTopByUserUsernameOrderByCheckInDesc(username);
     }
 
 }

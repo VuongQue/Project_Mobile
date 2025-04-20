@@ -17,9 +17,8 @@ public class ParkingArea {
     @Id
     private String idArea;
 
-    private Long maxCapacity;
-    private Long availableSlots;
-    private String status;
+    private int maxCapacity;
+    private int availableSlots;
 
     @OneToMany(mappedBy = "area", cascade = CascadeType.ALL)
     @JsonManagedReference

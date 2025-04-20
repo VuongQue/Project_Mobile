@@ -11,8 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserInfoResponse {
     private String username;
-    private String fullname;
+    private String fullName;
     private String email;
     private String phone;
     private String securityKey;
+    private String avatarUrl;
 }

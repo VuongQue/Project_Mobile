@@ -1,6 +1,5 @@
 package com.example.s_parking.implement;
 
-import com.example.s_parking.dto.response.SessionResponse;
 import com.example.s_parking.dto.response.UserInfoResponse;
 import com.example.s_parking.entity.User;
 import com.example.s_parking.repository.UserRepository;
@@ -80,10 +79,25 @@ public class UserImp implements UserService{
     public UserInfoResponse convertToDto(User entity) {
         return UserInfoResponse.builder()
                 .username(entity.getUsername())
-                .fullname(entity.getFullname())
+                .fullName(entity.getFullname())
                 .email(entity.getEmail())
                 .phone(entity.getPhone())
                 .securityKey(entity.getSecurity_key())
+                .avatarUrl(entity.getAvatarUrl())
                 .build();
+    }
+
+    @Override
+    public boolean updateAvatarUrl(String username, String avatarUrl) {
+        // Gọi phương thức repository để cập nhật avatarUrl
+        int updatedCount = userRepository.updateAvatarUrlByUsername(username, avatarUrl);
+
+        // Kiểm tra xem có bao nhiêu bản ghi được cập nhật
+        return updatedCount > 0; // Nếu số bản ghi được cập nhật lớn hơn 0, trả về true
+    }
+
+    @Override
+    public String getKeyByUsername(String username) {
+        return userRepository.getKeyByUsername(username);
     }
 }

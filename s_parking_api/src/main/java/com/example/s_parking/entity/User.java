@@ -24,5 +24,6 @@ public class User {
     private String email;
     private String phone;
     private String security_key;
+    private String avatarUrl;
     private boolean isActivate;
 }
