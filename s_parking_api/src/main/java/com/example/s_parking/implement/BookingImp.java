@@ -6,6 +6,7 @@ import com.example.s_parking.service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,5 +42,10 @@ public class BookingImp implements BookingService {
     @Override
     public void deleteBooking(Long id) {
         bookingRepository.deleteById(id);
+    }
+
+    @Override
+    public Optional<Booking> findByUsernameAndDate(String username, LocalDate date) {
+        return bookingRepository.findByUserUsernameAndDate(username, date);
     }
 }

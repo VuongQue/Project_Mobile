@@ -62,6 +62,5 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             txtCreatedAt = itemView.findViewById(R.id.txtCreatedAt);
         }
 
-
     }
 }

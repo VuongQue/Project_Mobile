@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
-    public List<User> getAllUsers();
+    List<User> getAllUsers();
     User createUser(User user);
     User updateUser(String username, User updatedUser);
     void deleteUser(String username);
@@ -21,5 +21,6 @@ public interface UserService {
     UserInfoResponse convertToDto(User entity);
 
     boolean updateAvatarUrl(String username, String avatarUrl);
+    String getKeyByUsername(String username);
 }
 

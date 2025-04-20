@@ -34,7 +34,9 @@ import com.example.project_mobile.api.ApiClient;
 import com.example.project_mobile.api.ApiService;
 import com.example.project_mobile.databinding.FragmentHomeBinding;
 import com.example.project_mobile.dto.MyCurrentSessionResponse;
+import com.example.project_mobile.dto.NotificationResponse;
 import com.example.project_mobile.dto.ParkingAreaResponse;
+import com.example.project_mobile.dto.SessionResponse;
 import com.example.project_mobile.dto.UsernameRequest;
 import com.example.project_mobile.model.Image;
 import com.example.project_mobile.socket.WebSocketManager;
@@ -122,7 +124,7 @@ public class HomeFragment extends Fragment {
         String username = requireActivity().getSharedPreferences("LoginDetails", MODE_PRIVATE).getString("Username", "");
         String key = requireActivity().getSharedPreferences("UserInfo", MODE_PRIVATE).getString("Security_Key", "");
         // Tạo mã QR từ văn bản
-        String textToEncode = username + hashBcrypt(key); // Đặt URL hoặc văn bản bạn muốn mã hóa vào QR
+        String textToEncode = username + "-" + key; // Đặt URL hoặc văn bản bạn muốn mã hóa vào QR
         try {
             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
             Bitmap bitmap = barcodeEncoder.encodeBitmap(textToEncode, com.google.zxing.BarcodeFormat.QR_CODE, 400, 400);
@@ -211,6 +213,20 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+
+    private void setUpSession(MyCurrentSessionResponse response) {
+        binding.tvLocation.setText(String.valueOf(response.getLocation()));
+        LocalDateTime checkIn = response.getCheckIn();
+        LocalDateTime checkOut = response.getCheckOut();
+        binding.tvCheckIn.setText("Check in: " + formatDateTime(checkIn));
+        binding.tvCheckOut.setText("Check out: " + formatDateTime(checkOut));
+        if (checkOut == null) {
+            binding.status.setText(R.string.parking_the_car);
+        }
+        else {
+            binding.status.setText(R.string.no_parking);
+        }
+    }
     private void loadCurrentSession() {
         String username = requireActivity().getSharedPreferences("LoginDetails", MODE_PRIVATE).getString("Username", "");
         ApiService apiService = ApiClient.getInstance(getContext());
@@ -218,17 +234,8 @@ public class HomeFragment extends Fragment {
             @Override
             public void onResponse(@NonNull Call<MyCurrentSessionResponse> call, @NonNull Response<MyCurrentSessionResponse> response) {
                 if (response.isSuccessful() & response.body() != null) {
-                    binding.tvLocation.setText(String.valueOf(response.body().getLocation()));
-                    LocalDateTime checkIn = response.body().getCheckIn();
-                    LocalDateTime checkOut = response.body().getCheckOut();
-                    binding.tvCheckIn.setText("Check in: " + formatDateTime(checkIn));
-                    binding.tvCheckOut.setText("Check out: " + formatDateTime(checkOut));
-                    if (checkOut == null) {
-                        binding.status.setText(R.string.parking_the_car);
-                    }
-                    else {
-                        binding.status.setText(R.string.no_parking);
-                    }
+                    setUpSession(response.body());
+                    startCheckInSocket(username);
                 } else {
                     Log.e("API_ERROR", "Code: " + response.code());
                 }
@@ -240,6 +247,27 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+
+    private void startCheckInSocket(String username) {
+        WebSocketManager<MyCurrentSessionResponse> sessionSocket =
+                new WebSocketManager<>(MyCurrentSessionResponse.class, "/topic/checkin/" + username);
+
+        // Dùng để thông báo ngoài máy nhưng chưa biết làm sao
+//        WebSocketManager<NotificationResponse> notiSocket =
+//                new WebSocketManager<>(NotificationResponse.class, "/topic/notification/" + username);
+
+        sessionSocket.connect(new WebSocketManager.OnMessageCallback<MyCurrentSessionResponse>() {
+            @Override
+            public void onMessage(MyCurrentSessionResponse myCurrentSessionResponse) {
+                requireActivity().runOnUiThread(() -> {
+                    Toast.makeText(getContext(), "Hello", Toast.LENGTH_SHORT).show();
+                    setUpSession(myCurrentSessionResponse);
+                });
+            }
+        });
+
+    }
+
 
     private void configSliderView() {
         sliderAdapter = new SliderAdapter(requireContext(), imageList);

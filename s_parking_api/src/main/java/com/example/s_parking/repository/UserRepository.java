@@ -19,4 +19,5 @@ public interface UserRepository extends JpaRepository<User, String> {
     @Query("UPDATE User u SET u.avatarUrl = :avatarUrl WHERE u.username = :username")
     int updateAvatarUrlByUsername(@Param("username") String username, @Param("avatarUrl") String avatarUrl);
 
+    String getKeyByUsername(String username);
 }

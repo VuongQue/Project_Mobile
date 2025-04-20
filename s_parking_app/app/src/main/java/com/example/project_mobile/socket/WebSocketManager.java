@@ -2,7 +2,11 @@ package com.example.project_mobile.socket;
 
 import android.util.Log;
 
+import com.example.project_mobile.utils.LocalDateTimeDeserializer;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.time.LocalDateTime;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -15,7 +19,9 @@ import ua.naiksoftware.stomp.dto.StompMessage;
 public class WebSocketManager<T> {
 
     private StompClient stompClient;
-    private Gson gson = new Gson();
+    Gson gson = new GsonBuilder()
+            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer())
+            .create();
     private Disposable stompDisposable;
     private Disposable lifecycleDisposable;
 

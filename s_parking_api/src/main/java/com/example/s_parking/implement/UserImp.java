@@ -95,4 +95,9 @@ public class UserImp implements UserService{
         // Kiểm tra xem có bao nhiêu bản ghi được cập nhật
         return updatedCount > 0; // Nếu số bản ghi được cập nhật lớn hơn 0, trả về true
     }
+
+    @Override
+    public String getKeyByUsername(String username) {
+        return userRepository.getKeyByUsername(username);
+    }
 }

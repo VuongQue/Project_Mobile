@@ -21,7 +21,7 @@ import java.util.List;
 
 public class NotificationFragment extends Fragment {
     FragmentNotificationBinding binding;
-    private List<Notification> notificationList;
+    public static List<Notification> notificationList;
     private NotificationAdapter adapter;
 
     public NotificationFragment() {
@@ -40,14 +40,19 @@ public class NotificationFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentNotificationBinding.inflate(inflater, container, false);
         // recyclerView
-        Load();
+
 
         return binding.getRoot();
     }
 
-    private void Load() {
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        Load();
+    }
 
+    private void Load() {
         notificationList = new ArrayList<>();
         adapter = new NotificationAdapter(getContext(), notificationList, new NotificationAdapter.OnItemClickListener() {
             @Override
