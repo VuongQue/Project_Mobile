@@ -1,5 +1,6 @@
 [versions]
 agp = "8.9.1"
+cloudinaryAndroidVersion = "2.3.1"
 core = "3.4.1"
 jbcrypt = "0.4"
 junit = "4.13.2"
@@ -17,8 +18,10 @@ sliderImage = "1.4.0"
 glide = "4.15.1"
 zxingAndroidEmbedded = "4.2.0"
 
+
 [libraries]
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
+cloudinary-cloudinary-android = { module = "com.cloudinary:cloudinary-android", version.ref = "cloudinaryAndroidVersion" }
 core = { module = "com.google.zxing:core", version.ref = "core" }
 jbcrypt = { module = "org.mindrot:jbcrypt", version.ref = "jbcrypt" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

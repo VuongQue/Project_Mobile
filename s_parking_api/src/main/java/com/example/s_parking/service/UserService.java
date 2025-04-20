@@ -19,5 +19,7 @@ public interface UserService {
     Optional<User> getUserInfo(String username);
 
     UserInfoResponse convertToDto(User entity);
+
+    boolean updateAvatarUrl(String username, String avatarUrl);
 }
 

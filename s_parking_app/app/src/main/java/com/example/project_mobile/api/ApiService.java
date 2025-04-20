@@ -4,6 +4,8 @@ import com.example.project_mobile.dto.AuthResponse;
 import com.example.project_mobile.dto.LoginRequest;
 import com.example.project_mobile.dto.MyCurrentSessionResponse;
 import com.example.project_mobile.dto.ParkingAreaResponse;
+import com.example.project_mobile.dto.SuccessResponse;
+import com.example.project_mobile.dto.UpdateAvatarRequest;
 import com.example.project_mobile.dto.UserInfoResponse;
 import com.example.project_mobile.dto.UsernameRequest;
 import com.example.project_mobile.dto.ParkingLotResponse;
@@ -16,6 +18,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 
 public interface ApiService {
 
@@ -39,6 +42,9 @@ public interface ApiService {
 
     @GET("img/all")
     Call<List<Image>> getNotificationImg();
+
+    @PUT("user/update-avatar")
+    Call<SuccessResponse> updateAvatar(@Body UpdateAvatarRequest request);
 
 }
 

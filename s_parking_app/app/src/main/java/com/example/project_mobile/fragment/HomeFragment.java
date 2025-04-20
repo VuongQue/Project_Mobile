@@ -7,8 +7,10 @@ import static com.example.project_mobile.utils.FormatAndCipher.hashBcrypt;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.bumptech.glide.Glide;
 import com.example.project_mobile.HistoryActivity;
 import com.example.project_mobile.ParkingActivity;
 import com.example.project_mobile.R;
@@ -49,6 +52,7 @@ public class HomeFragment extends Fragment {
     FragmentHomeBinding binding;
     private SliderAdapter sliderAdapter;
     private ParkingAreaAdapter parkingAreaAdapter;
+    private SharedPreferences sharedPreferences;
     private ArrayList<Image> imageList;
     private ArrayList<ParkingAreaResponse> parkingAreaResponseArrayList;
 
@@ -77,6 +81,18 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         String fullName = requireActivity().getSharedPreferences("UserInfo", MODE_PRIVATE).getString("FullName", "");
         binding.fullName.setText(fullName);
+        String avatarUrl = requireActivity().getSharedPreferences("UserInfo", MODE_PRIVATE).getString("Avatar_Url", ""); // Lấy URL từ SharedPreferences
+
+        if (avatarUrl != null && !avatarUrl.isEmpty()) {
+            Glide.with(getContext())
+                    .load(Uri.parse(avatarUrl))  // Tải ảnh từ URL
+                    .into(binding.avatar);  // Gán vào ImageView
+        } else {
+            // Nếu không có URL hợp lệ, có thể sử dụng ảnh mặc định
+            Glide.with(getContext())
+                    .load(android.R.drawable.sym_def_app_icon)  // Sử dụng ảnh mặc định từ drawable
+                    .into(binding.avatar);
+        }
 
         parkingAreaResponseArrayList = new ArrayList<>();
         imageList = new ArrayList<>();

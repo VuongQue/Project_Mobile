@@ -52,6 +52,7 @@ dependencies {
     implementation(libs.zxing.android.embedded)
     testImplementation(libs.junit)
     implementation(libs.jbcrypt)
+    implementation(libs.cloudinary.cloudinary.android)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 }
