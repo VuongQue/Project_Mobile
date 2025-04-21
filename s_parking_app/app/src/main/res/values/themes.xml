@@ -6,6 +6,10 @@
         <item name="android:windowBackground">#FFFFFF</item>
         <item name="colorBackground">#FFFFFF</item> <!-- Tùy chỉnh -->
         <item name="textColor">#000000</item>
+        <item name="editTextColor">#decece</item>
+        <item name="navColor">#decece</item>
+        <item name="backgroundIconColor">#decece</item>
+        <item name="backgroundSession">#decece</item>
     </style>
 
     <style name="Theme.Project_Mobile" parent="Base.Theme.Project_Mobile" />

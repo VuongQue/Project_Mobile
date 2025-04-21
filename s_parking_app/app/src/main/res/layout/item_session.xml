@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="12dp"
-        android:background="#121212">
+        android:background="?attr/backgroundSession">
 
         <!-- Icon bên trái -->
         <ImageView

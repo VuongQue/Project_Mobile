@@ -16,7 +16,7 @@
         android:padding="10dp"
         android:elevation="10dp"
         android:gravity="center"
-        android:background="#121212"
+        android:background="?attr/navColor"
         android:layout_alignParentBottom="true">
 
         <LinearLayout
