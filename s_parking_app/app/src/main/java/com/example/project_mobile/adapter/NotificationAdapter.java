@@ -1,31 +1,36 @@
 package com.example.project_mobile.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_mobile.R;
+import com.example.project_mobile.dto.NotificationResponse;
 import com.example.project_mobile.model.Notification;
 
 import java.util.List;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.ViewHolder>{
     private Context context;
-    private List<Notification> notificationList;
+    private List<NotificationResponse> notificationResponseList;
     private NotificationAdapter.OnItemClickListener onItemClickListener;
 
     public interface OnItemClickListener {
-        void onItemClick(Notification notification);
+        void onItemClick(NotificationResponse notificationResponse, int position);
     }
 
-    public NotificationAdapter(Context context, List<Notification> notificationList, NotificationAdapter.OnItemClickListener listener) {
+    public NotificationAdapter(Context context, List<NotificationResponse> notificationResponseList, NotificationAdapter.OnItemClickListener listener) {
         this.context = context;
-        this.notificationList = notificationList;
+        this.notificationResponseList = notificationResponseList;
         this.onItemClickListener = listener;
     }
 
@@ -38,18 +43,24 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     @Override
     public void onBindViewHolder(@NonNull NotificationAdapter.ViewHolder holder, int position) {
-        Notification notification = notificationList.get(position);
+        NotificationResponse notification = notificationResponseList.get(position);
 
         holder.txtTitle.setText(notification.getTitle());
         holder.txtMessage.setText(notification.getMessage());
         holder.txtCreatedAt.setText(notification.getFormattedDate());
+        if (!notification.isRead()) {
+            holder.txtTitle.setTypeface(null, Typeface.BOLD);
+        }
+        else {
+            holder.txtTitle.setTypeface(null, Typeface.NORMAL);
+        }
 
-        holder.itemView.setOnClickListener(v -> onItemClickListener.onItemClick(notification));
+        holder.itemView.setOnClickListener(v -> onItemClickListener.onItemClick(notification, position));
     }
 
     @Override
     public int getItemCount() {
-        return notificationList.size();
+        return notificationResponseList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

@@ -20,5 +20,10 @@ public class Notification {
     private String title;
     private String message;
     private LocalDateTime createdAt;
+    private boolean isRead;
+
+    @ManyToOne
+    @JoinColumn(name = "username")
+    private User user;
 }
 

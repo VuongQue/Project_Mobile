@@ -42,11 +42,6 @@ public class Notification {
         this.createdAt = createdAt;
     }
 
-    public String getFormattedDate() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
-        return dateFormat.format(createdAt);
-    }
-
     public Notification(Long id, String title, String message, Date createdAt) {
         this.id = id;
         this.title = title;
