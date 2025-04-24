@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -37,6 +36,9 @@ public class SessionController {
 
     @Autowired
     private final ParkingLotService parkingLotService;
+
+    @Autowired
+    private final ParkingAreaService parkingAreaService;
 
     @Autowired
     private ParkingSocketController parkingSocketController;
@@ -100,7 +102,7 @@ public class SessionController {
         }
 
         Optional<Booking> booking = bookingService.findByUsernameAndDate(username.trim(), LocalDate.now());
-        Session session = null;
+        Session session;
         if (booking.isPresent()) {
             session = new Session(null, LocalDateTime.now(), null, request.getLicensePlate(), "Booked", 0,
                     booking.get().getUser(), booking.get().getParking(), booking.get().getPayment());
@@ -117,14 +119,13 @@ public class SessionController {
             optionalSlot.get().setStatus("Unavailable");
             parkingLotService.updateParkingLot(optionalSlot.get().getId(), optionalSlot.get());
         }
-        if (session == null)
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
-                    .body("Có lỗi");
 
         sessionService.createSession(session);
+        parkingAreaService.updateSlots();
         MyCurrentSessionResponse currentSessionResponse = sessionService.convertToDTO(session);
 
-        Notification notification = new Notification(null, "Check In", "Xe của bạn đã được đổ ở" + session.getParking().getLocation(), LocalDateTime.now());
+        Notification notification = new Notification(null, "Check In", "Xe của bạn đã được đổ ở: " + session.getParking().getLocation(), LocalDateTime.now(), false, user.get());
+        notificationService.createNewNotificatioin(notification);
         NotificationResponse notificationResponse = notificationService.convertToDto(notification);
 
         parkingSocketController.sendCheckInNotification(username, currentSessionResponse);

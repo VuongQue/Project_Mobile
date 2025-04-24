@@ -50,4 +50,9 @@ public class ParkingAreaImp implements ParkingAreaService {
         messagingTemplate.convertAndSend("/topic/parking-area", area);
     }
 
+    @Override
+    public void updateSlots() {
+        parkingAreaRepository.updateAvailableSlotsForAllAreas();
+    }
+
 }

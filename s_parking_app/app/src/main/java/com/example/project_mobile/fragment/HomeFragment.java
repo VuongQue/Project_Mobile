@@ -3,7 +3,6 @@ package com.example.project_mobile.fragment;
 import static android.content.Context.MODE_PRIVATE;
 
 import static com.example.project_mobile.utils.FormatAndCipher.formatDateTime;
-import static com.example.project_mobile.utils.FormatAndCipher.hashBcrypt;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -85,9 +84,9 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         String fullName = requireActivity().getSharedPreferences("UserInfo", MODE_PRIVATE).getString("FullName", "");
         binding.fullName.setText(fullName);
-        String avatarUrl = requireActivity().getSharedPreferences("UserInfo", MODE_PRIVATE).getString("Avatar_Url", ""); // Lấy URL từ SharedPreferences
+        String avatarUrl = requireActivity().getSharedPreferences("UserInfo", MODE_PRIVATE).getString("Avatar_Url", "");
 
-        if (avatarUrl != null && !avatarUrl.isEmpty()) {
+        if (!avatarUrl.isEmpty()) {
             Glide.with(getContext())
                     .load(Uri.parse(avatarUrl))  // Tải ảnh từ URL
                     .into(binding.avatar);  // Gán vào ImageView
@@ -252,16 +251,23 @@ public class HomeFragment extends Fragment {
         WebSocketManager<MyCurrentSessionResponse> sessionSocket =
                 new WebSocketManager<>(MyCurrentSessionResponse.class, "/topic/checkin/" + username);
 
-        // Dùng để thông báo ngoài máy nhưng chưa biết làm sao
-//        WebSocketManager<NotificationResponse> notiSocket =
-//                new WebSocketManager<>(NotificationResponse.class, "/topic/notification/" + username);
+        WebSocketManager<NotificationResponse> notiSocket =
+                new WebSocketManager<>(NotificationResponse.class, "/topic/notification/" + username);
 
         sessionSocket.connect(new WebSocketManager.OnMessageCallback<MyCurrentSessionResponse>() {
             @Override
             public void onMessage(MyCurrentSessionResponse myCurrentSessionResponse) {
                 requireActivity().runOnUiThread(() -> {
-                    Toast.makeText(getContext(), "Hello", Toast.LENGTH_SHORT).show();
                     setUpSession(myCurrentSessionResponse);
+                });
+            }
+        });
+
+        notiSocket.connect(new WebSocketManager.OnMessageCallback<NotificationResponse>() {
+            @Override
+            public void onMessage(NotificationResponse notificationResponse) {
+                requireActivity().runOnUiThread(() -> {
+                    Toast.makeText(getContext(), notificationResponse.getMessage(), Toast.LENGTH_SHORT).show();
                 });
             }
         });
