@@ -136,9 +136,9 @@ public class ProfileFragment extends Fragment {
         String username = requireActivity().getSharedPreferences("LoginDetails", MODE_PRIVATE).getString("Username", "");
         ApiService apiService = ApiClient.getInstance(getContext());
         UpdateAvatarRequest request = new UpdateAvatarRequest(username, url);
-        apiService.updateAvatar(request).enqueue(new Callback<SuccessResponse>() {
+        apiService.updateAvatar(request).enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<SuccessResponse> call, Response<SuccessResponse> response) {
+            public void onResponse(@NonNull Call<SuccessResponse> call, @NonNull Response<SuccessResponse> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(getContext(), "Tải lên thành công", Toast.LENGTH_SHORT).show();
                 }
@@ -203,7 +203,7 @@ public class ProfileFragment extends Fragment {
                         String avatarUrl = (String) resultData.get("secure_url");
 
                         Log.d("UPLOAD", "Upload thành công: " + avatarUrl);
-                        sendToServer(avatarUrl); // 👈 Gửi về API
+                        sendToServer(avatarUrl);
                     }
 
                     @Override

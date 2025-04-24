@@ -3,6 +3,8 @@ package com.example.project_mobile.api;
 import com.example.project_mobile.dto.AuthResponse;
 import com.example.project_mobile.dto.LoginRequest;
 import com.example.project_mobile.dto.MyCurrentSessionResponse;
+import com.example.project_mobile.dto.NotificationRequest;
+import com.example.project_mobile.dto.NotificationResponse;
 import com.example.project_mobile.dto.ParkingAreaResponse;
 import com.example.project_mobile.dto.SuccessResponse;
 import com.example.project_mobile.dto.UpdateAvatarRequest;
@@ -45,6 +47,12 @@ public interface ApiService {
 
     @PUT("user/update-avatar")
     Call<SuccessResponse> updateAvatar(@Body UpdateAvatarRequest request);
+
+    @POST("notification/yours")
+    Call<List<NotificationResponse>> getMyNotifications(@Body UsernameRequest request);
+
+    @POST("notification/update")
+    Call<SuccessResponse> updateNotificationStatus(@Body NotificationRequest request);
 
 }
 
