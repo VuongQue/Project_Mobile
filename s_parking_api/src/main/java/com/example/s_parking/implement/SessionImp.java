@@ -34,12 +34,16 @@ public class SessionImp implements SessionService {
     }
 
     @Override
-    public Session updateSession(Long id, Session session) {
-        if (sessionRepository.existsById(id)) {
-            session.setId(id);
-            return sessionRepository.save(session);
+    public Session updateSession(Session session) {
+        try {
+            if (sessionRepository.existsById(session.getId())) {
+                return sessionRepository.save(session);
+            }
         }
-        throw new RuntimeException("Session not found");
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override

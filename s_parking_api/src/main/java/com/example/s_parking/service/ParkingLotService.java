@@ -12,7 +12,7 @@ public interface ParkingLotService {
     List<ParkingLotResponse> convertAllToDto(List<ParkingLot> list);
     Optional<ParkingLot> getParkingLotById(Long id);
     ParkingLot createParkingLot(ParkingLot booking);
-    ParkingLot updateParkingLot(Long id, ParkingLot parkingLot);
+    ParkingLot updateParkingLot(ParkingLot parkingLot);
     void deleteParkingLot(Long id);
 
     Optional<ParkingLot> getSlot();

@@ -8,8 +8,8 @@
         <item name="textColor">#000000</item>
         <item name="editTextColor">#858585</item>
         <item name="navColor">#858585</item>
-        <item name="backgroundIconColor">#decece</item>
-        <item name="backgroundSession">#decece</item>
+        <item name="backgroundIconColor">#858585</item>
+        <item name="backgroundSession">#858585</item>
     </style>
 
     <style name="Theme.Project_Mobile" parent="Base.Theme.Project_Mobile" />

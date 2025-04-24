@@ -49,7 +49,15 @@ public class ParkingLotImp implements ParkingLotService {
     }
 
     @Override
-    public ParkingLot updateParkingLot(Long id, ParkingLot parkingLot) {
+    public ParkingLot updateParkingLot(ParkingLot parkingLot) {
+        try {
+            if (parkingLotRepository.existsById(parkingLot.getId())) {
+                return parkingLotRepository.save(parkingLot);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
 

@@ -14,8 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -84,8 +83,9 @@ public class SessionController {
         return ResponseEntity.ok(myCurrentSessionResponse);
     }
 
-    @PostMapping("/check-in")
+    @PostMapping("/check-in-out")
     public ResponseEntity<?> checkIn(@RequestBody InOutRequest request) {
+        // Tách chuỗi kiểm tra
         String[] parts = request.getCode().split("-");
         String username = parts[0];
         String key = parts[1];
@@ -101,37 +101,96 @@ public class SessionController {
                     .body("Khóa không đúng");
         }
 
-        Optional<Booking> booking = bookingService.findByUsernameAndDate(username.trim(), LocalDate.now());
+        Notification notification;
+        MyCurrentSessionResponse currentSessionResponse;
+
+        // Kiểm tra là check in hay check out
+        Session lastSession;
         Session session;
-        if (booking.isPresent()) {
-            session = new Session(null, LocalDateTime.now(), null, request.getLicensePlate(), "Booked", 0,
-                    booking.get().getUser(), booking.get().getParking(), booking.get().getPayment());
+        lastSession = sessionService.getMyCurrentSession(user.get().getUsername());
+        if (lastSession == null || lastSession.getCheckOut() != null) {
+            // check in
+            // Nếu có đặt trước
+            Optional<Booking> booking = bookingService.findByUsernameAndDate(username.trim(), LocalDate.now());
+            if (booking.isPresent()) {
+                session = new Session(null, LocalDateTime.now(), null, request.getLicensePlate(), "Booked", 0,
+                        booking.get().getUser(), booking.get().getParking(), booking.get().getPayment());
+            }
+            // Nếu không đặt trước
+            else {
+                Optional<ParkingLot> optionalSlot  = parkingLotService.getSlot();
+                if (optionalSlot.isEmpty()) {
+                    return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
+                            .body("Hết chỗ");
+                }
+
+                session = new Session(null, LocalDateTime.now(), null, request.getLicensePlate(), "Normal", 0,
+                        user.get(), optionalSlot.get(), null);
+                optionalSlot.get().setStatus("Unavailable");
+                parkingLotService.updateParkingLot(optionalSlot.get());
+            }
+            // thao tác với csdl và thông báo
+            sessionService.createSession(session);
+            notification = new Notification(null, "Check In", "Xe của bạn đã được đổ ở: " + session.getParking().getLocation(), LocalDateTime.now(), false, user.get());
+
         }
         else {
-            Optional<ParkingLot> optionalSlot  = parkingLotService.getSlot();
-            if (optionalSlot.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
-                        .body("Hết chỗ");
+            //check out
+            // Nếu có đặt trước
+            if (lastSession.getType().equals("Booked")) {
+                lastSession.setCheckOut(LocalDateTime.now());
             }
+            // Nếu không có đặt trước
+            else {
+                lastSession.setCheckOut(LocalDateTime.now());
+                lastSession.setFee(calculateParkingFee(lastSession.getCheckIn(), lastSession.getCheckOut()));
+                ParkingLot parkingLot = lastSession.getParking();
+                parkingLot.setStatus("Unavailable");
+                parkingLotService.updateParkingLot(parkingLot);
+            }
+            // thao tác với csdl và thông báo
+            sessionService.updateSession(lastSession);
+            notification = new Notification(null, "Check Out", "Xe của bạn đã được lấy thành công", LocalDateTime.now(), false, user.get());
 
-            session = new Session(null, LocalDateTime.now(), null, request.getLicensePlate(), "Normal", 4000,
-                    user.get(), optionalSlot.get(), null);
-            optionalSlot.get().setStatus("Unavailable");
-            parkingLotService.updateParkingLot(optionalSlot.get().getId(), optionalSlot.get());
         }
 
-        sessionService.createSession(session);
         parkingAreaService.updateSlots();
-        MyCurrentSessionResponse currentSessionResponse = sessionService.convertToDTO(session);
+        currentSessionResponse = sessionService.convertToDTO(lastSession);
 
-        Notification notification = new Notification(null, "Check In", "Xe của bạn đã được đổ ở: " + session.getParking().getLocation(), LocalDateTime.now(), false, user.get());
         notificationService.createNewNotificatioin(notification);
         NotificationResponse notificationResponse = notificationService.convertToDto(notification);
 
-        parkingSocketController.sendCheckInNotification(username, currentSessionResponse);
+        parkingSocketController.sendCheckInOutNotification(username, currentSessionResponse);
         parkingSocketController.sendUserNotification(username, notificationResponse);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body("Checked In");
+                .body(notificationResponse.getTitle());
     }
+
+    public float calculateParkingFee(LocalDateTime checkIn, LocalDateTime checkOut) {
+        // Nếu quá 21h cùng ngày → 50.000đ
+        if (checkOut.toLocalTime().isAfter(LocalTime.of(21, 0)) &&
+                checkIn.toLocalDate().equals(checkOut.toLocalDate())) {
+            return 50000;
+        }
+
+        // Nếu gửi > 12 tiếng → 9.000đ
+        long durationInMinutes = Duration.between(checkIn, checkOut).toMinutes();
+        if (durationInMinutes > 12 * 60) {
+            return 9000;
+        }
+
+        // Nếu gửi vào Chủ nhật → 5.000đ
+        if (checkIn.getDayOfWeek() == DayOfWeek.SUNDAY) {
+            return 5000;
+        }
+
+        // Từ Thứ 2 → Thứ 7
+        if (checkOut.toLocalTime().isAfter(LocalTime.of(18, 30))) {
+            return 5_000;
+        } else {
+            return 4_000;
+        }
+    }
+
 }
