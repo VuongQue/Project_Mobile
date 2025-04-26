@@ -1,5 +1,6 @@
 package com.example.s_parking.entity;
 
+import com.example.s_parking.value.PaymentStatus;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,7 +23,9 @@ public class Payment {
     private LocalDateTime createdAt;
     private float amount;
     private String method;
-    private String status;
+
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus status;
     private String transactionId;
 }
 

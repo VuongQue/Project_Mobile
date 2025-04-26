@@ -29,6 +29,7 @@
     <string name="username">Username</string>
     <string name="phone_number">Phone number</string>
     <string name="key">Key</string>
+    <string name="date">Date</string>
 
     <string name="fee">Fee</string>
     <string name="paid">Paid</string>

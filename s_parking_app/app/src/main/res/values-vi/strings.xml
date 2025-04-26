@@ -28,7 +28,8 @@
     <string name="your_info">Thông tin của bạn...</string>
     <string name="username">Tên đăng nhập</string>
     <string name="phone_number">Số điện thoại</string>
-    <string name="key">Từ khóa</string>
+    <string name="key">Khóa</string>
+    <string name="date">Ngày</string>
 
     <string name="fee">Phí</string>
     <string name="paid">Đã thanh toán</string>

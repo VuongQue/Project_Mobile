@@ -1,5 +1,6 @@
 package com.example.s_parking.service;
 
+import com.example.s_parking.dto.response.BookingResponse;
 import com.example.s_parking.entity.Booking;
 
 import java.time.LocalDate;
@@ -14,4 +15,10 @@ public interface BookingService {
     void deleteBooking(Long id);
 
     Optional<Booking> findByUsernameAndDate(String username, LocalDate date);
+
+    List<Booking> getBookingByUserUsername(String username);
+
+    List<BookingResponse> convertAllToDto(List<Booking> bookingList);
+
+    BookingResponse convertToDto(Booking entity);
 }

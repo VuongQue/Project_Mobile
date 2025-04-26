@@ -16,4 +16,6 @@ public interface ParkingLotService {
     void deleteParkingLot(Long id);
 
     Optional<ParkingLot> getSlot();
+
+    List<ParkingLot> getAvailableParkingLots();
 }

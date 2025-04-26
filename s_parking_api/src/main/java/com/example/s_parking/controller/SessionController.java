@@ -7,6 +7,8 @@ import com.example.s_parking.dto.response.NotificationResponse;
 import com.example.s_parking.dto.response.SessionResponse;
 import com.example.s_parking.entity.*;
 import com.example.s_parking.service.*;
+import com.example.s_parking.value.ParkingStatus;
+import com.example.s_parking.value.SessionType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -113,7 +115,7 @@ public class SessionController {
             // Nếu có đặt trước
             Optional<Booking> booking = bookingService.findByUsernameAndDate(username.trim(), LocalDate.now());
             if (booking.isPresent()) {
-                session = new Session(null, LocalDateTime.now(), null, request.getLicensePlate(), "Booked", 0,
+                session = new Session(null, LocalDateTime.now(), null, request.getLicensePlate(), SessionType.RESERVED, 0,
                         booking.get().getUser(), booking.get().getParking(), booking.get().getPayment());
             }
             // Nếu không đặt trước
@@ -124,9 +126,9 @@ public class SessionController {
                             .body("Hết chỗ");
                 }
 
-                session = new Session(null, LocalDateTime.now(), null, request.getLicensePlate(), "Normal", 0,
+                session = new Session(null, LocalDateTime.now(), null, request.getLicensePlate(), SessionType.NOT_RESERVED, 0,
                         user.get(), optionalSlot.get(), null);
-                optionalSlot.get().setStatus("Unavailable");
+                optionalSlot.get().setStatus(ParkingStatus.UNAVAILABLE);
                 parkingLotService.updateParkingLot(optionalSlot.get());
             }
             // thao tác với csdl và thông báo
@@ -137,7 +139,7 @@ public class SessionController {
         else {
             //check out
             // Nếu có đặt trước
-            if (lastSession.getType().equals("Booked")) {
+            if (lastSession.getType().equals(SessionType.RESERVED)) {
                 lastSession.setCheckOut(LocalDateTime.now());
             }
             // Nếu không có đặt trước
@@ -145,7 +147,7 @@ public class SessionController {
                 lastSession.setCheckOut(LocalDateTime.now());
                 lastSession.setFee(calculateParkingFee(lastSession.getCheckIn(), lastSession.getCheckOut()));
                 ParkingLot parkingLot = lastSession.getParking();
-                parkingLot.setStatus("Unavailable");
+                parkingLot.setStatus(ParkingStatus.AVAILABLE);
                 parkingLotService.updateParkingLot(parkingLot);
             }
             // thao tác với csdl và thông báo

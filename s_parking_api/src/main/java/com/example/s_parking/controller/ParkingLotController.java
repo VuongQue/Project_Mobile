@@ -28,6 +28,18 @@ public class ParkingLotController {
         return ResponseEntity.ok(parkingLotResponses);
     }
 
+    @GetMapping("/available")
+    public ResponseEntity<?> getAvailableParkingLots() {
+        List<ParkingLot> parkingLots = parkingLotService.getAvailableParkingLots();
+        List<ParkingLotResponse> parkingLotResponses = parkingLotService.convertAllToDto(parkingLots);
+        if (parkingLotResponses == null || parkingLotResponses.isEmpty()) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("Không tìm dữ liệu");
+        }
+        return ResponseEntity.ok(parkingLotResponses);
+    }
+
     /*@PostMapping("/filter")
     public ResponseEntity<?> filterParkingLots(@RequestBody ParkingLotRequest request) {
         List<ParkingLotRequest> filteredLots = parkingLotRepository.findAll(Specifications.ParkingLotFilterBy(request));

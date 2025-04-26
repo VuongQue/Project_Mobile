@@ -4,6 +4,7 @@ import com.example.s_parking.dto.response.ParkingLotResponse;
 import com.example.s_parking.entity.ParkingLot;
 import com.example.s_parking.repository.ParkingLotRepository;
 import com.example.s_parking.service.ParkingLotService;
+import com.example.s_parking.value.ParkingStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,7 @@ public class ParkingLotImp implements ParkingLotService {
                 .id(entity.getId())
                 .row(entity.getRow())
                 .pos(entity.getPos())
-                .status(entity.getStatus())
+                .status(String.valueOf(entity.getStatus()))
                 .area(entity.getArea().getIdArea())
                 .build();
     }
@@ -68,6 +69,11 @@ public class ParkingLotImp implements ParkingLotService {
 
     @Override
     public Optional<ParkingLot> getSlot() {
-        return parkingLotRepository.findFirstByStatus("Available");
+        return parkingLotRepository.findFirstByStatus(ParkingStatus.AVAILABLE);
+    }
+
+    @Override
+    public List<ParkingLot> getAvailableParkingLots() {
+        return parkingLotRepository.findByStatus(ParkingStatus.AVAILABLE);
     }
 }

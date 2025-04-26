@@ -4,6 +4,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 import static com.example.project_mobile.utils.FormatAndCipher.formatDateTime;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -35,7 +36,6 @@ import com.example.project_mobile.databinding.FragmentHomeBinding;
 import com.example.project_mobile.dto.MyCurrentSessionResponse;
 import com.example.project_mobile.dto.NotificationResponse;
 import com.example.project_mobile.dto.ParkingAreaResponse;
-import com.example.project_mobile.dto.SessionResponse;
 import com.example.project_mobile.dto.UsernameRequest;
 import com.example.project_mobile.model.Image;
 import com.example.project_mobile.socket.WebSocketManager;
@@ -79,6 +79,7 @@ public class HomeFragment extends Fragment {
         return binding.getRoot();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -87,12 +88,12 @@ public class HomeFragment extends Fragment {
         String avatarUrl = requireActivity().getSharedPreferences("UserInfo", MODE_PRIVATE).getString("Avatar_Url", "");
 
         if (!avatarUrl.isEmpty()) {
-            Glide.with(getContext())
+            Glide.with(requireContext())
                     .load(Uri.parse(avatarUrl))  // Tải ảnh từ URL
                     .into(binding.avatar);  // Gán vào ImageView
         } else {
             // Nếu không có URL hợp lệ, có thể sử dụng ảnh mặc định
-            Glide.with(getContext())
+            Glide.with(requireContext())
                     .load(android.R.drawable.sym_def_app_icon)  // Sử dụng ảnh mặc định từ drawable
                     .into(binding.avatar);
         }
@@ -117,7 +118,7 @@ public class HomeFragment extends Fragment {
 
     private void showQRCodeDialog() {
         // Tạo một Dialog
-        Dialog qrDialog = new Dialog(getContext());
+        Dialog qrDialog = new Dialog(requireContext());
         qrDialog.setContentView(R.layout.dialog_qr_code);
 
         String username = requireActivity().getSharedPreferences("LoginDetails", MODE_PRIVATE).getString("Username", "");
@@ -143,7 +144,7 @@ public class HomeFragment extends Fragment {
         ApiService apiService = ApiClient.getInstance(getContext());
         apiService.getNotificationImg().enqueue(new Callback<List<Image>>() {
             @Override
-            public void onResponse(Call<List<Image>> call, Response<List<Image>> response) {
+            public void onResponse(@NonNull Call<List<Image>> call, @NonNull Response<List<Image>> response) {
                 if (response.isSuccessful() & response.body() != null) {
                     imageList.clear();
                     imageList.addAll(response.body());
@@ -165,6 +166,7 @@ public class HomeFragment extends Fragment {
     private void loadParkingArea() {
         ApiService apiService = ApiClient.getInstance(getContext());
         apiService.getParkingAreas().enqueue(new Callback<>() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(@NonNull Call<List<ParkingAreaResponse>> call, @NonNull Response<List<ParkingAreaResponse>> response) {
                 if (response.isSuccessful() & response.body() != null) {
@@ -190,6 +192,7 @@ public class HomeFragment extends Fragment {
                 new WebSocketManager<>(ParkingAreaResponse.class, "/topic/parkingArea");
 
         socket.connect(new WebSocketManager.OnMessageCallback<ParkingAreaResponse>() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onMessage(ParkingAreaResponse updatedArea) {
                 requireActivity().runOnUiThread(() -> {
@@ -213,6 +216,7 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    @SuppressLint("SetTextI18n")
     private void setUpSession(MyCurrentSessionResponse response) {
         binding.tvLocation.setText(String.valueOf(response.getLocation()));
         LocalDateTime checkIn = response.getCheckIn();

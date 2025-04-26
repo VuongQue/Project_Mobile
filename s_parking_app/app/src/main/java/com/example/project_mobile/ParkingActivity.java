@@ -1,15 +1,21 @@
 package com.example.project_mobile;
 
+import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -20,10 +26,13 @@ import com.example.project_mobile.adapter.ParkingLotAdapter;
 import com.example.project_mobile.api.ApiClient;
 import com.example.project_mobile.api.ApiService;
 import com.example.project_mobile.databinding.ActivityParkingBinding;
+import com.example.project_mobile.databinding.DialogBookingBinding;
 import com.example.project_mobile.dto.ParkingLotResponse;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import retrofit2.Call;
@@ -86,6 +95,7 @@ public class ParkingActivity extends AppCompatActivity {
         public void afterTextChanged(Editable s) {}
     };
 
+    @SuppressLint("NotifyDataSetChanged")
     public void updateLists() {
         String selectedArea = binding.actvArea.getText().toString().trim();
         String selectedRow = binding.actvRow.getText().toString().trim();
@@ -101,7 +111,7 @@ public class ParkingActivity extends AppCompatActivity {
         adapter = new ParkingLotAdapter(this, filteredList, new ParkingLotAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(ParkingLotResponse parkingLotResponse) {
-                Toast.makeText(ParkingActivity.this, "Selected: " + parkingLotResponse.getName(), Toast.LENGTH_SHORT).show();
+                showDialog(parkingLotResponse);
             }
         });
         binding.recyclerView.setAdapter(adapter);
@@ -136,15 +146,16 @@ public class ParkingActivity extends AppCompatActivity {
         adapter = new ParkingLotAdapter(this, parkingLotResponseList, new ParkingLotAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(ParkingLotResponse parkingLotResponse) {
-                Toast.makeText(ParkingActivity.this, "Selected: " + parkingLotResponse.getName(), Toast.LENGTH_SHORT).show();
+                showDialog(parkingLotResponse);
             }
         });
         binding.recyclerView.setAdapter(adapter);
 
         ApiService apiService = ApiClient.getInstance(getApplicationContext());
-        apiService.getAllParkingLots().enqueue(new Callback<List<ParkingLotResponse>>() {
+        apiService.getAvailableParkingLots().enqueue(new Callback<List<ParkingLotResponse>>() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
-            public void onResponse(Call<List<ParkingLotResponse>> call, Response<List<ParkingLotResponse>> response) {
+            public void onResponse(@NonNull Call<List<ParkingLotResponse>> call, @NonNull Response<List<ParkingLotResponse>> response) {
                 if (response.isSuccessful() & response.body() != null)
                 {
                     parkingLotResponseList.clear(); // Clear dữ liệu cũ
@@ -157,10 +168,51 @@ public class ParkingActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<ParkingLotResponse>> call, Throwable t) {
+            public void onFailure(@NonNull Call<List<ParkingLotResponse>> call, @NonNull Throwable t) {
                 Log.e("API_ERROR", "Failed to fetch data", t);
             }
         });
+
+    }
+
+    private void showDialog(ParkingLotResponse parkingLotResponse) {
+        DialogBookingBinding bookingBinding = DialogBookingBinding.inflate(getLayoutInflater());
+
+        bookingBinding.etLocation.setText(parkingLotResponse.getLocation());
+
+        Dialog bookingDialog = new Dialog(ParkingActivity.this);
+        bookingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        bookingDialog.setContentView(bookingBinding.getRoot());
+
+        Objects.requireNonNull(bookingDialog.getWindow()).setLayout(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+
+
+        bookingBinding.btnPay.setOnClickListener(v -> {
+            // TODO: Xử lý thanh toán ở đây
+            Toast.makeText(this, "Đã nhấn Thanh Toán", Toast.LENGTH_SHORT).show();
+            bookingDialog.dismiss();
+        });
+
+        // Gán sự kiện click vào ô Date để chọn ngày
+        bookingBinding.etDate.setOnClickListener(v -> {
+            Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+            DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                    (view, selectedYear, selectedMonth, selectedDay) -> {
+                        String date = selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear;
+                        bookingBinding.etDate.setText(date);
+                    }, year, month, day);
+            datePickerDialog.show();
+        });
+
+        // Hiển thị Dialog
+        bookingDialog.show();
 
     }
 
@@ -171,6 +223,13 @@ public class ParkingActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(ParkingActivity.this, MainActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        binding.imgHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ParkingActivity.this, BookingHistoryActivity.class));
             }
         });
     }

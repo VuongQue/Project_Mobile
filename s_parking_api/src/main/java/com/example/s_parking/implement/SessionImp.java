@@ -68,7 +68,7 @@ public class SessionImp implements SessionService {
                 .id(entity.getId())
                 .checkIn(entity.getCheckIn())
                 .checkOut(entity.getCheckOut())
-                .type(entity.getType())
+                .type(String.valueOf(entity.getType()))
                 .licensePlate(entity.getLicensePlate())
                 .fee(entity.getFee())
                 .username(
@@ -89,7 +89,7 @@ public class SessionImp implements SessionService {
                 .id(entity.getId())
                 .checkIn(entity.getCheckIn())
                 .checkOut(entity.getCheckOut())
-                .type(entity.getType())
+                .type(String.valueOf(entity.getType()))
                 .licensePlate(entity.getLicensePlate())
                 .fee(entity.getFee())
                 .location(entity.getParking().getLocation())

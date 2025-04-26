@@ -1,5 +1,6 @@
 package com.example.s_parking.implement;
 
+import com.example.s_parking.dto.response.BookingResponse;
 import com.example.s_parking.entity.Booking;
 import com.example.s_parking.repository.BookingRepository;
 import com.example.s_parking.service.BookingService;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BookingImp implements BookingService {
@@ -47,5 +49,27 @@ public class BookingImp implements BookingService {
     @Override
     public Optional<Booking> findByUsernameAndDate(String username, LocalDate date) {
         return bookingRepository.findByUserUsernameAndDate(username, date);
+    }
+
+    @Override
+    public List<Booking> getBookingByUserUsername(String username) {
+        return bookingRepository.findByUserUsername(username);
+    }
+
+    @Override
+    public List<BookingResponse> convertAllToDto(List<Booking> list) {
+        return list.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+    @Override
+    public BookingResponse convertToDto(Booking entity) {
+        return BookingResponse.builder()
+                .id(entity.getId())
+                .location(entity.getParking().getLocation())
+                .date(entity.getDate())
+                .createdAt(entity.getCreatedAt())
+                .fee(entity.getFee())
+                .build();
     }
 }

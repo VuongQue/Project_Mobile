@@ -12,9 +12,9 @@ import com.example.project_mobile.dto.ParkingLotResponse;
 import java.util.List;
 
 public class ParkingLotAdapter extends RecyclerView.Adapter<ParkingLotAdapter.ViewHolder> {
-    private Context context;
-    private List<ParkingLotResponse> parkingLotResponseList;
-    private OnItemClickListener onItemClickListener;
+    private final Context context;
+    private final List<ParkingLotResponse> parkingLotResponseList;
+    private final OnItemClickListener onItemClickListener;
 
     public interface OnItemClickListener {
         void onItemClick(ParkingLotResponse parkingLotResponse);
@@ -36,7 +36,7 @@ public class ParkingLotAdapter extends RecyclerView.Adapter<ParkingLotAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ParkingLotResponse parkingLotResponse = parkingLotResponseList.get(position);
-        holder.txtName.setText(parkingLotResponse.getName());
+        holder.txtName.setText(parkingLotResponse.getLocation());
 
         if ("Unavailable".equals(parkingLotResponse.getStatus())) {
             holder.vStatus.setBackgroundResource(R.color.red);

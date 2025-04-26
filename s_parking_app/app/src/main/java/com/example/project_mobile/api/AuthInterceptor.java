@@ -1,5 +1,7 @@
 package com.example.project_mobile.api;
 
+import androidx.annotation.NonNull;
+
 import java.io.IOException;
 
 import okhttp3.Interceptor;
@@ -9,11 +11,12 @@ import okhttp3.Response;
 
 public class AuthInterceptor implements Interceptor {
 
-    private TokenProvider tokenProvider;
+    private final TokenProvider tokenProvider;
     public AuthInterceptor(TokenProvider tokenProvider) {
         this.tokenProvider = tokenProvider;
     }
 
+    @NonNull
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request originalRequest = chain.request();
