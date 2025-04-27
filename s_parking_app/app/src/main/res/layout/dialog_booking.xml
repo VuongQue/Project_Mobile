@@ -5,49 +5,32 @@
     android:orientation="vertical"
     android:padding="24dp">
 
-    <!-- Location TextView -->
-    <TextView
-        android:id="@+id/tv_location_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/parking_location"
-        android:textSize="16sp"
-        android:layout_marginBottom="4dp"/>
-
-    <TextView
-        android:id="@+id/et_location"
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"/>
+        android:hint="@string/parking_location"
+        android:layout_marginBottom="16dp">
+        <AutoCompleteTextView
+            android:id="@+id/et_location"
+            android:padding="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Date Input -->
-    <TextView
-        android:id="@+id/tv_date_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/date"
-        android:textSize="16sp"
-        android:layout_marginBottom="4dp"/>
-
-    <EditText
-        android:id="@+id/et_date"
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Select Date"
-        android:focusable="false"
-        android:inputType="none"
-        android:drawableEnd="@drawable/ic_calendar_day"
-        android:paddingEnd="12dp"
-        android:layout_marginBottom="16dp"/>
-
-    <!-- Fee Display -->
-    <TextView
-        android:id="@+id/tv_fee_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/fee"
-        android:textSize="16sp"
-        android:layout_marginBottom="4dp"/>
+        android:hint="@string/date"
+        android:layout_marginBottom="16dp">
+        <AutoCompleteTextView
+            android:id="@+id/et_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:inputType="none"
+            android:drawableEnd="@drawable/ic_calendar_day"
+            android:padding="12dp"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:id="@+id/tv_fee_value"
@@ -55,8 +38,9 @@
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:gravity="center_vertical"
         android:padding="8dp"
+        android:text="7.000đ"
+        android:textAlignment="textEnd"
         android:layout_marginBottom="24dp"/>
 
     <!-- Payment Button -->
