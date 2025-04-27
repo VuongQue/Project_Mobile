@@ -33,7 +33,9 @@ public class SecurityConfig {
                                 "/ws-parking/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
-                                "/v3/api-docs/**"
+                                "/v3/api-docs/**",
+                                "/payment/create-transaction",
+                                "/sessions/check-in-out"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
