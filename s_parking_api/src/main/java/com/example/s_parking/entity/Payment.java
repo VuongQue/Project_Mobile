@@ -20,7 +20,7 @@ public class Payment {
     private Long id;
 
     private LocalDateTime createdAt;
-    private float amount;
+    private double amount;
     private String method;
     private String status;
     private String transactionId;

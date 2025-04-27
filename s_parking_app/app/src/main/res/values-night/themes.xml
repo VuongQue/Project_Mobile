@@ -7,5 +7,9 @@
         <item name="android:windowBackground">#121212</item>
         <item name="colorBackground">#121212</item>
         <item name="textColor">#FFFFFF</item>
+        <item name="editTextColor">#858585</item>
+        <item name="navColor">#858585</item>
+        <item name="backgroundIconColor">#decece</item>
+        <item name="backgroundSession">#decece</item>
     </style>
 </resources>
