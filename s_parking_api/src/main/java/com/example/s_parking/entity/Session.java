@@ -1,5 +1,6 @@
 package com.example.s_parking.entity;
 
+import com.example.s_parking.value.SessionType;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -21,7 +22,9 @@ public class Session {
     private LocalDateTime checkIn;
     private LocalDateTime checkOut;
     private String licensePlate;
-    private String type;
+
+    @Enumerated(EnumType.STRING)
+    private SessionType type;
     private float fee;
 
     @ManyToOne

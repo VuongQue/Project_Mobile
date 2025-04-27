@@ -21,7 +21,7 @@ public class ParkingSocketController {
         messagingTemplate.convertAndSend("/topic/parkingArea", response);
     }
 
-    public void sendCheckInNotification(String username, MyCurrentSessionResponse response) {
+    public void sendCheckInOutNotification(String username, MyCurrentSessionResponse response) {
         messagingTemplate.convertAndSend("/topic/checkin/" + username, response);
     }
 

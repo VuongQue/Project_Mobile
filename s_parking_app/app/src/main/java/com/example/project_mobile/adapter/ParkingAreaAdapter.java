@@ -12,14 +12,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_mobile.R;
 import com.example.project_mobile.dto.ParkingAreaResponse;
-import com.example.project_mobile.dto.ParkingLotResponse;
 
 import java.util.List;
 
 public class ParkingAreaAdapter extends RecyclerView.Adapter<ParkingAreaAdapter.ViewHolder>{
 
-    private Context context;
-    private List<ParkingAreaResponse> parkingAreaResponseList;
+    private final Context context;
+    private final List<ParkingAreaResponse> parkingAreaResponseList;
 
     public ParkingAreaAdapter(Context context, List<ParkingAreaResponse> parkingAreaResponseList) {
         this.context = context;

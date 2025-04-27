@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Booking")
@@ -18,6 +19,8 @@ public class Booking {
     private Long id;
 
     private LocalDate date;
+
+    private LocalDateTime createdAt;
     private float fee;
 
     @ManyToOne

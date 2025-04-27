@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="TEN NGUOI DUNG"
-        android:textColor="@android:color/white"
+        android:textColor="?attr/textColor"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"

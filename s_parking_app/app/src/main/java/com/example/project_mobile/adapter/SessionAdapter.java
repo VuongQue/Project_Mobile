@@ -1,5 +1,6 @@
 package com.example.project_mobile.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +14,9 @@ import com.example.project_mobile.dto.SessionResponse;
 import java.util.List;
 
 public class SessionAdapter extends RecyclerView.Adapter<SessionAdapter.SessionViewHolder> {
-    private Context context;
-    private List<SessionResponse> sessionResponseList;
-    private OnItemClickListener onItemClickListener;
+    private final Context context;
+    private final List<SessionResponse> sessionResponseList;
+    private final OnItemClickListener onItemClickListener;
 
     public interface OnItemClickListener {
         void onItemClick(SessionResponse sessionResponse);
@@ -30,11 +31,12 @@ public class SessionAdapter extends RecyclerView.Adapter<SessionAdapter.SessionV
     @NonNull
     @Override
     public SessionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_session, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_session, parent, false);
         return new SessionViewHolder(view);
     }
 
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull SessionViewHolder holder, int position) {
         SessionResponse sessionResponse = sessionResponseList.get(position);
@@ -52,7 +54,9 @@ public class SessionAdapter extends RecyclerView.Adapter<SessionAdapter.SessionV
     }
 
     public static class SessionViewHolder extends RecyclerView.ViewHolder {
-        private TextView txtTimeIn, txtFee, txtPaid;
+        private final TextView txtTimeIn;
+        private final TextView txtFee;
+        private final TextView txtPaid;
 
         public SessionViewHolder(@NonNull View itemView) {
             super(itemView);

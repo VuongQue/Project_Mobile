@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.project_mobile.R;
@@ -15,8 +14,8 @@ import com.smarteist.autoimageslider.SliderViewAdapter;
 import java.util.ArrayList;
 
 public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderHolder> {
-    private Context context;
-    private ArrayList<Image> imagesList;
+    private final Context context;
+    private final ArrayList<Image> imagesList;
 
     public SliderAdapter(Context context, ArrayList<Image> imagesList) {
         this.context = context;
@@ -39,8 +38,8 @@ public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderHolder>
         return imagesList.size();
     }
 
-    public class SliderHolder extends SliderViewAdapter.ViewHolder {
-        private ImageView imageView;
+    public static class SliderHolder extends SliderViewAdapter.ViewHolder {
+        private final ImageView imageView;
 
         public SliderHolder(View itemView) {
             super(itemView);

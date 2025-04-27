@@ -34,12 +34,16 @@ public class SessionImp implements SessionService {
     }
 
     @Override
-    public Session updateSession(Long id, Session session) {
-        if (sessionRepository.existsById(id)) {
-            session.setId(id);
-            return sessionRepository.save(session);
+    public Session updateSession(Session session) {
+        try {
+            if (sessionRepository.existsById(session.getId())) {
+                return sessionRepository.save(session);
+            }
         }
-        throw new RuntimeException("Session not found");
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
@@ -64,7 +68,7 @@ public class SessionImp implements SessionService {
                 .id(entity.getId())
                 .checkIn(entity.getCheckIn())
                 .checkOut(entity.getCheckOut())
-                .type(entity.getType())
+                .type(String.valueOf(entity.getType()))
                 .licensePlate(entity.getLicensePlate())
                 .fee(entity.getFee())
                 .username(
@@ -85,7 +89,7 @@ public class SessionImp implements SessionService {
                 .id(entity.getId())
                 .checkIn(entity.getCheckIn())
                 .checkOut(entity.getCheckOut())
-                .type(entity.getType())
+                .type(String.valueOf(entity.getType()))
                 .licensePlate(entity.getLicensePlate())
                 .fee(entity.getFee())
                 .location(entity.getParking().getLocation())

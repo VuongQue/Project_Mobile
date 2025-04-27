@@ -1,5 +1,6 @@
 package com.example.s_parking.entity;
 
+import com.example.s_parking.value.ParkingStatus;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -29,7 +30,9 @@ public class ParkingLot {
     @Column(name = "`row`")
     private String row;
     private String pos;
-    private String status;
+
+    @Enumerated(EnumType.STRING)
+    private ParkingStatus status;
 
     
 

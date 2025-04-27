@@ -17,26 +17,46 @@
             android:background="@drawable/gradient_background"
             android:orientation="horizontal"
             android:paddingTop="8dp"
-            android:paddingBottom="8dp">
+            android:paddingBottom="8dp"
+            android:gravity="center_vertical">
 
+            <!-- Nút Back -->
             <ImageButton
                 android:id="@+id/btnBack"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_margin="8dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
                 android:background="@drawable/ic_previous"
                 android:backgroundTint="@color/white"
                 android:padding="8dp"
-                android:textSize="18sp" />
+                android:scaleType="centerInside"/>
 
+            <!-- Text Booking -->
             <TextView
+                android:id="@+id/tvBookingTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
                 android:text="@string/book"
                 android:textColor="@color/white"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:gravity="center_vertical" />
+
+            <!-- Space đẩy phần còn lại sang phải -->
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <!-- Icon Time -->
+            <ImageView
+                android:id="@+id/imgHistory"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="8dp"
+                android:src="@drawable/ic_time"
+                android:scaleType="fitCenter"/>
         </LinearLayout>
 
         <LinearLayout
@@ -107,16 +127,6 @@
             android:padding="16dp" />
     </LinearLayout>
 
-    <com.google.android.material.button.MaterialButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/book"
-        android:background="@drawable/gradient_button"
-        app:backgroundTint="@null"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/linearLayout2"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

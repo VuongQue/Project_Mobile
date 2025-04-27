@@ -1,6 +1,7 @@
 package com.example.project_mobile.api;
 
 import com.example.project_mobile.dto.AuthResponse;
+import com.example.project_mobile.dto.BookingResponse;
 import com.example.project_mobile.dto.LoginRequest;
 import com.example.project_mobile.dto.MyCurrentSessionResponse;
 import com.example.project_mobile.dto.NotificationRequest;
@@ -24,8 +25,8 @@ import retrofit2.http.PUT;
 
 public interface ApiService {
 
-    @GET("parking-lots/all")
-    Call<List<ParkingLotResponse>> getAllParkingLots();
+    @GET("parking-lots/available")
+    Call<List<ParkingLotResponse>> getAvailableParkingLots();
 
     @POST("auth/login")
     Call<AuthResponse> login(@Body LoginRequest request);
@@ -53,6 +54,9 @@ public interface ApiService {
 
     @POST("notification/update")
     Call<SuccessResponse> updateNotificationStatus(@Body NotificationRequest request);
+
+    @POST("booking/my-booking-history")
+    Call<List<BookingResponse>> getMyBookingHistory(@Body UsernameRequest request);
 
 }
 

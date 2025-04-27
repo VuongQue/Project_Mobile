@@ -19,7 +19,7 @@ public class LocalDateTimeDeserializer implements JsonDeserializer<LocalDateTime
 
         // Kiểm tra nếu chuỗi là null hoặc rỗng
         if (dateString == null || dateString.isEmpty()) {
-            return null;  // Hoặc bạn có thể thay thế bằng LocalDateTime.now() nếu cần giá trị mặc định
+            return null;
         }
 
         try {

@@ -11,7 +11,7 @@ public interface SessionService {
     List<Session> getAllSessions();
     Optional<Session> getSessionById(Long id);
     Session createSession(Session session);
-    Session updateSession(Long id, Session session);
+    Session updateSession(Session session);
     void deleteSession(Long id);
 
     List<Session> getSessionByUsername(String username);

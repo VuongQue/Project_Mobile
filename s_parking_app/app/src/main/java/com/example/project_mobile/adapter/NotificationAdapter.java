@@ -1,28 +1,24 @@
 package com.example.project_mobile.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Typeface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.project_mobile.R;
 import com.example.project_mobile.dto.NotificationResponse;
-import com.example.project_mobile.model.Notification;
 
 import java.util.List;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.ViewHolder>{
-    private Context context;
-    private List<NotificationResponse> notificationResponseList;
-    private NotificationAdapter.OnItemClickListener onItemClickListener;
+    private final Context context;
+    private final List<NotificationResponse> notificationResponseList;
+    private final NotificationAdapter.OnItemClickListener onItemClickListener;
 
     public interface OnItemClickListener {
         void onItemClick(NotificationResponse notificationResponse, int position);

@@ -55,7 +55,7 @@ public class ParkingLotResponse {
         this.status = status;
     }
 
-    public String getName() {
+    public String getLocation() {
         return area + " - " + row + pos;
     }
 }
