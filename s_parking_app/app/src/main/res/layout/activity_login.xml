@@ -50,7 +50,7 @@
             android:background="@drawable/edittext_border"
             android:hint="MSSV"
             android:padding="12dp"
-            android:textColor="@color/white"
+            android:textColor="?attr/textColor"
             android:textColorHint="#8a8a8a"
             android:textSize="14sp" />
 
@@ -67,7 +67,7 @@
             android:hint="Password"
             android:inputType="textPassword"
             android:padding="12dp"
-            android:textColor="@color/white"
+            android:textColor="?attr/textColor"
             android:textColorHint="#8a8a8a"
             android:textSize="14sp" />
 
@@ -156,13 +156,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tvDontHaveAccount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="DON’T HAVE AN ACCOUNT?"
+                android:text="YOU HAVEN'T ACTIVATE YOUR ACCOUNT YET?"
                 android:textColor="#8a8a8a"
                 android:textSize="14sp" />
 

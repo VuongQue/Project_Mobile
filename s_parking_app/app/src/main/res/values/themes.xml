@@ -6,9 +6,9 @@
         <item name="android:windowBackground">#FFFFFF</item>
         <item name="colorBackground">#FFFFFF</item> <!-- Tùy chỉnh -->
         <item name="textColor">#000000</item>
-        <item name="editTextColor">#858585</item>
+        <item name="editTextColor">#FFFFFF</item>
         <item name="navColor">#858585</item>
-        <item name="backgroundIconColor">#858585</item>
+        <item name="backgroundIconColor">#FFFFFF</item>
         <item name="backgroundSession">#858585</item>
     </style>
 
