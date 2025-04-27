@@ -7,6 +7,8 @@ import com.example.project_mobile.dto.MyCurrentSessionResponse;
 import com.example.project_mobile.dto.NotificationRequest;
 import com.example.project_mobile.dto.NotificationResponse;
 import com.example.project_mobile.dto.ParkingAreaResponse;
+import com.example.project_mobile.dto.PaymentRequest;
+import com.example.project_mobile.dto.PaymentResponse;
 import com.example.project_mobile.dto.SuccessResponse;
 import com.example.project_mobile.dto.UpdateAvatarRequest;
 import com.example.project_mobile.dto.UserInfoResponse;
@@ -20,6 +22,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 
@@ -57,6 +60,14 @@ public interface ApiService {
 
     @POST("booking/my-booking-history")
     Call<List<BookingResponse>> getMyBookingHistory(@Body UsernameRequest request);
+
+    @POST("sessions/unpaid")
+    Call<List<SessionResponse>> getUnpaidSessions(@Body UsernameRequest usernameRequest);
+
+    @POST("/payment/create-transaction")
+    Call<PaymentResponse> createPayment(@Body PaymentRequest request);
+    @PUT("/payment/confirm")
+    Call<String> confirmPayment(@Body PaymentRequest paymentRequest);
 
 }
 

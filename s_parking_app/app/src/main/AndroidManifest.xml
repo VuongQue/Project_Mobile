@@ -33,6 +33,8 @@
         <activity android:name=".HistoryActivity"/>
         <activity android:name=".MainActivity"/>
         <activity android:name=".BookingHistoryActivity"/>
+        <activity android:name=".PaymentActivity"/>
+        <activity android:name=".QRPaymentActivity"/>
     </application>
 
 </manifest>

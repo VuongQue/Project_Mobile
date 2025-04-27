@@ -95,6 +95,10 @@ public class LoginActivity extends AppCompatActivity {
                     PreferenceManager preferenceManager = new PreferenceManager(LoginActivity.this);
                     preferenceManager.saveToken(response.body().getToken());
 
+                    // >>>> Thêm đoạn này để lưu Username
+                    SharedPreferences prefs = getSharedPreferences("LoginDetails", MODE_PRIVATE);
+                    prefs.edit().putString("Username", username).apply();
+
                     Toast.makeText(LoginActivity.this, R.string.login_success, Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     finish();
@@ -110,5 +114,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
 
 }
