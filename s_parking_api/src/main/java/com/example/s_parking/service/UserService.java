@@ -1,5 +1,6 @@
 package com.example.s_parking.service;
 
+import com.example.s_parking.dto.request.UpdateInfoRequest;
 import com.example.s_parking.dto.response.UserInfoResponse;
 import com.example.s_parking.entity.User;
 
@@ -22,5 +23,7 @@ public interface UserService {
 
     boolean updateAvatarUrl(String username, String avatarUrl);
     String getKeyByUsername(String username);
+    boolean updateUserInfo(User user, UpdateInfoRequest request);
+
 }
 

@@ -23,7 +23,10 @@ public class AuthInterceptor implements Interceptor {
         String path = originalRequest.url().encodedPath();
 
         // Không chèn token với các API công khai
-        if (path.startsWith("/auth/login") || path.startsWith("/auth/register")) {
+        if (path.startsWith("/auth/login") || path.startsWith("/auth/register")
+                || path.startsWith("/auth/send-otp") || path.startsWith("/auth/verify-otp")
+                || path.startsWith("/auth/update-info")) {
+
             return chain.proceed(originalRequest);
         }
 

@@ -1,14 +1,11 @@
 package com.example.s_parking.service;
 
-import java.util.List;
-import java.util.Optional;
-
-import com.example.s_parking.entity.Payment;
+import com.example.s_parking.dto.request.ConfirmPaymentRequest;
+import com.example.s_parking.dto.request.PaymentRequest;
+import com.example.s_parking.dto.response.PaymentResponse;
 
 public interface PaymentService {
-    List<Payment> getAllPayments();
-    Optional<Payment> getPaymentById(Long id);
-    Payment createPayment(Payment payment);
-    Payment updatePayment(Long id, Payment payment);
-    void deletePayment(Long id);
+    PaymentResponse createPayment(PaymentRequest request, String username);
+
+    String confirmPayment(ConfirmPaymentRequest request, String username);
 }

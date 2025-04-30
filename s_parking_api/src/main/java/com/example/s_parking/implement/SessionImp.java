@@ -101,4 +101,19 @@ public class SessionImp implements SessionService {
         return sessionRepository.findTopByUserUsernameOrderByCheckInDesc(username);
     }
 
+    @Override
+    public List<Session> getUnpaidSessions(String username) {
+        return sessionRepository.findByUserUsernameAndPaymentIsNull(username);
+    }
+
+    @Override
+    public List<Session> getSessionsByIds(List<Long> ids) {
+        return List.of();
+    }
+
+    @Override
+    public void saveAllSessions(List<Session> sessions) {
+
+    }
+
 }
