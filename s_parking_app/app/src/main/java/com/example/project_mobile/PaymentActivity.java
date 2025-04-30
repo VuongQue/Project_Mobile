@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.cloudinary.api.ApiResponse;
 import com.example.project_mobile.adapter.SessionSelectAdapter;
 import com.example.project_mobile.api.ApiClient;
 import com.example.project_mobile.api.ApiService;
@@ -22,6 +21,7 @@ import com.example.project_mobile.dto.UsernameRequest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -116,9 +116,21 @@ public class PaymentActivity extends AppCompatActivity {
             public void onResponse(Call<PaymentResponse> call, Response<PaymentResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     String transactionId = response.body().getTransactionId();
+                    if (transactionId == null || transactionId.isEmpty()) {
+                        Toast.makeText(PaymentActivity.this, "Không nhận được mã giao dịch!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    // Tạo 1 list ID từ các session đã chọn
+                    ArrayList<Long> selectedSessionIds = new ArrayList<>();
+                    for (SessionResponse session : selectedSessions) {
+                        selectedSessionIds.add(session.getId());
+                    }
+
+                    // Chuyển màn sang QRPaymentActivity
                     Intent intent = new Intent(PaymentActivity.this, QRPaymentActivity.class);
                     intent.putExtra("transactionId", transactionId);
                     intent.putExtra("amount", totalAmount);
+                    intent.putExtra("selectedSessionIds", selectedSessionIds); // <-- Truyền list id
                     startActivity(intent);
                 } else {
                     Toast.makeText(PaymentActivity.this, "Tạo giao dịch thất bại!", Toast.LENGTH_SHORT).show();

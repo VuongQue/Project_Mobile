@@ -1,7 +1,6 @@
 package com.example.project_mobile;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -14,13 +13,14 @@ import com.bumptech.glide.Glide;
 import com.example.project_mobile.api.ApiClient;
 import com.example.project_mobile.api.ApiService;
 import com.example.project_mobile.api.VietQRService;
+import com.example.project_mobile.dto.ConfirmPaymentRequest;
 import com.example.project_mobile.dto.PaymentRequest;
+import com.example.project_mobile.dto.SuccessResponse;
 import com.example.project_mobile.dto.VietQRResponse;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.WriterException;
-import com.google.zxing.qrcode.QRCodeWriter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -37,11 +37,14 @@ public class QRPaymentActivity extends AppCompatActivity {
 
     private String transactionId;
     private double amount;
+    private ArrayList<Long> selectedSessionIds; // <-- Bổ sung nhận list id
+
     private ApiService apiService;
 
     private static final String ACCOUNT_NUMBER = "0397405880"; // MB Bank
-    private static final String BANK_BIN = "970422"; // BIN code MB
-    private static final String DESCRIPTION = "THANH TOAN PHI GUI XE"; // Nội dung cố định
+    private static final String BANK_BIN = "970422"; // BIN MB
+    private static final String ACCOUNT_NAME = "VUONG LAP QUE"; // Thay bằng tên tài khoản thật
+    private static final String DESCRIPTION = "THANH TOAN PHI GUI XE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +55,10 @@ public class QRPaymentActivity extends AppCompatActivity {
         txtTransactionInfo = findViewById(R.id.txtTransactionInfo);
         btnConfirmTransfer = findViewById(R.id.btnConfirmTransfer);
 
+        // Nhận data từ PaymentActivity
         transactionId = getIntent().getStringExtra("transactionId");
         amount = getIntent().getDoubleExtra("amount", 0);
+        selectedSessionIds = (ArrayList<Long>) getIntent().getSerializableExtra("selectedSessionIds");
 
         apiService = ApiClient.getInstance(this);
 
@@ -66,18 +71,18 @@ public class QRPaymentActivity extends AppCompatActivity {
 
     private void generateVietQR() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://api.vietqr.io/") // Base URL
+                .baseUrl("https://api.vietqr.io/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         VietQRService vietQRService = retrofit.create(VietQRService.class);
 
         Map<String, Object> body = new HashMap<>();
-        body.put("accountNo", "0397405880");
-        body.put("accountName", "NGUYEN VAN A"); // Anh thay tên chủ tài khoản thật
-        body.put("acqId", "970422"); // Mã MB Bank
-        body.put("amount", (int) amount); // Chuyển double về int
-        body.put("addInfo", "THANH TOAN PHI GUI XE");
+        body.put("accountNo", ACCOUNT_NUMBER);
+        body.put("accountName", ACCOUNT_NAME);
+        body.put("acqId", BANK_BIN);
+        body.put("amount", (int) amount);
+        body.put("addInfo", DESCRIPTION);
         body.put("template", "compact");
 
         vietQRService.generateQR(body).enqueue(new Callback<VietQRResponse>() {
@@ -98,16 +103,14 @@ public class QRPaymentActivity extends AppCompatActivity {
         });
     }
 
-
     private void confirmPayment() {
-        PaymentRequest request = new PaymentRequest();
-        request.setTransactionId(transactionId);
+        ConfirmPaymentRequest request = new ConfirmPaymentRequest(transactionId, selectedSessionIds);
 
-        apiService.confirmPayment(request).enqueue(new Callback<String>() {
+        apiService.confirmPayment(request).enqueue(new Callback<SuccessResponse>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                if (response.isSuccessful()) {
-                    Toast.makeText(QRPaymentActivity.this, "Thanh toán thành công!", Toast.LENGTH_SHORT).show();
+            public void onResponse(Call<SuccessResponse> call, Response<SuccessResponse> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().isStatus()) {
+                    Toast.makeText(QRPaymentActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(QRPaymentActivity.this, HistoryActivity.class);
                     startActivity(intent);
                     finishAffinity();
@@ -117,9 +120,10 @@ public class QRPaymentActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<SuccessResponse> call, Throwable t) {
                 Toast.makeText(QRPaymentActivity.this, "Lỗi mạng khi xác nhận!", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
 }

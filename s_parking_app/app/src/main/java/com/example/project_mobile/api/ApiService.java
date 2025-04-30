@@ -2,15 +2,18 @@ package com.example.project_mobile.api;
 
 import com.example.project_mobile.dto.AuthResponse;
 import com.example.project_mobile.dto.BookingResponse;
+import com.example.project_mobile.dto.ConfirmPaymentRequest;
 import com.example.project_mobile.dto.LoginRequest;
 import com.example.project_mobile.dto.MyCurrentSessionResponse;
 import com.example.project_mobile.dto.NotificationRequest;
 import com.example.project_mobile.dto.NotificationResponse;
+import com.example.project_mobile.dto.OTPRequest;
 import com.example.project_mobile.dto.ParkingAreaResponse;
 import com.example.project_mobile.dto.PaymentRequest;
 import com.example.project_mobile.dto.PaymentResponse;
 import com.example.project_mobile.dto.SuccessResponse;
 import com.example.project_mobile.dto.UpdateAvatarRequest;
+import com.example.project_mobile.dto.UpdateInfoRequest;
 import com.example.project_mobile.dto.UserInfoResponse;
 import com.example.project_mobile.dto.UsernameRequest;
 import com.example.project_mobile.dto.ParkingLotResponse;
@@ -19,10 +22,10 @@ import com.example.project_mobile.model.Image;
 
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 
@@ -67,7 +70,19 @@ public interface ApiService {
     @POST("/payment/create-transaction")
     Call<PaymentResponse> createPayment(@Body PaymentRequest request);
     @PUT("/payment/confirm")
-    Call<String> confirmPayment(@Body PaymentRequest paymentRequest);
+    Call<SuccessResponse> confirmPayment(@Body ConfirmPaymentRequest paymentRequest);
+
+    // Gửi OTP qua email từ username
+    @POST("auth/send-otp")
+    Call<ResponseBody> sendOtp(@Body UsernameRequest request);
+
+    // Xác minh OTP
+    @POST("auth/verify-otp")
+    Call<ResponseBody> verifyOtp(@Body OTPRequest request);
+
+    // Cập nhật thông tin sau khi xác minh
+    @POST("auth/update-info")
+    Call<ResponseBody> updateUserInfo(@Body UpdateInfoRequest request);
 
 }
 

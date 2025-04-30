@@ -30,11 +30,13 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/auth/login",
                                 "/auth/register",
+                                "/auth/send-otp",
+                                "/auth/verify-otp",
+                                "/auth/update-info",
                                 "/ws-parking/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
                                 "/v3/api-docs/**",
-                                "/payment/create-transaction",
                                 "/sessions/check-in-out"
                         ).permitAll()
                         .anyRequest().authenticated()

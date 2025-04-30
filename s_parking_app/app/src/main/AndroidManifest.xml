@@ -35,6 +35,9 @@
         <activity android:name=".BookingHistoryActivity"/>
         <activity android:name=".PaymentActivity"/>
         <activity android:name=".QRPaymentActivity"/>
+        <activity android:name=".SignUpActivity"/>
+        <activity android:name=".OtpActivity"/>
+        <activity android:name=".UpdateInfoActivity"/>
     </application>
 
 </manifest>

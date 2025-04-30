@@ -49,6 +49,13 @@ public class LoginActivity extends AppCompatActivity {
                 attemptLogin();
             }
         });
+        binding.tvSignUpNow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
+            }
+        });
+
     }
 
     private void attemptLogin() {

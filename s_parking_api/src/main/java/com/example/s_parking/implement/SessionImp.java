@@ -106,4 +106,14 @@ public class SessionImp implements SessionService {
         return sessionRepository.findByUserUsernameAndPaymentIsNull(username);
     }
 
+    @Override
+    public List<Session> getSessionsByIds(List<Long> ids) {
+        return List.of();
+    }
+
+    @Override
+    public void saveAllSessions(List<Session> sessions) {
+
+    }
+
 }
