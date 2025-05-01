@@ -5,8 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class OTPRequest {
+public class ResetPasswordRequest {
     private String username;
-    private String otp;
-    private String purpose;
+    private String newPassword;
 }

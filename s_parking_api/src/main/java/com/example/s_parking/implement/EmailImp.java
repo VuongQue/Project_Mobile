@@ -20,12 +20,28 @@ public class EmailImp implements EmailService {
     }
 
     @Override
-    public void sendOTP(String toEmail, String otp) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(toEmail);
-        message.setSubject("Mã xác thực OTP");
-        message.setText("Mã OTP của bạn là: " + otp + "\nCó hiệu lực trong 5 phút.");
-        message.setFrom(from);
-        mailSender.send(message);
+    public void sendOTP(String toEmail, String otp, String purpose) {
+        String subject;
+        String message;
+
+        switch (purpose) {
+            case "FORGOT_PASSWORD":
+                subject = "Khôi phục mật khẩu";
+                message = "Bạn đã yêu cầu khôi phục mật khẩu. Mã OTP là: " + otp + "\nCó hiệu lực trong 5 phút.";
+                break;
+            case "ACTIVATE":
+            default:
+                subject = "Kích hoạt tài khoản";
+                message = "Mã OTP để kích hoạt tài khoản của bạn là: " + otp + "\nCó hiệu lực trong 5 phút.";
+                break;
+        }
+
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(toEmail);
+        mailMessage.setSubject(subject);
+        mailMessage.setText(message);
+        mailMessage.setFrom(from);
+        mailSender.send(mailMessage);
     }
+
 }

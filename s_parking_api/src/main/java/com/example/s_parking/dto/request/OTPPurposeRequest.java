@@ -3,10 +3,10 @@ package com.example.s_parking.dto.request;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
 @Setter
-public class OTPRequest {
+@Getter
+public class OTPPurposeRequest {
     private String username;
-    private String otp;
     private String purpose;
+
 }

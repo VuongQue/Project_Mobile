@@ -11,6 +11,7 @@ import com.example.project_mobile.dto.OTPRequest;
 import com.example.project_mobile.dto.ParkingAreaResponse;
 import com.example.project_mobile.dto.PaymentRequest;
 import com.example.project_mobile.dto.PaymentResponse;
+import com.example.project_mobile.dto.ResetPasswordRequest;
 import com.example.project_mobile.dto.SuccessResponse;
 import com.example.project_mobile.dto.UpdateAvatarRequest;
 import com.example.project_mobile.dto.UpdateInfoRequest;
@@ -74,7 +75,7 @@ public interface ApiService {
 
     // Gửi OTP qua email từ username
     @POST("auth/send-otp")
-    Call<ResponseBody> sendOtp(@Body UsernameRequest request);
+    Call<ResponseBody> sendOtp(@Body OTPRequest request);
 
     // Xác minh OTP
     @POST("auth/verify-otp")
@@ -83,6 +84,10 @@ public interface ApiService {
     // Cập nhật thông tin sau khi xác minh
     @POST("auth/update-info")
     Call<ResponseBody> updateUserInfo(@Body UpdateInfoRequest request);
+
+    @POST("/auth/reset-password")
+    Call<ResponseBody> resetPassword(@Body ResetPasswordRequest request);
+
 
 }
 

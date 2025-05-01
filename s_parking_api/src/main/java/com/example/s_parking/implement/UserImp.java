@@ -119,6 +119,17 @@ public class UserImp implements UserService{
         userRepository.save(user);
         return true;
     }
+    @Override
+    public boolean resetPassword(String username, String newPassword) {
+        Optional<User> userOpt = userRepository.findByUsername(username);
+        if (userOpt.isEmpty()) return false;
+
+        User user = userOpt.get();
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+        return true;
+    }
+
 
 
 }

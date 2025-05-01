@@ -20,6 +20,7 @@ public class OtpActivity extends AppCompatActivity {
 
     private EditText edtOtp;
     private String username;
+    private String purpose;
     private ApiService apiService;
 
     @Override
@@ -31,6 +32,8 @@ public class OtpActivity extends AppCompatActivity {
         findViewById(R.id.btnVerifyOtp).setOnClickListener(v -> verifyOtp());
 
         username = getIntent().getStringExtra("username");
+        purpose = getIntent().getStringExtra("purpose"); // Lấy purpose từ intent
+
         apiService = ApiClient.getInstance(this);
     }
 
@@ -42,16 +45,25 @@ public class OtpActivity extends AppCompatActivity {
             return;
         }
 
-        OTPRequest request = new OTPRequest(username, otp);
+        OTPRequest request = new OTPRequest(username, otp, purpose); // Truyền purpose
 
         apiService.verifyOtp(request).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(OtpActivity.this, "Xác thực thành công", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(OtpActivity.this, UpdateInfoActivity.class);
-                    intent.putExtra("username", username);
-                    startActivity(intent);
+
+                    // Tùy vào purpose mà chuyển activity
+                    if ("FORGOT_PASSWORD".equals(purpose)) {
+                        Intent intent = new Intent(OtpActivity.this, ResetPasswordActivity.class);
+                        intent.putExtra("username", username);
+                        startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(OtpActivity.this, UpdateInfoActivity.class);
+                        intent.putExtra("username", username);
+                        startActivity(intent);
+                    }
+
                     finish();
                 } else {
                     Toast.makeText(OtpActivity.this, "OTP sai hoặc đã hết hạn", Toast.LENGTH_SHORT).show();
