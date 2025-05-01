@@ -33,6 +33,7 @@ public class SecurityConfig {
                                 "/auth/send-otp",
                                 "/auth/verify-otp",
                                 "/auth/update-info",
+                                "/auth/reset-password",
                                 "/ws-parking/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",

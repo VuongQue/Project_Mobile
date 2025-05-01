@@ -38,6 +38,8 @@
         <activity android:name=".SignUpActivity"/>
         <activity android:name=".OtpActivity"/>
         <activity android:name=".UpdateInfoActivity"/>
+        <activity android:name=".ForgotPasswordActivity"/>
+        <activity android:name=".ResetPasswordActivity"/>
     </application>
 
 </manifest>

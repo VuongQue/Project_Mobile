@@ -35,7 +35,7 @@ public class OTPImp implements OTPService {
         otpRepository.save(entity);
 
         String studentEmail = user.getUsername() + "@student.hcmute.edu.vn";
-        emailService.sendOTP(studentEmail, otp);
+        emailService.sendOTP(studentEmail, otp, purpose);
     }
 
     @Override

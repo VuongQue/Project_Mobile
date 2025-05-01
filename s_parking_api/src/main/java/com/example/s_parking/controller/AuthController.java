@@ -41,7 +41,6 @@ public class AuthController {
         } catch (BadCredentialsException ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Sai tài khoản hoặc mật khẩu");
         } catch (Exception ex) {
-            ex.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi hệ thống");
         }
     }
@@ -58,13 +57,13 @@ public class AuthController {
     }
 
     @PostMapping("/send-otp")
-    public ResponseEntity<?> sendOtp(@RequestBody UsernameRequest request) {
+    public ResponseEntity<?> sendOtp(@RequestBody OTPPurposeRequest request) {
         Optional<User> userOpt = userService.getUserInfo(request.getUsername());
         if (userOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy tài khoản");
         }
 
-        otpService.sendOTP(userOpt.get(), "ACTIVATE");
+        otpService.sendOTP(userOpt.get(), request.getPurpose());
         return ResponseEntity.ok("Đã gửi OTP về email của bạn");
     }
 
@@ -75,7 +74,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy tài khoản");
         }
 
-        boolean verified = otpService.verifyOTP(userOpt.get(), request.getOTP(), "ACTIVATE");
+        boolean verified = otpService.verifyOTP(userOpt.get(), request.getOtp(), request.getPurpose());
         if (verified) {
             return ResponseEntity.ok("Xác thực OTP thành công");
         } else {
@@ -99,6 +98,17 @@ public class AuthController {
             }
         } catch (IllegalStateException ex) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
+        }
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest request) {
+        boolean success = userService.resetPassword(request.getUsername(), request.getNewPassword());
+
+        if (success) {
+            return ResponseEntity.ok("Đặt lại mật khẩu thành công");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy tài khoản");
         }
     }
 }
