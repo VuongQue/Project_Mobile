@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="24dp"
@@ -12,6 +13,7 @@
         android:orientation="vertical"
         android:gravity="center_horizontal">
 
+        <!-- Logo -->
         <ImageView
             android:layout_width="60dp"
             android:layout_height="60dp"
@@ -19,6 +21,7 @@
             android:layout_marginTop="20dp"
             android:layout_gravity="start" />
 
+        <!-- Title -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -37,18 +40,85 @@
             android:layout_marginBottom="24dp"
             android:layout_marginTop="4dp" />
 
-        <EditText
-            android:id="@+id/edtOtp"
+        <!-- OTP Boxes -->
+        <LinearLayout
+            android:id="@+id/otpBoxContainer"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:background="@drawable/edittext_border"
-            android:hint="Enter OTP"
-            android:inputType="number"
-            android:padding="12dp"
-            android:textColor="?attr/editTextColor"
-            android:textColorHint="#8a8a8a"
-            android:layout_marginBottom="24dp" />
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginBottom="24dp">
 
+            <!-- 6 OTP boxes -->
+            <EditText
+                android:id="@+id/otp1"
+                android:layout_width="40dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="6dp"
+                android:gravity="center"
+                android:background="@drawable/edittext_border"
+                android:inputType="number"
+                android:maxLength="1"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/otp2"
+                android:layout_width="40dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="6dp"
+                android:gravity="center"
+                android:background="@drawable/edittext_border"
+                android:inputType="number"
+                android:maxLength="1"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/otp3"
+                android:layout_width="40dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="6dp"
+                android:gravity="center"
+                android:background="@drawable/edittext_border"
+                android:inputType="number"
+                android:maxLength="1"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/otp4"
+                android:layout_width="40dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="6dp"
+                android:gravity="center"
+                android:background="@drawable/edittext_border"
+                android:inputType="number"
+                android:maxLength="1"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/otp5"
+                android:layout_width="40dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="6dp"
+                android:autofillHints=""
+                android:gravity="center"
+                android:background="@drawable/edittext_border"
+                android:inputType="number"
+                android:maxLength="1"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/otp6"
+                android:layout_width="40dp"
+                android:layout_height="48dp"
+                android:autofillHints=""
+                android:gravity="center"
+                android:background="@drawable/edittext_border"
+                android:inputType="number"
+                android:maxLength="1"
+                android:textSize="18sp"
+                tools:ignore="LabelFor" />
+        </LinearLayout>
+
+        <!-- Verify Button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnVerifyOtp"
             android:layout_width="match_parent"
