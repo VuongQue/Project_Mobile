@@ -23,4 +23,8 @@ public interface SessionService {
     MyCurrentSessionResponse convertToDTO(Session entity);
 
     Session getMyCurrentSession(String username);
+
+    List<Session> getUnpaidSessions(String username);
+    List<Session> getSessionsByIds(List<Long> ids);
+    void saveAllSessions(List<Session> sessions);
 }

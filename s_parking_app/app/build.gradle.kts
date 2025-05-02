@@ -59,4 +59,7 @@ dependencies {
     implementation(libs.rxandroid)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation (libs.core.v352)
+    implementation (libs.zxing.android.embedded.v430)
+
 }

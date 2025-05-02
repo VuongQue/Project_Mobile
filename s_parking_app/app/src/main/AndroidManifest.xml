@@ -33,6 +33,13 @@
         <activity android:name=".HistoryActivity"/>
         <activity android:name=".MainActivity"/>
         <activity android:name=".BookingHistoryActivity"/>
+        <activity android:name=".PaymentActivity"/>
+        <activity android:name=".QRPaymentActivity"/>
+        <activity android:name=".SignUpActivity"/>
+        <activity android:name=".OtpActivity"/>
+        <activity android:name=".UpdateInfoActivity"/>
+        <activity android:name=".ForgotPasswordActivity"/>
+        <activity android:name=".ResetPasswordActivity"/>
     </application>
 
 </manifest>

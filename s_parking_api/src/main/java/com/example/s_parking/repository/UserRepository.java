@@ -20,4 +20,10 @@ public interface UserRepository extends JpaRepository<User, String> {
     int updateAvatarUrlByUsername(@Param("username") String username, @Param("avatarUrl") String avatarUrl);
 
     String getKeyByUsername(String username);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE User u SET u.isActivate = true WHERE u.username = :username")
+    int activateUser(@Param("username") String username);
+
 }

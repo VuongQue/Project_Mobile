@@ -1,5 +1,6 @@
 package com.example.s_parking.implement;
 
+import com.example.s_parking.dto.request.UpdateInfoRequest;
 import com.example.s_parking.dto.response.UserInfoResponse;
 import com.example.s_parking.entity.User;
 import com.example.s_parking.repository.UserRepository;
@@ -100,4 +101,35 @@ public class UserImp implements UserService{
     public String getKeyByUsername(String username) {
         return userRepository.getKeyByUsername(username);
     }
+    @Override
+    public boolean updateUserInfo(User user, UpdateInfoRequest request) {
+        if (!user.isActivate()) {
+            throw new IllegalStateException("Tài khoản chưa được xác thực OTP");
+        }
+
+        user.setFullname(request.getFullname());
+        user.setPhone(request.getPhone());
+        user.setSecurity_key(request.getSecurityKey());
+
+        if (request.getPassword() != null && !request.getPassword().isBlank()) {
+            String encoded = passwordEncoder.encode(request.getPassword());
+            user.setPassword(encoded);
+        }
+
+        userRepository.save(user);
+        return true;
+    }
+    @Override
+    public boolean resetPassword(String username, String newPassword) {
+        Optional<User> userOpt = userRepository.findByUsername(username);
+        if (userOpt.isEmpty()) return false;
+
+        User user = userOpt.get();
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+        return true;
+    }
+
+
+
 }

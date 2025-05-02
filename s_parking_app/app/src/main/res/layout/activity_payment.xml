@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="16dp"
-            android:text="Khoản nợ"
+            android:text="Thanh toán"
             android:textColor="@android:color/white"
             android:textSize="20sp"
             android:textStyle="bold"/>

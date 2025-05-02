@@ -194,5 +194,26 @@ public class SessionController {
             return 4_000;
         }
     }
+    @PostMapping("/unpaid")
+    public ResponseEntity<?> getUnpaidSessions(@RequestBody UsernameRequest request, Authentication authentication) {
+        String username = request.getUsername();
+        String currentUser = authentication.getName(); // username đăng nhập
+
+        if (!username.equals(currentUser)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("Bạn không có quyền truy cập thông tin của người dùng khác!");
+        }
+
+        List<Session> unpaidSessions = sessionService.getUnpaidSessions(username);
+        List<SessionResponse> responseList = sessionService.convertAllToDto(unpaidSessions);
+
+        if (responseList == null || responseList.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Không tìm thấy phiên gửi xe chưa thanh toán nào.");
+        }
+
+        return ResponseEntity.ok(responseList);
+    }
+
 
 }

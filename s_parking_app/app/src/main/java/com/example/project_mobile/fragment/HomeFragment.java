@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.bumptech.glide.Glide;
 import com.example.project_mobile.HistoryActivity;
 import com.example.project_mobile.ParkingActivity;
+import com.example.project_mobile.PaymentActivity;
 import com.example.project_mobile.R;
 import com.example.project_mobile.adapter.ParkingAreaAdapter;
 import com.example.project_mobile.adapter.SliderAdapter;
@@ -323,6 +324,11 @@ public class HomeFragment extends Fragment {
                 public void onClick(View v) {
                     showQRCodeDialog();
                 }
+            });
+
+            binding.payment.setOnClickListener(v -> {
+                Intent intent = new Intent(getActivity(), PaymentActivity.class);
+                startActivity(intent);
             });
         }
     }
