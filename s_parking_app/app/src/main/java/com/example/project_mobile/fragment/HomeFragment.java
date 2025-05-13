@@ -86,6 +86,7 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         String fullName = requireActivity().getSharedPreferences("UserInfo", MODE_PRIVATE).getString("FullName", "");
         binding.fullName.setText(fullName);
+        Toast.makeText(getContext(), fullName, Toast.LENGTH_SHORT).show();
         String avatarUrl = requireActivity().getSharedPreferences("UserInfo", MODE_PRIVATE).getString("Avatar_Url", "");
 
         if (!avatarUrl.isEmpty()) {

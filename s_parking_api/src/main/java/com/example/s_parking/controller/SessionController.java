@@ -47,6 +47,8 @@ public class SessionController {
     @Autowired
     private NotificationService notificationService;
 
+    @Autowired VehicleService vehicleService;
+
     @PostMapping("/user")
     public ResponseEntity<?> getSessionsByUsername(@RequestBody UsernameRequest request, Authentication authentication) {
 
@@ -87,20 +89,30 @@ public class SessionController {
 
     @PostMapping("/check-in-out")
     public ResponseEntity<?> checkIn(@RequestBody InOutRequest request) {
-        // Tách chuỗi kiểm tra
-        String[] parts = request.getCode().split("-");
-        String username = parts[0];
-        String key = parts[1];
 
-        Optional<User> user = userService.findByUsername(username);
-        if (user.get().getSecurity_key() == null || user.get().getSecurity_key().isEmpty()) {
+        String username = request.getUsername();
+
+        Optional<User> userOptional = userService.findByUsername(username);
+        if (userOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Không có người dùng này");
         }
 
-        if (!user.get().getSecurity_key().equals(key)) {
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
-                    .body("Khóa không đúng");
+        User user = userOptional.get();
+        List<Vehicle> userVehicles = vehicleService.getVehiclesByUserUsername(username);
+        String userVehicle = null;
+
+        for (Vehicle vehicle : userVehicles) {
+            if (vehicle.getLicensePlate().equals(request.getLicensePlate()))
+            {
+                userVehicle = vehicle.getLicensePlate();
+                break;
+            }
+        }
+
+        if (userVehicle == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Người dùng không sử dụng xe này");
         }
 
         Notification notification;
@@ -109,14 +121,22 @@ public class SessionController {
         // Kiểm tra là check in hay check out
         Session lastSession;
         Session session;
-        lastSession = sessionService.getMyCurrentSession(user.get().getUsername());
+        lastSession = sessionService.getMyCurrentSession(username);
         if (lastSession == null || lastSession.getCheckOut() != null) {
             // check in
             // Nếu có đặt trước
-            Optional<Booking> booking = bookingService.findByUsernameAndDate(username.trim(), LocalDate.now());
+            Optional<Booking> booking = bookingService.findByUsernameAndDate(username, LocalDate.now());
             if (booking.isPresent()) {
-                session = new Session(null, LocalDateTime.now(), null, request.getLicensePlate(), SessionType.RESERVED, 0,
-                        booking.get().getUser(), booking.get().getParking(), booking.get().getPayment());
+                session = new Session(
+                        null,
+                        LocalDateTime.now(),
+                        null,
+                        request.getLicensePlate(),
+                        SessionType.RESERVED,
+                        0,
+                        booking.get().getUser(),
+                        booking.get().getParking(),
+                        booking.get().getPayment());
             }
             // Nếu không đặt trước
             else {
@@ -126,14 +146,26 @@ public class SessionController {
                             .body("Hết chỗ");
                 }
 
-                session = new Session(null, LocalDateTime.now(), null, request.getLicensePlate(), SessionType.NOT_RESERVED, 0,
-                        user.get(), optionalSlot.get(), null);
+                session = new Session(
+                        null,
+                        LocalDateTime.now(),
+                        null,
+                        request.getLicensePlate(),
+                        SessionType.NOT_RESERVED,
+                        0,
+                        user,
+                        optionalSlot.get(),
+                        null);
                 optionalSlot.get().setStatus(ParkingStatus.UNAVAILABLE);
                 parkingLotService.updateParkingLot(optionalSlot.get());
             }
             // thao tác với csdl và thông báo
             sessionService.createSession(session);
-            notification = new Notification(null, "Check In", "Xe của bạn đã được đổ ở: " + session.getParking().getLocation(), LocalDateTime.now(), false, user.get());
+            notification = new Notification(
+                    null,
+                    "Check In",
+                    "Xe của bạn đã được đổ ở: " + session.getParking().getLocation(), LocalDateTime.now(),
+                    false, userOptional.get());
 
         }
         else {
@@ -152,7 +184,13 @@ public class SessionController {
             }
             // thao tác với csdl và thông báo
             sessionService.updateSession(lastSession);
-            notification = new Notification(null, "Check Out", "Xe của bạn đã được lấy thành công", LocalDateTime.now(), false, user.get());
+            notification = new Notification(
+                    null,
+                    "Check Out",
+                    "Xe của bạn đã được lấy thành công",
+                    LocalDateTime.now(),
+                    false,
+                    userOptional.get());
 
         }
 
@@ -214,6 +252,4 @@ public class SessionController {
 
         return ResponseEntity.ok(responseList);
     }
-
-
 }

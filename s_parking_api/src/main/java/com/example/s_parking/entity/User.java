@@ -1,13 +1,9 @@
 package com.example.s_parking.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "user_db")
@@ -20,10 +16,11 @@ public class User {
 
     private String password;
     private String role;
-    private String fullname;
+
+    @Column(name = "fullname")
+    private String fullName;
     private String email;
     private String phone;
-    private String security_key;
     private String avatarUrl;
     private boolean isActivate;
 }

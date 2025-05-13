@@ -4,8 +4,6 @@ import static android.app.Activity.RESULT_OK;
 import static android.content.ContentValues.TAG;
 import static android.content.Context.MODE_PRIVATE;
 
-import static com.example.project_mobile.api.CloudinaryConfig.getCloudinaryInstance;
-
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -226,7 +224,6 @@ public class ProfileFragment extends Fragment {
             binding.tvName.setText(sharedPreferences.getString("FullName", ""));
             binding.tvEmail.setText(sharedPreferences.getString("Email", ""));
             binding.tvPhone.setText(sharedPreferences.getString("Phone", ""));
-            binding.etKey.setText(sharedPreferences.getString("Security_Key", ""));
             String avatarUrl = sharedPreferences.getString("Avatar_Url", ""); // Lấy URL từ SharedPreferences
 
             if (!avatarUrl.isEmpty()) {

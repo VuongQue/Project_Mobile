@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private SwitchFragmentAdapter switchFragmentAdapter;
     private PreferenceManager preferenceManager;
     static public SetUp setUp;
-    private int selectedTab = 1;
+    private int selectedTab = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -72,8 +72,6 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationBarProcess();
     }
-    // Hàm thay đổi ngôn ngữ
-
 
     private void BottomNavigationBarProcess() {
         LinearLayout[] layouts = {

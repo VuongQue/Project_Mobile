@@ -47,7 +47,7 @@
         android:id="@+id/status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/parking_the_car"
+        android:text="..."
         android:textColor="?attr/textColor"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="@id/fullName"
@@ -111,7 +111,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginBottom="8dp"
-                android:text="A - L12"
+                android:text="..."
                 android:textColor="@android:color/white"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -121,7 +121,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="Check in: 6:45:2   12/7/2025"
+                android:text="Check in: ..."
                 android:textColor="@android:color/white"
                 android:textSize="14sp" />
             <TextView
@@ -129,7 +129,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="Check out: 6:45:2   12/7/2025"
+                android:text="Check out: ..."
                 android:textColor="@android:color/white"
                 android:textSize="14sp" />
 

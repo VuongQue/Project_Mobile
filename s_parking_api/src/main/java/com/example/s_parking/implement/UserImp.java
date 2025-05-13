@@ -80,10 +80,9 @@ public class UserImp implements UserService{
     public UserInfoResponse convertToDto(User entity) {
         return UserInfoResponse.builder()
                 .username(entity.getUsername())
-                .fullName(entity.getFullname())
+                .fullName(entity.getFullName())
                 .email(entity.getEmail())
                 .phone(entity.getPhone())
-                .securityKey(entity.getSecurity_key())
                 .avatarUrl(entity.getAvatarUrl())
                 .build();
     }
@@ -98,18 +97,13 @@ public class UserImp implements UserService{
     }
 
     @Override
-    public String getKeyByUsername(String username) {
-        return userRepository.getKeyByUsername(username);
-    }
-    @Override
     public boolean updateUserInfo(User user, UpdateInfoRequest request) {
         if (!user.isActivate()) {
             throw new IllegalStateException("Tài khoản chưa được xác thực OTP");
         }
 
-        user.setFullname(request.getFullname());
+        user.setFullName(request.getFullName());
         user.setPhone(request.getPhone());
-        user.setSecurity_key(request.getSecurityKey());
 
         if (request.getPassword() != null && !request.getPassword().isBlank()) {
             String encoded = passwordEncoder.encode(request.getPassword());

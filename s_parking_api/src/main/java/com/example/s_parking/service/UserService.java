@@ -22,10 +22,8 @@ public interface UserService {
     UserInfoResponse convertToDto(User entity);
 
     boolean updateAvatarUrl(String username, String avatarUrl);
-    String getKeyByUsername(String username);
     boolean updateUserInfo(User user, UpdateInfoRequest request);
-    public boolean resetPassword(String username, String newPassword);
-
+    boolean resetPassword(String username, String newPassword);
 
 }
 
