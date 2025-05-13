@@ -78,8 +78,8 @@ public class HistoryActivity extends AppCompatActivity {
             public void onResponse(Call<List<SessionResponse>> call, Response<List<SessionResponse>> response) {
                 if (response.isSuccessful() & response.body() != null)
                 {
-                    sessionResponseList.clear(); // Clear dữ liệu cũ
-                    sessionResponseList.addAll(response.body()); // Add dữ liệu mới
+                    sessionResponseList.clear();
+                    sessionResponseList.addAll(response.body());
                     adapter.notifyDataSetChanged();
                 }
                 else {

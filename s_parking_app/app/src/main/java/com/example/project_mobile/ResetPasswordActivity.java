@@ -2,6 +2,9 @@ package com.example.project_mobile;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +21,7 @@ import retrofit2.Response;
 public class ResetPasswordActivity extends AppCompatActivity {
 
     private EditText edtNewPassword, edtConfirmPassword;
+    private View rootView;
     private String username;
     private ApiService apiService;
 
@@ -28,10 +32,30 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
         edtNewPassword = findViewById(R.id.edtNewPassword);
         edtConfirmPassword = findViewById(R.id.edtConfirmPassword);
+        rootView = findViewById(android.R.id.content);
         findViewById(R.id.btnResetPassword).setOnClickListener(v -> handleResetPassword());
 
         username = getIntent().getStringExtra("username");
         apiService = ApiClient.getInstance(this);
+
+        applyAnimations();
+    }
+
+    /**
+     * Áp dụng Animation cho toàn bộ màn hình
+     */
+    private void applyAnimations() {
+        Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+        Animation slideIn = AnimationUtils.loadAnimation(this, R.anim.slide_in_left);
+        Animation bounce = AnimationUtils.loadAnimation(this, R.anim.bounce);
+
+        // Áp dụng fadeIn cho toàn bộ màn hình
+        rootView.startAnimation(fadeIn);
+
+        // Áp dụng slideIn và bounce cho từng thành phần
+        edtNewPassword.startAnimation(slideIn);
+        edtConfirmPassword.startAnimation(slideIn);
+        findViewById(R.id.btnResetPassword).startAnimation(bounce);
     }
 
     private void handleResetPassword() {

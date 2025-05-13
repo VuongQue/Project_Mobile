@@ -1,71 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="?attr/colorBackground"
-    android:id="@+id/login"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:fitsSystemWindows="true">
 
+    <!-- Nội dung chính -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="start"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="16dp">
 
         <!-- Logo -->
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_gravity="start"
-            android:src="@drawable/ic_logo" />
+            android:src="@drawable/ic_logo"
+            android:layout_gravity="center" />
 
         <!-- Welcome Text -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:fontFamily="sans-serif"
+            android:layout_marginTop="16dp"
             android:text="Welcome to ...!"
             android:textColor="?attr/textColor"
-            android:textSize="35sp" />
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginBottom="50dp"
+            android:layout_marginBottom="32dp"
             android:text="The Best Parking Solution for Students"
             android:textColor="?attr/textColor"
-            android:textSize="17sp" />
+            android:textSize="16sp" />
 
         <!-- Input MSSV -->
         <EditText
             android:id="@+id/etUsername"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/edittext_border"
+            android:layout_marginTop="16dp"
             android:hint="MSSV"
+            android:background="@drawable/edittext_border"
             android:padding="12dp"
             android:textColor="?attr/textColor"
             android:textColorHint="#8a8a8a"
             android:textSize="14sp" />
-
 
         <!-- Password -->
         <EditText
             android:id="@+id/etPassword"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginStart="16dp"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/edittext_border"
             android:hint="Password"
             android:inputType="textPassword"
+            android:background="@drawable/edittext_border"
             android:padding="12dp"
             android:textColor="?attr/textColor"
             android:textColorHint="#8a8a8a"
@@ -83,8 +79,6 @@
                 android:id="@+id/cbRememberMe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
                 android:text="Remember me"
                 android:textColor="#8a8a8a" />
 
@@ -92,63 +86,22 @@
                 android:id="@+id/tvForgotPassword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:gravity="end"
+                android:layout_gravity="end"
                 android:text="Forgot Password?"
                 android:textColor="#8a8a8a" />
         </LinearLayout>
-
 
         <!-- Sign In Button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSignIn"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_marginStart="16dp"
             android:layout_marginTop="30dp"
-            android:layout_marginEnd="16dp"
             android:text="SIGN IN"
             android:textColor="@color/white"
             app:cornerRadius="16dp"
             android:background="@drawable/gradient_button"
             app:backgroundTint="@null" />
-
-
-        <!--        <TextView-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:text="OR SIGN IN WITH"-->
-        <!--            android:textColor="#8a8a8a"-->
-        <!--            android:layout_marginTop="20dp"-->
-        <!--            android:layout_gravity="center"/>-->
-
-        <!--        -->
-        <!--        <LinearLayout-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:orientation="horizontal"-->
-        <!--            android:gravity="center"-->
-        <!--            android:layout_marginTop="10dp">-->
-
-        <!--            <ImageView-->
-        <!--                android:layout_width="50dp"-->
-        <!--                android:layout_height="50dp"-->
-        <!--                android:src="@drawable/ic_facebook"-->
-        <!--                android:layout_margin="8dp"/>-->
-
-        <!--            <ImageView-->
-        <!--                android:layout_width="50dp"-->
-        <!--                android:layout_height="50dp"-->
-        <!--                android:src="@drawable/ic_google"-->
-        <!--                android:layout_margin="8dp"/>-->
-
-        <!--            <ImageView-->
-        <!--                android:layout_width="50dp"-->
-        <!--                android:layout_height="50dp"-->
-        <!--                android:src="@drawable/ic_twitter"-->
-        <!--                android:layout_margin="8dp"/>-->
-        <!--        </LinearLayout>-->
 
         <!-- Sign Up Redirect -->
         <LinearLayout
@@ -170,8 +123,6 @@
                 android:id="@+id/tvSignUpNow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
                 android:text=" SIGN UP NOW"
                 android:textColor="#7ED957"
                 android:textSize="14sp"
@@ -179,4 +130,24 @@
         </LinearLayout>
 
     </LinearLayout>
-</ScrollView>
+
+    <!-- Overlay Layer (Phủ đen toàn màn hình) -->
+    <View
+        android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80000000"
+        android:visibility="gone"/>
+
+    <!-- Circular Progress Indicator -->
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/circularProgress"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:indicatorColor="@color/primaryColor"
+        app:indicatorSize="60dp"
+        app:trackThickness="4dp"/>
+
+</FrameLayout>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:interpolator="@android:interpolator/decelerate_quad"
+    android:shareInterpolator="true">
+
+    <!-- Logo Animation (Scale & Fade-In) -->
+    <set android:interpolator="@android:interpolator/overshoot">
+        <scale
+            android:duration="1000"
+            android:fromXScale="0.6"
+            android:toXScale="1.0"
+            android:fromYScale="0.6"
+            android:toYScale="1.0"
+            android:pivotX="50%"
+            android:pivotY="50%" />
+
+        <alpha
+            android:duration="1000"
+            android:fromAlpha="0.0"
+            android:toAlpha="1.0" />
+    </set>
+
+    <!-- Welcome Text Slide-In + Fade-In -->
+    <set android:interpolator="@android:interpolator/accelerate_decelerate">
+        <translate
+            android:duration="800"
+            android:fromXDelta="-150%"
+            android:toXDelta="0%" />
+
+        <alpha
+            android:duration="800"
+            android:fromAlpha="0.0"
+            android:toAlpha="1.0" />
+    </set>
+
+    <!-- Input Fields Slide-Up + Fade-In -->
+    <set android:interpolator="@android:interpolator/decelerate_quad">
+        <translate
+            android:duration="900"
+            android:fromYDelta="30dp"
+            android:toYDelta="0dp" />
+
+        <alpha
+            android:duration="900"
+            android:fromAlpha="0.0"
+            android:toAlpha="1.0" />
+    </set>
+
+    <!-- Sign Up Text Bounce -->
+    <set android:interpolator="@android:interpolator/bounce">
+        <scale
+            android:duration="1000"
+            android:fromXScale="0.7"
+            android:toXScale="1.0"
+            android:fromYScale="0.7"
+            android:toYScale="1.0"
+            android:pivotX="50%"
+            android:pivotY="50%" />
+
+        <alpha
+            android:duration="1000"
+            android:fromAlpha="0.0"
+            android:toAlpha="1.0" />
+    </set>
+
+</set>
