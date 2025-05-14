@@ -48,7 +48,7 @@ public class PreferenceManager {
         editor.putString("FullName", userInfoResponse.getFullName());
         editor.putString("Email", userInfoResponse.getEmail());
         editor.putString("Phone", userInfoResponse.getPhone());
-        editor.putString("Security_Key", userInfoResponse.getSecurityKey());
+        editor.putString("License_Plate", userInfoResponse.getLicensePlate());
         editor.putString("Avatar_Url", userInfoResponse.getAvatarUrl());
         editor.putBoolean("isLoaded", true);
         editor.apply();

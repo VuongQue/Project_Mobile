@@ -262,7 +262,7 @@
                         android:layout_height="40dp"
                         android:layout_gravity="center"
                         android:padding="8dp"
-                        android:src="@drawable/ic_key"
+                        android:src="@drawable/ic_motorbike"
                         android:background="@drawable/bg_icon"/>
 
                     <LinearLayout
@@ -273,30 +273,27 @@
                         android:paddingStart="8dp">
 
                         <EditText
-                            android:id="@+id/etKey"
+                            android:id="@+id/license_plate"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="HelloMiEm"
-                            android:enabled="false"
                             android:textColor="?attr/textColor"
                             android:textSize="18sp"
-                            android:background="@android:color/transparent"
-                            android:inputType="textPassword"/>
+                            android:background="@android:color/transparent"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/key"
+                            android:text="@string/licensePlate"
                             android:textColor="#B3B3B3"
                             android:textSize="16sp" />
                     </LinearLayout>
 
                     <!-- Icon bên phải -->
                     <ImageView
-                        android:id="@+id/ic_hidden"
                         android:layout_width="50dp"
                         android:layout_height="match_parent"
-                        android:src="@drawable/white_hidden"
+                        android:src="@drawable/ic_next"
                         android:layout_gravity="center"/>
                 </LinearLayout>
 

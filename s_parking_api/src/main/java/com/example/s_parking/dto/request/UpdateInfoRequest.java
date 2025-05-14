@@ -10,5 +10,5 @@ public class UpdateInfoRequest {
     private String password;
     private String phone;
     private String fullname;
-    private String securityKey;
+    private String licensePlate;
 }

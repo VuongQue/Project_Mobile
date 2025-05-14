@@ -86,21 +86,20 @@ public class SessionController {
     }
 
     @PostMapping("/check-in-out")
-    public ResponseEntity<?> checkIn(@RequestBody InOutRequest request) {
-        // Tách chuỗi kiểm tra
-        String[] parts = request.getCode().split("-");
-        String username = parts[0];
-        String key = parts[1];
+    public ResponseEntity<?> checkInOut(@RequestBody InOutRequest request) {
+
+        String username = request.getUsername();
+        String licensePlate = request.getLicensePlate();
 
         Optional<User> user = userService.findByUsername(username);
-        if (user.get().getSecurity_key() == null || user.get().getSecurity_key().isEmpty()) {
+        if (user.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Không có người dùng này");
         }
 
-        if (!user.get().getSecurity_key().equals(key)) {
+        if (!user.get().getLicensePlate().equals(licensePlate)) {
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
-                    .body("Khóa không đúng");
+                    .body("Không phải xe của người dùng này");
         }
 
         Notification notification;
@@ -115,7 +114,7 @@ public class SessionController {
             // Nếu có đặt trước
             Optional<Booking> booking = bookingService.findByUsernameAndDate(username.trim(), LocalDate.now());
             if (booking.isPresent()) {
-                session = new Session(null, LocalDateTime.now(), null, request.getLicensePlate(), SessionType.RESERVED, 0,
+                session = new Session(null, LocalDateTime.now(), null, licensePlate, SessionType.RESERVED, 0,
                         booking.get().getUser(), booking.get().getParking(), booking.get().getPayment());
             }
             // Nếu không đặt trước
@@ -126,7 +125,7 @@ public class SessionController {
                             .body("Hết chỗ");
                 }
 
-                session = new Session(null, LocalDateTime.now(), null, request.getLicensePlate(), SessionType.NOT_RESERVED, 0,
+                session = new Session(null, LocalDateTime.now(), null, licensePlate, SessionType.NOT_RESERVED, 0,
                         user.get(), optionalSlot.get(), null);
                 optionalSlot.get().setStatus(ParkingStatus.UNAVAILABLE);
                 parkingLotService.updateParkingLot(optionalSlot.get());

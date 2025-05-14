@@ -23,7 +23,7 @@ public class User {
     private String fullname;
     private String email;
     private String phone;
-    private String security_key;
+    private String licensePlate;
     private String avatarUrl;
     private boolean isActivate;
 }
