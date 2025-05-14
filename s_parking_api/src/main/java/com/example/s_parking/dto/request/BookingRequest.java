@@ -1,6 +1,9 @@
 package com.example.s_parking.dto.request;
 
+
+
 public class BookingRequest{
+
 
     private Long idParking;
 
