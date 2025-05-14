@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.project_mobile.api.ApiClient;
 import com.example.project_mobile.api.ApiService;
 import com.example.project_mobile.dto.UpdateInfoRequest;
+import com.example.project_mobile.utils.Validate;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -43,6 +44,22 @@ public class UpdateInfoActivity extends AppCompatActivity {
         String phone = edtPhone.getText().toString().trim();
         String key = etLicensePlate.getText().toString().trim();
         String password = edtPassword.getText().toString().trim();
+
+        // Kiểm tra tính hợp lệ
+        if (!Validate.isPhoneNumberValid(phone)) {
+            Toast.makeText(this, "Số điện thoại không hợp lệ", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!Validate.isLicensePlateValid(key)) {
+            Toast.makeText(this, "Biển số xe không hợp lệ", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!Validate.isPasswordValid(password)) {
+            Toast.makeText(this, R.string.error_invalid_password, Toast.LENGTH_LONG).show();
+            return;
+        }
 
         UpdateInfoRequest request = new UpdateInfoRequest(username, fullname, phone, key, password);
 

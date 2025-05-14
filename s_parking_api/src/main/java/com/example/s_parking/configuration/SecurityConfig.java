@@ -38,7 +38,10 @@ public class SecurityConfig {
                                 "/ws-parking/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
-                                "/v3/api-docs/**"
+                                "/v3/api-docs/**",
+                                "/parking-lots/available",
+                                "/parking-area/all",
+                                "img/all"
                         ).permitAll()
                         .requestMatchers("/sessions/check-in-out").hasRole("ADMIN")
                         .anyRequest().authenticated()

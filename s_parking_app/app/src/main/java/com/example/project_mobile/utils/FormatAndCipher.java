@@ -16,10 +16,4 @@ public class FormatAndCipher {
         }
     }
 
-    public static String hashBcrypt(String password) {
-        // Tạo salt ngẫu nhiên và băm mật khẩu
-        String salt = BCrypt.gensalt(12); // 12 là log rounds, mức độ bảo mật
-        return BCrypt.hashpw(password, salt);
-    }
-
 }

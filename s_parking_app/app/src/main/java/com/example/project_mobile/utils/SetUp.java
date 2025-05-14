@@ -1,8 +1,6 @@
 package com.example.project_mobile.utils;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.util.DisplayMetrics;
 
@@ -14,26 +12,32 @@ import java.util.Locale;
 
 public class SetUp {
 
-    private Context context;
-    private PreferenceManager preferenceManager;
+    private final Context context;
+    private final PreferenceManager preferenceManager;
+
+    private static final String KEY_DARK_MODE = "darkMode";
 
     public SetUp(Context context) {
-        this.context = context;
+        this.context = context.getApplicationContext(); // Sử dụng application context để tránh memory leak
         this.preferenceManager = new PreferenceManager(context);
     }
 
-    // Hàm tải ngôn ngữ đã lưu từ SharedPreferences và thay đổi ngôn ngữ
+    /**
+     * Tải ngôn ngữ đã lưu và áp dụng
+     */
     public void loadLocale() {
         String language = preferenceManager.getLanguage();
         setLocale(language);
     }
 
-    // Hàm thay đổi ngôn ngữ
+    /**
+     * Thay đổi ngôn ngữ và lưu vào SharedPreferences
+     */
     public void setLocale(String lang) {
         Locale locale = new Locale(lang);
         Locale.setDefault(locale);
 
-        Configuration config = context.getResources().getConfiguration();
+        Configuration config = new Configuration();
         config.setLocale(locale);
 
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
@@ -43,25 +47,33 @@ public class SetUp {
         preferenceManager.setLanguage(lang);
     }
 
-    // Hàm thiết lập theme theo chế độ đã lưu (gọi ở MainActivity)
+    /**
+     * Thiết lập theme dựa trên chế độ đã lưu
+     */
     public void loadTheme() {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("settings", Context.MODE_PRIVATE);
-        boolean darkModeOn = sharedPreferences.getBoolean("darkMode", false);
+        boolean isDarkModeOn = preferenceManager.getSettings().getBoolean(KEY_DARK_MODE, false);
         AppCompatDelegate.setDefaultNightMode(
-                darkModeOn ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO
+                isDarkModeOn ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO
         );
     }
 
-    // Hàm thay đổi chế độ sáng/tối và lưu vào SharedPreferences
+    /**
+     * Thay đổi chế độ sáng/tối và lưu vào SharedPreferences
+     */
     public void setMode(boolean isDark) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("settings", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean("darkMode", isDark);
-        editor.apply();
+        preferenceManager.getSettings().edit()
+                .putBoolean(KEY_DARK_MODE, isDark)
+                .apply();
 
         AppCompatDelegate.setDefaultNightMode(
                 isDark ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO
         );
     }
 
+    /**
+     * Xóa toàn bộ dữ liệu
+     */
+    public void clearData() {
+        preferenceManager.clearAllData();
+    }
 }

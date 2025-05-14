@@ -18,6 +18,7 @@ import com.example.project_mobile.api.ApiService;
 import com.example.project_mobile.databinding.ActivityLoginBinding;
 import com.example.project_mobile.dto.AuthResponse;
 import com.example.project_mobile.dto.LoginRequest;
+import com.example.project_mobile.storage.GuestManager;
 import com.example.project_mobile.storage.PreferenceManager;
 
 import retrofit2.Call;
@@ -61,6 +62,13 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
             }
         });
+        binding.tvStartAsAGuest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GuestManager.setGuestMode(getApplicationContext(), true);
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            }
+        });
 
     }
 
@@ -73,13 +81,6 @@ public class LoginActivity extends AppCompatActivity {
 
         boolean cancel = false;
         View focusView = null;
-
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password))
-        {
-            binding.etPassword.setError(getString(R.string.error_invalid_password));
-            focusView = binding.etPassword;
-            cancel = true;
-        }
 
         if (TextUtils.isEmpty(username)) {
             binding.etUsername.setError(getString(R.string.error_field_required));
@@ -94,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
         {
             login(username, password);
             if (binding.cbRememberMe.isChecked())
-                new PreferenceManager(this).saveloginDetails(username, password, true);
+                new PreferenceManager(this).saveLoginDetails(username, password, true);
         }
     }
 

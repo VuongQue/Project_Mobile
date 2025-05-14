@@ -1,8 +1,8 @@
 package com.example.project_mobile.api;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 
+import com.example.project_mobile.storage.PreferenceManager;
 import com.example.project_mobile.utils.LocalDateDeserializer;
 import com.example.project_mobile.utils.LocalDateTimeDeserializer;
 import com.google.gson.Gson;
@@ -24,15 +24,18 @@ public class ApiClient {
     public static ApiService getInstance(final Context context) {
         if (apiService == null) {
 
+            // Sử dụng PreferenceManager để lấy token
+            PreferenceManager preferenceManager = new PreferenceManager(context);
+
             AuthInterceptor.TokenProvider tokenProvider = () -> {
-                SharedPreferences prefs = context.getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
-                return prefs.getString("Token", "");
+                // Không cần try-catch vì PreferenceManager đã xử lý
+                return preferenceManager.getToken();
             };
 
             Gson gson = new GsonBuilder()
                     .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer())
                     .registerTypeAdapter(LocalDate.class, new LocalDateDeserializer())
-                    .setDateFormat("yyyy-MM-dd'T'HH:mm:ss") // Format y hệt như JSON từ backend
+                    .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
                     .create();
 
             OkHttpClient client = new OkHttpClient.Builder()
@@ -51,4 +54,3 @@ public class ApiClient {
         return apiService;
     }
 }
-
