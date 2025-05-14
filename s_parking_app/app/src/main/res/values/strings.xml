@@ -7,6 +7,7 @@
 
     <string name="logOut">Log out</string>
     <string name="guest_mode">Guest</string>
+    <string name="update">Update</string>
 
     <string name="home">Home</string>
     <string name="notification">Notification</string>

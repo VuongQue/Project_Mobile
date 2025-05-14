@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.project_mobile.api.ApiClient;
 import com.example.project_mobile.api.ApiService;
 import com.example.project_mobile.dto.UpdateInfoRequest;
+import com.example.project_mobile.dto.UserInfoResponse;
+import com.example.project_mobile.storage.PreferenceManager;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -26,6 +28,10 @@ public class UpdateInfoActivity extends AppCompatActivity {
     private String source;
     private SharedPreferences sharedPreferences;
 
+    UserInfoResponse userInfoResponse;
+
+    private PreferenceManager preferenceManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +44,9 @@ public class UpdateInfoActivity extends AppCompatActivity {
 
         apiService = ApiClient.getInstance(this);
         sharedPreferences = getSharedPreferences("UserInfo", MODE_PRIVATE);
+
+        preferenceManager = new PreferenceManager(getApplicationContext());
+        userInfoResponse = preferenceManager.getUserInfo();
 
         source = getIntent().getStringExtra("source");
         username = getIntent().getStringExtra("username");
@@ -55,13 +64,10 @@ public class UpdateInfoActivity extends AppCompatActivity {
     }
 
     private void loadUserData() {
-        String fullname = sharedPreferences.getString("FullName", "");
-        String phone = sharedPreferences.getString("Phone", "");
-        String licensePlate = sharedPreferences.getString("License_Plate", "");
 
-        edtFullname.setText(fullname);
-        edtPhone.setText(phone);
-        etLicensePlate.setText(licensePlate);
+        edtFullname.setText(userInfoResponse.getFullName());
+        edtPhone.setText(userInfoResponse.getPhone());
+        etLicensePlate.setText(userInfoResponse.getLicensePlate());
     }
 
     private void updateUserInfo() {
