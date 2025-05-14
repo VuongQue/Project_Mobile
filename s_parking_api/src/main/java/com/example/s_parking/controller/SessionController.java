@@ -81,7 +81,7 @@ public class SessionController {
                     .body("Bạn không có quyền truy cập thông tin của người dùng khác!");
         }
         Session session = sessionService.getMyCurrentSession(username);
-        MyCurrentSessionResponse myCurrentSessionResponse = sessionService.convertToDTO(session);
+        MyCurrentSessionResponse myCurrentSessionResponse = sessionService.convertToMyDto(session);
         if (myCurrentSessionResponse == null ) {
             myCurrentSessionResponse = new MyCurrentSessionResponse();
         }
@@ -129,10 +129,17 @@ public class SessionController {
                     LocalDateTime.now(), false, user);
         }
 
+        parkingAreaService.updateSlots();
+
         notificationService.createNewNotificatioin(notification);
         NotificationResponse notificationResponse = notificationService.convertToDto(notification);
 
+        Session myCurrentSession = sessionService.getMyCurrentSession(username);
+        MyCurrentSessionResponse myCurrentSessionResponse = sessionService.convertToMyDto(myCurrentSession);
+
+        parkingSocketController.updateSlots();
         parkingSocketController.sendUserNotification(username, notificationResponse);
+        parkingSocketController.sendCheckInOutNotification(username, myCurrentSessionResponse);
 
         return ResponseEntity.ok(notificationResponse.getTitle());
     }

@@ -84,7 +84,7 @@ public class SessionImp implements SessionService {
     }
 
     @Override
-    public MyCurrentSessionResponse convertToDTO(Session entity) {
+    public MyCurrentSessionResponse convertToMyDto(Session entity) {
         return MyCurrentSessionResponse.builder()
                 .id(entity.getId())
                 .checkIn(entity.getCheckIn())

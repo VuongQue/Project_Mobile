@@ -93,6 +93,7 @@ public class LoginActivity extends AppCompatActivity {
         }
         else
         {
+            GuestManager.setGuestMode(getApplicationContext(), false);
             login(username, password);
             if (binding.cbRememberMe.isChecked())
                 new PreferenceManager(this).saveLoginDetails(username, password, true);
