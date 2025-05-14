@@ -11,5 +11,7 @@
         <item name="navColor">#121212</item>
         <item name="backgroundIconColor">#2B2B2B</item>
         <item name="backgroundSession">#2B2B2B</item>
+        <item name="iconColor">#FFFFFF</item>
+        <item name="navIconColor">#FFFFFF</item>
     </style>
 </resources>
