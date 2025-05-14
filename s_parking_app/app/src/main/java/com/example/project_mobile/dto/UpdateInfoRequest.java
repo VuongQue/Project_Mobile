@@ -11,6 +11,15 @@ public class UpdateInfoRequest {
     public UpdateInfoRequest() {
     }
 
+    // Constructor không có password
+    public UpdateInfoRequest(String username, String fullname, String phone, String licensePlate) {
+        this.username = username;
+        this.fullname = fullname;
+        this.phone = phone;
+        this.licensePlate = licensePlate;
+    }
+
+    // Constructor có password
     public UpdateInfoRequest(String username, String fullname, String phone, String licensePlate, String password) {
         this.username = username;
         this.fullname = fullname;
