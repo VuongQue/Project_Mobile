@@ -115,20 +115,31 @@ public class LoginActivity extends AppCompatActivity {
      * Kiểm tra thông tin đăng nhập
      */
     private void attemptLogin() {
+        binding.etUsername.setError(null);
+        binding.etPassword.setError(null);
+
         String username = binding.etUsername.getText().toString();
         String password = binding.etPassword.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
-        if (TextUtils.isEmpty(password)) {
-            binding.etPassword.setError("Password is required");
-            binding.etPassword.requestFocus();
-            resetUI();
-            return;
+        if (TextUtils.isEmpty(username)) {
+            binding.etUsername.setError(getString(R.string.error_field_required));
+            focusView = binding.etUsername;
+            cancel = true;
         }
 
-       
+        if (cancel) {
+            focusView.requestFocus();
+        }
+        else
+        {
+            GuestManager.setGuestMode(getApplicationContext(), false);
+            login(username, password);
+            if (binding.cbRememberMe.isChecked())
+                new PreferenceManager(this).saveLoginDetails(username, password, true);
+        }
     }
 
     /**
