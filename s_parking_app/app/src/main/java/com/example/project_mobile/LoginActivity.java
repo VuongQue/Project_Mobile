@@ -3,13 +3,16 @@ package com.example.project_mobile;
 import static com.example.project_mobile.api.ApiClient.BASE_URL;
 import static com.example.project_mobile.utils.Validate.isPasswordValid;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,6 +21,8 @@ import com.example.project_mobile.api.ApiService;
 import com.example.project_mobile.databinding.ActivityLoginBinding;
 import com.example.project_mobile.dto.AuthResponse;
 import com.example.project_mobile.dto.LoginRequest;
+import com.example.project_mobile.dto.UserInfoResponse;
+import com.example.project_mobile.dto.UsernameRequest;
 import com.example.project_mobile.storage.GuestManager;
 import com.example.project_mobile.storage.PreferenceManager;
 
@@ -113,6 +118,26 @@ public class LoginActivity extends AppCompatActivity {
                     // >>>> Thêm đoạn này để lưu Username
                     SharedPreferences prefs = getSharedPreferences("LoginDetails", MODE_PRIVATE);
                     prefs.edit().putString("Username", username).apply();
+
+                    String username = preferenceManager.getUsername();
+                    ApiService apiService = ApiClient.getInstance(getApplicationContext());
+                    apiService.getUserInfo(new UsernameRequest(username)).enqueue(new Callback<UserInfoResponse>() {
+                        @SuppressLint("NotifyDataSetChanged")
+                        @Override
+                        public void onResponse(@NonNull Call<UserInfoResponse> call, @NonNull Response<UserInfoResponse> response) {
+                            if (response.isSuccessful() && response.body() != null) {
+                                preferenceManager.saveUserInfo(response.body());
+
+                            } else {
+                                Log.e("API_ERROR", "Code: " + response.code());
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(@NonNull Call<UserInfoResponse> call, @NonNull Throwable t) {
+                            Log.e("API_ERROR", "Failed to fetch data", t);
+                        }
+                    });
 
                     Toast.makeText(LoginActivity.this, R.string.login_success, Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));

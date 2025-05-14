@@ -41,6 +41,19 @@ public class PreferenceManager {
         this.context = context.getApplicationContext();
     }
 
+    public String getUsername() {
+        SharedPreferences userPrefs = getEncryptedSharedPreferences(USER_INFO_PREF);
+        String username = userPrefs.getString(KEY_USERNAME, "");
+
+        if (username.isEmpty()) {
+            // Nếu không có trong USER_INFO_PREF, lấy từ LOGIN_PREF
+            SharedPreferences loginPrefs = getEncryptedSharedPreferences(LOGIN_PREF);
+            username = loginPrefs.getString(KEY_USERNAME, "");
+        }
+
+        return username;
+    }
+
     /**
      * Lấy SharedPreferences cho Settings (không mã hóa)
      */

@@ -1,7 +1,9 @@
 package com.example.project_mobile.fragment;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.MODE_PRIVATE;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
@@ -26,12 +28,15 @@ import com.example.project_mobile.R;
 import com.example.project_mobile.api.ApiClient;
 import com.example.project_mobile.api.ApiService;
 import com.example.project_mobile.databinding.FragmentProfileBinding;
+import com.example.project_mobile.dto.ParkingAreaResponse;
 import com.example.project_mobile.dto.SuccessResponse;
 import com.example.project_mobile.dto.UpdateAvatarRequest;
 import com.example.project_mobile.dto.UserInfoResponse;
+import com.example.project_mobile.dto.UsernameRequest;
 import com.example.project_mobile.storage.PreferenceManager;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -160,12 +165,14 @@ public class ProfileFragment extends Fragment {
     }
 
     private void Load() {
+
         UserInfoResponse userInfo = preferenceManager.getUserInfo();
-        if (userInfo != null) {
+        if (userInfo!= null)
+        {
             binding.tvName.setText(userInfo.getFullName());
             binding.tvEmail.setText(userInfo.getEmail());
             binding.tvPhone.setText(userInfo.getPhone());
-            binding.licensePlate.setText(userInfo.getLicensePlate());
+            binding.tvLicensePlate.setText(userInfo.getLicensePlate());
 
             String avatarUrl = userInfo.getAvatarUrl();
             if (avatarUrl != null && !avatarUrl.isEmpty()) {
@@ -174,6 +181,7 @@ public class ProfileFragment extends Fragment {
                 Glide.with(requireContext()).load(android.R.drawable.sym_def_app_icon).into(binding.avatar);
             }
         }
+
     }
 
     private void sendToServer(String url) {
