@@ -10,7 +10,8 @@ import java.util.Optional;
 public interface BookingService {
     List<Booking> getAllBookings();
     Optional<Booking> getBookingById(Long id);
-    Booking createBooking(Booking booking);
+
+    BookingResponse createBooking(BookingRequest bookingRequest);
     Booking updateBooking(Long id, Booking booking);
     void deleteBooking(Long id);
 

@@ -43,4 +43,16 @@ public class BookingController {
         }
         return ResponseEntity.ok(bookingResponseList);
     }
+    @PostMapping("/create")
+    public ResponseEntity<?> createBooking(@RequestBody BookingRequest request, Authentication authentication) {
+        String username = authentication.getName();
+        request.setUsername(username);
+
+        BookingResponse response = bookingService.createBooking(request);
+
+        if (response == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Booking không thành công");
+        }
+        return ResponseEntity.ok(response);
+    }
 }
