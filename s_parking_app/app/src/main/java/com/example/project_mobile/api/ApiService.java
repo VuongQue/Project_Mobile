@@ -69,25 +69,24 @@ public interface ApiService {
     Call<List<SessionResponse>> getUnpaidSessions(@Body UsernameRequest usernameRequest);
 
     @POST("/payment/create-transaction")
-    Call<PaymentResponse> createPayment(@Body PaymentRequest request);
+    Call<PaymentResponse> createBankPayment(@Body PaymentRequest request);
+
+    @POST("/payment/momo/create-transaction")
+    Call<PaymentResponse> createMomoPayment(@Body PaymentRequest request);
+
     @PUT("/payment/confirm")
     Call<SuccessResponse> confirmPayment(@Body ConfirmPaymentRequest paymentRequest);
 
-    // Gửi OTP qua email từ username
     @POST("auth/send-otp")
     Call<ResponseBody> sendOtp(@Body OTPRequest request);
 
-    // Xác minh OTP
     @POST("auth/verify-otp")
     Call<ResponseBody> verifyOtp(@Body OTPRequest request);
 
-    // Cập nhật thông tin sau khi xác minh
     @POST("auth/update-info")
     Call<ResponseBody> updateUserInfo(@Body UpdateInfoRequest request);
 
     @POST("/auth/reset-password")
     Call<ResponseBody> resetPassword(@Body ResetPasswordRequest request);
 
-
 }
-

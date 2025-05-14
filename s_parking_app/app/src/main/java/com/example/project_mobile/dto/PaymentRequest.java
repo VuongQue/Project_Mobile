@@ -1,7 +1,7 @@
 package com.example.project_mobile.dto;
 
 public class PaymentRequest {
-    private double amount;
+    private String amount;
     private String method;
     private String status;
     private String transactionId;
@@ -10,7 +10,7 @@ public class PaymentRequest {
     public PaymentRequest() {
     }
 
-    public PaymentRequest(double amount, String method, String status, String transactionId, String orderInfo) {
+    public PaymentRequest(String amount, String method, String status, String transactionId, String orderInfo) {
         this.amount = amount;
         this.method = method;
         this.status = status;
@@ -19,11 +19,11 @@ public class PaymentRequest {
     }
 
     // Getter - Setter
-    public double getAmount() {
+    public String getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(String amount) {
         this.amount = amount;
     }
 

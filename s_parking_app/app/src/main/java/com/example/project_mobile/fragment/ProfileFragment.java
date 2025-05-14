@@ -25,6 +25,7 @@ import com.cloudinary.android.MediaManager;
 import com.cloudinary.android.callback.ErrorInfo;
 import com.cloudinary.android.callback.UploadCallback;
 import com.example.project_mobile.R;
+import com.example.project_mobile.UpdateInfoActivity;
 import com.example.project_mobile.api.ApiClient;
 import com.example.project_mobile.api.ApiService;
 import com.example.project_mobile.databinding.FragmentProfileBinding;
@@ -58,6 +59,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LoadFromAPI();
 
     }
 
@@ -83,12 +85,23 @@ public class ProfileFragment extends Fragment {
         sharedPreferences = requireActivity().getSharedPreferences("UserInfo", MODE_PRIVATE);
         LoadFromAPI();
 
-        binding.btnReload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LoadFromAPI();
+        binding.btnUpdate.setOnClickListener(v -> {
+            String username = requireActivity().getSharedPreferences("LoginDetails", MODE_PRIVATE).getString("Username", "");
+
+            if (username.isEmpty()) {
+                Toast.makeText(getActivity(), "Không tìm thấy tài khoản", Toast.LENGTH_SHORT).show();
+                return;
             }
+
+            Intent intent = new Intent(getActivity(), UpdateInfoActivity.class);
+            intent.putExtra("username", username);  // Truyền username qua Intent
+            intent.putExtra("source", "profile_update");
+            startActivity(intent);
+
         });
+
+
+
         binding.avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -141,14 +154,14 @@ public class ProfileFragment extends Fragment {
 
     // Handle result from picking an image
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
-            selectedImageUri = data.getData();
-            selectedImageView.setImageURI(selectedImageUri);
-            uploadButton.setEnabled(true); // Kích hoạt nút tải lên
+
+        if (requestCode == 100 && resultCode == RESULT_OK) {
+            LoadFromAPI();
         }
     }
+
 
     // Tải ảnh lên Cloudinary
     private void uploadImageToCloudinary() {

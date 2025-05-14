@@ -108,6 +108,7 @@ public class OtpActivity extends AppCompatActivity {
                         intent = new Intent(OtpActivity.this, ResetPasswordActivity.class);
                     } else {
                         intent = new Intent(OtpActivity.this, UpdateInfoActivity.class);
+                        intent.putExtra("source", "otp_verification");
                     }
                     intent.putExtra("username", username);
 

@@ -19,3 +19,4 @@ local.properties
 /.tmp
 /android
 /native
+/.idea
