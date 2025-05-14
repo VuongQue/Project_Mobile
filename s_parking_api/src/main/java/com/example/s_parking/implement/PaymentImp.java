@@ -74,16 +74,21 @@ public class PaymentImp implements PaymentService {
             String requestId = UUID.randomUUID().toString();
             String transactionId = generateTransactionId();
 
-
-
             if (request.getOrderInfo() == null || request.getOrderInfo().isEmpty()) {
                 throw new RuntimeException("OrderInfo không được để trống");
             }
 
-            String rawData = String.format(
-                    "accessKey=%s&amount=%s&extraData=&ipnUrl=%s&orderId=%s&orderInfo=%s&partnerCode=%s&redirectUrl=%s&requestId=%s&requestType=captureWallet",
-                    accessKey, request.getAmount(), notifyUrl, transactionId, request.getOrderInfo(), partnerCode, redirectUrl, requestId
-            );
+            // Cập nhật rawData theo thứ tự chính xác của MoMo
+            String rawData = "accessKey=" + accessKey +
+                    "&amount=" + request.getAmount() +
+                    "&extraData=" + "" +
+                    "&ipnUrl=" + notifyUrl +
+                    "&orderId=" + transactionId +
+                    "&orderInfo=" + request.getOrderInfo() +
+                    "&partnerCode=" + partnerCode +
+                    "&redirectUrl=" + redirectUrl +
+                    "&requestId=" + requestId +
+                    "&requestType=captureWallet";
 
             logger.info("Raw Data for Signature: {}", rawData);
 
@@ -126,16 +131,12 @@ public class PaymentImp implements PaymentService {
                     throw new RuntimeException("MoMo Error: " + message);
                 }
 
-                String payUrl = responseMap.get("deeplink") != null ? responseMap.get("deeplink").toString() : null;
-
-                if (payUrl == null) {
-                    throw new RuntimeException("MoMo Error: Không nhận được `payUrl` từ MoMo");
-                }
+                String payUrl = responseMap.get("payUrl") != null ? responseMap.get("payUrl").toString() : null;
 
                 Payment payment = new Payment();
                 payment.setAmount(Double.parseDouble(request.getAmount()));
                 payment.setMethod("MoMo");
-                payment.setStatus(PaymentStatus.valueOf(PaymentStatus.UNPAID.toString()));
+                payment.setStatus(PaymentStatus.UNPAID);
                 payment.setTransactionId(transactionId);
                 payment.setCreatedAt(LocalDateTime.now());
 
@@ -151,13 +152,11 @@ public class PaymentImp implements PaymentService {
                         .build();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error creating MoMo transaction: " + e.getMessage());
             throw new RuntimeException("Lỗi khi tạo giao dịch MoMo: " + e.getMessage());
         }
     }
-
-
-
+    
 
     @Override
     public String confirmPayment(ConfirmPaymentRequest request, String username) {

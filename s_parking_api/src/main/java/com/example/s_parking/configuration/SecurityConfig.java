@@ -41,7 +41,8 @@ public class SecurityConfig {
                                 "/v3/api-docs/**",
                                 "/parking-lots/available",
                                 "/parking-area/all",
-                                "img/all"
+                                "img/all",
+                                "/payment/momo/notify"
                         ).permitAll()
                         .requestMatchers("/sessions/check-in-out").hasRole("ADMIN")
                         .anyRequest().authenticated()

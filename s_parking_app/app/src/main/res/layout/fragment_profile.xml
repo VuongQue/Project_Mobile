@@ -273,7 +273,7 @@
                         android:paddingStart="8dp">
 
                         <EditText
-                            android:id="@+id/tvLicense_plate"
+                            android:id="@+id/tvLicensePlate"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="?attr/textColor"

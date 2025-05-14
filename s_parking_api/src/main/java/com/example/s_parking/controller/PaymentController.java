@@ -74,22 +74,37 @@ public class PaymentController {
         }
     }
 
-
     /**
      * Xử lý callback từ MoMo
      */
     @PostMapping("/momo/notify")
     public ResponseEntity<String> handleMomoNotification(@RequestBody Map<String, Object> requestBody) {
-        String orderId = (String) requestBody.get("orderId");
-        int resultCode = (int) requestBody.get("resultCode");
-        String transId = (String) requestBody.get("transId");
+        try {
+            System.out.println("MoMo Notification Received: " + requestBody);
 
-        if (resultCode == 0) {
-            // Thanh toán thành công, cập nhật trạng thái đơn hàng
-            paymentService.updatePaymentStatus(orderId, "PAID");
-            return ResponseEntity.ok("Success");
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Payment failed");
+            String orderId = String.valueOf(requestBody.get("orderId"));
+            Integer resultCode = Integer.parseInt(String.valueOf(requestBody.get("resultCode")));
+            String transId = String.valueOf(requestBody.get("transId"));
+
+            // Kiểm tra dữ liệu
+            if (orderId == null || transId == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid data received");
+            }
+
+            if (resultCode == 0) {
+                // Thanh toán thành công, cập nhật trạng thái đơn hàng
+                paymentService.updatePaymentStatus(orderId, "PAID");
+                return ResponseEntity.ok("Success");
+            } else {
+                // Thanh toán thất bại
+                paymentService.updatePaymentStatus(orderId, "FAILED");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Payment failed");
+            }
+
+        } catch (NumberFormatException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Data parsing error: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error: " + e.getMessage());
         }
     }
 
