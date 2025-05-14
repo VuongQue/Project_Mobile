@@ -77,7 +77,7 @@ public class UpdateInfoActivity extends AppCompatActivity {
             return;
         }
 
-        if (!Validate.isLicensePlateValid(key)) {
+        if (!Validate.isLicensePlateValid(licensePlate)) {
             Toast.makeText(this, "Biển số xe không hợp lệ", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -87,7 +87,7 @@ public class UpdateInfoActivity extends AppCompatActivity {
             return;
         }
 
-        UpdateInfoRequest request = new UpdateInfoRequest(username, fullname, phone, key, password);
+        UpdateInfoRequest request = new UpdateInfoRequest(username, fullname, phone, licensePlate, password);
 
         if ("profile_update".equals(source)) {
             request = new UpdateInfoRequest(username, fullname, phone, licensePlate);

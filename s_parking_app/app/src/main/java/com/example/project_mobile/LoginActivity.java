@@ -115,9 +115,6 @@ public class LoginActivity extends AppCompatActivity {
      * Kiểm tra thông tin đăng nhập
      */
     private void attemptLogin() {
-        String username = binding.etUsername.getText().toString().trim();
-        String password = binding.etPassword.getText().toString().trim();
-
         String username = binding.etUsername.getText().toString();
         String password = binding.etPassword.getText().toString();
 
@@ -160,6 +157,13 @@ public class LoginActivity extends AppCompatActivity {
 
                     ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(LoginActivity.this, p1, p2, p3);
                     startActivity(intent, options.toBundle());
+                    PreferenceManager preferenceManager = new PreferenceManager(LoginActivity.this);
+                    preferenceManager.saveToken(response.body().getToken());
+
+                    // >>>> Thêm đoạn này để lưu Username
+                    SharedPreferences prefs = getSharedPreferences("LoginDetails", MODE_PRIVATE);
+                    prefs.edit().putString("Username", username).apply();
+
                     String username = preferenceManager.getUsername();
                     ApiService apiService = ApiClient.getInstance(getApplicationContext());
                     apiService.getUserInfo(new UsernameRequest(username)).enqueue(new Callback<UserInfoResponse>() {

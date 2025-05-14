@@ -7,7 +7,7 @@
     android:padding="16dp"
     android:fitsSystemWindows="true">
 
-    <!-- N?i dung chính -->
+    <!-- Ná»™i dung chÃ­nh -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -67,7 +67,6 @@
             android:background="?attr/editTextBackground"
             android:hint="Password"
             android:inputType="textPassword"
-            android:background="@drawable/edittext_border"
             android:padding="12dp"
             android:textColor="?attr/textColor"
             android:textColorHint="#8a8a8a"
@@ -161,7 +160,7 @@
 
     </LinearLayout>
 
-    <!-- Overlay Layer (Ph? den toàn màn hình) -->
+    <!-- Overlay Layer -->
     <View
         android:id="@+id/overlay"
         android:layout_width="match_parent"

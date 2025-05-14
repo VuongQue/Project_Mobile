@@ -25,7 +25,6 @@ import com.cloudinary.android.MediaManager;
 import com.cloudinary.android.callback.ErrorInfo;
 import com.cloudinary.android.callback.UploadCallback;
 import com.example.project_mobile.R;
-import com.example.project_mobile.UpdateInfoActivity;
 import com.example.project_mobile.api.ApiClient;
 import com.example.project_mobile.api.ApiService;
 import com.example.project_mobile.databinding.FragmentProfileBinding;
@@ -82,42 +81,7 @@ public class ProfileFragment extends Fragment {
 
         Load();
 
-        binding.btnUpdate.setOnClickListener(v -> {
-            String username = requireActivity().getSharedPreferences("LoginDetails", MODE_PRIVATE).getString("Username", "");
-
-            if (username.isEmpty()) {
-                Toast.makeText(getActivity(), "Không tìm thấy tài khoản", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            Intent intent = new Intent(getActivity(), UpdateInfoActivity.class);
-            intent.putExtra("username", username);  // Truyền username qua Intent
-            intent.putExtra("source", "profile_update");
-            startActivity(intent);
-
-        });
-
-
-
-        binding.avatar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showUploadImageDialog();
-            }
-        });
-        selectImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openGallery();
-            }
-        });
-        uploadButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                uploadImageToCloudinary();
-            }
-        });
-    }
+        binding.btnUpdate.setOnClickListener(v -> Load());
 
         binding.avatar.setOnClickListener(v -> showUploadImageDialog());
 
@@ -136,7 +100,7 @@ public class ProfileFragment extends Fragment {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
             selectedImageUri = data.getData();
