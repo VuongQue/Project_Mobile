@@ -11,6 +11,8 @@
     <string name="settings">Cài đặt</string>
 
     <string name="history">Lịch sử</string>
+    <string name="licensePlate">Biển số xe</string>
+    <string name="fullName">Họ Tên</string>
 
     <string name="book">Đặt chỗ</string>
     <string name="area">Bãi xe</string>
@@ -28,7 +30,6 @@
     <string name="your_info">Thông tin của bạn...</string>
     <string name="username">Tên đăng nhập</string>
     <string name="phone_number">Số điện thoại</string>
-    <string name="key">Khóa</string>
     <string name="date">Ngày</string>
 
     <string name="fee">Phí</string>

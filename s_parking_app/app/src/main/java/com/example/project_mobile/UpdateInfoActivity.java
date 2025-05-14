@@ -18,7 +18,7 @@ import retrofit2.Response;
 
 public class UpdateInfoActivity extends AppCompatActivity {
 
-    private EditText edtFullname, edtPhone, edtSecurityKey, edtPassword;
+    private EditText edtFullname, edtPhone, etLicensePlate, edtPassword;
     private String username;
     private ApiService apiService;
 
@@ -27,9 +27,9 @@ public class UpdateInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_info);
 
-        edtFullname = findViewById(R.id.edtFullname);
+        edtFullname = findViewById(R.id.etFullname);
         edtPhone = findViewById(R.id.edtPhone);
-        edtSecurityKey = findViewById(R.id.edtSecurityKey);
+        etLicensePlate = findViewById(R.id.etLicensePlate);
         edtPassword = findViewById(R.id.edtPassword);
 
         username = getIntent().getStringExtra("username");
@@ -41,7 +41,7 @@ public class UpdateInfoActivity extends AppCompatActivity {
     private void updateUserInfo() {
         String fullname = edtFullname.getText().toString().trim();
         String phone = edtPhone.getText().toString().trim();
-        String key = edtSecurityKey.getText().toString().trim();
+        String key = etLicensePlate.getText().toString().trim();
         String password = edtPassword.getText().toString().trim();
 
         UpdateInfoRequest request = new UpdateInfoRequest(username, fullname, phone, key, password);

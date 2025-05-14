@@ -1,10 +1,7 @@
 package com.example.project_mobile.fragment;
 
 import static android.app.Activity.RESULT_OK;
-import static android.content.ContentValues.TAG;
 import static android.content.Context.MODE_PRIVATE;
-
-import static com.example.project_mobile.api.CloudinaryConfig.getCloudinaryInstance;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -27,7 +24,6 @@ import com.bumptech.glide.Glide;
 import com.cloudinary.android.MediaManager;
 import com.cloudinary.android.callback.ErrorInfo;
 import com.cloudinary.android.callback.UploadCallback;
-import com.cloudinary.utils.ObjectUtils;
 import com.example.project_mobile.R;
 import com.example.project_mobile.api.ApiClient;
 import com.example.project_mobile.api.ApiService;
@@ -37,13 +33,9 @@ import com.example.project_mobile.dto.UpdateAvatarRequest;
 import com.example.project_mobile.dto.UserInfoResponse;
 import com.example.project_mobile.dto.UsernameRequest;
 import com.example.project_mobile.storage.PreferenceManager;
-import com.example.project_mobile.utils.FileUtils;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -59,7 +51,6 @@ public class ProfileFragment extends Fragment {
     Button selectImageButton;
     Dialog dialog;
     private static final int PICK_IMAGE_REQUEST = 1;
-    private boolean isKeyVisible = false;
 
     public ProfileFragment() {
     }
@@ -96,20 +87,6 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 LoadFromAPI();
-            }
-        });
-        binding.icHidden.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Kiểm tra trạng thái hiện tại của mật khẩu
-                if (isKeyVisible) {
-                    binding.etKey.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD);  // Chế độ ẩn
-                    binding.icHidden.setImageResource(R.drawable.white_hidden);  // Thay đổi icon mắt (Ví dụ: mắt mở)
-                } else {
-                    binding.etKey.setInputType(android.text.InputType.TYPE_CLASS_TEXT | android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);  // Chế độ hiện
-                    binding.icHidden.setImageResource(R.drawable.white_eye);  // Thay đổi icon mắt (Ví dụ: mắt đóng)
-                }
-                isKeyVisible = !isKeyVisible;  // Đổi trạng thái
             }
         });
         binding.avatar.setOnClickListener(new View.OnClickListener() {
@@ -226,7 +203,7 @@ public class ProfileFragment extends Fragment {
             binding.tvName.setText(sharedPreferences.getString("FullName", ""));
             binding.tvEmail.setText(sharedPreferences.getString("Email", ""));
             binding.tvPhone.setText(sharedPreferences.getString("Phone", ""));
-            binding.etKey.setText(sharedPreferences.getString("Security_Key", ""));
+            binding.licensePlate.setText(sharedPreferences.getString("License_Plate", ""));
             String avatarUrl = sharedPreferences.getString("Avatar_Url", ""); // Lấy URL từ SharedPreferences
 
             if (!avatarUrl.isEmpty()) {

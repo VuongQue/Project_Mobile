@@ -5,7 +5,7 @@ public class UserInfoResponse {
     private String fullName;
     private String email;
     private String phone;
-    private String securityKey;
+    private String licensePlate;
     private String avatarUrl;
 
     public UserInfoResponse() {
@@ -44,12 +44,12 @@ public class UserInfoResponse {
         this.phone = phone;
     }
 
-    public String getSecurityKey() {
-        return securityKey;
+    public String getLicensePlate() {
+        return licensePlate;
     }
 
-    public void setSecurityKey(String securityKey) {
-        this.securityKey = securityKey;
+    public void setLicensePlate(String licensePlate) {
+        this.licensePlate = licensePlate;
     }
 
     public String getAvatarUrl() {
@@ -60,12 +60,12 @@ public class UserInfoResponse {
         this.avatarUrl = avatarUrl;
     }
 
-    public UserInfoResponse(String username, String fullName, String email, String phone, String securityKey, String avatarUrl) {
+    public UserInfoResponse(String username, String fullName, String email, String phone, String licensePlate, String avatarUrl) {
         this.username = username;
         this.fullName = fullName;
         this.email = email;
         this.phone = phone;
-        this.securityKey = securityKey;
+        this.licensePlate = licensePlate;
         this.avatarUrl = avatarUrl;
     }
 }
