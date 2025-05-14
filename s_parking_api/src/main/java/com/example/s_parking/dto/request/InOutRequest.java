@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class InOutRequest {
-    String code;
+    String username;
     String licensePlate;
 }

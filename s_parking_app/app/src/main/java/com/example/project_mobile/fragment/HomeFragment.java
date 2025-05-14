@@ -122,10 +122,7 @@ public class HomeFragment extends Fragment {
         Dialog qrDialog = new Dialog(requireContext());
         qrDialog.setContentView(R.layout.dialog_qr_code);
 
-        String username = requireActivity().getSharedPreferences("LoginDetails", MODE_PRIVATE).getString("Username", "");
-        String key = requireActivity().getSharedPreferences("UserInfo", MODE_PRIVATE).getString("Security_Key", "");
-        // Tạo mã QR từ văn bản
-        String textToEncode = username + "-" + key; // Đặt URL hoặc văn bản bạn muốn mã hóa vào QR
+        String textToEncode = requireActivity().getSharedPreferences("LoginDetails", MODE_PRIVATE).getString("Username", "");
         try {
             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
             Bitmap bitmap = barcodeEncoder.encodeBitmap(textToEncode, com.google.zxing.BarcodeFormat.QR_CODE, 400, 400);

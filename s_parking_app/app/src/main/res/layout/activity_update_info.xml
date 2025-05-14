@@ -35,11 +35,11 @@
 
         <!-- Full Name Input -->
         <EditText
-            android:id="@+id/edtFullname"
+            android:id="@+id/etFullname"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:background="@drawable/edittext_border"
-            android:hint="Full Name"
+            android:hint="@string/fullName"
             android:padding="12dp"
             android:layout_marginTop="24dp"
             android:transitionName="fullnameTransition" />
@@ -50,7 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:background="@drawable/edittext_border"
-            android:hint="Phone"
+            android:hint="@string/phone_number"
             android:inputType="phone"
             android:padding="12dp"
             android:layout_marginTop="12dp"
@@ -58,11 +58,11 @@
 
         <!-- Security Key Input -->
         <EditText
-            android:id="@+id/edtSecurityKey"
+            android:id="@+id/etLicensePlate"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:background="@drawable/edittext_border"
-            android:hint="Security Key"
+            android:hint="@string/licensePlate"
             android:padding="12dp"
             android:layout_marginTop="12dp"
             android:transitionName="securityKeyTransition" />

@@ -5,17 +5,17 @@ public class UpdateInfoRequest {
     private String username;
     private String fullname;
     private String phone;
-    private String securityKey;
+    private String licensePlate;
     private String password;
 
     public UpdateInfoRequest() {
     }
 
-    public UpdateInfoRequest(String username, String fullname, String phone, String securityKey, String password) {
+    public UpdateInfoRequest(String username, String fullname, String phone, String licensePlate, String password) {
         this.username = username;
         this.fullname = fullname;
         this.phone = phone;
-        this.securityKey = securityKey;
+        this.licensePlate = licensePlate;
         this.password = password;
     }
 
@@ -43,12 +43,12 @@ public class UpdateInfoRequest {
         this.phone = phone;
     }
 
-    public String getSecurityKey() {
-        return securityKey;
+    public String getLicensePlate() {
+        return licensePlate;
     }
 
-    public void setSecurityKey(String securityKey) {
-        this.securityKey = securityKey;
+    public void setLicensePlate(String licensePlate) {
+        this.licensePlate = licensePlate;
     }
 
     public String getPassword() {

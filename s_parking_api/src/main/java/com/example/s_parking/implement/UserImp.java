@@ -83,7 +83,7 @@ public class UserImp implements UserService{
                 .fullName(entity.getFullname())
                 .email(entity.getEmail())
                 .phone(entity.getPhone())
-                .securityKey(entity.getSecurity_key())
+                .licensePlate(entity.getLicensePlate())
                 .avatarUrl(entity.getAvatarUrl())
                 .build();
     }
@@ -109,7 +109,7 @@ public class UserImp implements UserService{
 
         user.setFullname(request.getFullname());
         user.setPhone(request.getPhone());
-        user.setSecurity_key(request.getSecurityKey());
+        user.setLicensePlate(request.getLicensePlate());
 
         if (request.getPassword() != null && !request.getPassword().isBlank()) {
             String encoded = passwordEncoder.encode(request.getPassword());
