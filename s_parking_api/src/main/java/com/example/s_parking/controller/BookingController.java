@@ -1,5 +1,6 @@
 package com.example.s_parking.controller;
 
+import com.example.s_parking.dto.request.BookingRequest;
 import com.example.s_parking.dto.request.UsernameRequest;
 import com.example.s_parking.dto.response.BookingResponse;
 import com.example.s_parking.entity.Booking;

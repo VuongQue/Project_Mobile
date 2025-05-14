@@ -1,5 +1,6 @@
 package com.example.s_parking.service;
 
+import com.example.s_parking.dto.request.BookingRequest;
 import com.example.s_parking.dto.response.BookingResponse;
 import com.example.s_parking.entity.Booking;
 
@@ -12,6 +13,10 @@ public interface BookingService {
     Optional<Booking> getBookingById(Long id);
 
     BookingResponse createBooking(BookingRequest bookingRequest);
+
+
+    Booking createBooking(Booking booking);
+
     Booking updateBooking(Long id, Booking booking);
     void deleteBooking(Long id);
 
@@ -21,5 +26,15 @@ public interface BookingService {
 
     List<BookingResponse> convertAllToDto(List<Booking> bookingList);
 
+    List<BookingResponse> convertToDtoList(List<Booking> bookingList);
+
     BookingResponse convertToDto(Booking entity);
+
+    Booking getMyCurrentBooking(String username);
+
+    List<Booking> getUnpaidBookings(String username);
+
+    List<Booking> getBookingsByIds(List<Long> ids);
+
+    void saveAllBookings(List<Booking> bookings);
 }
