@@ -7,13 +7,16 @@ import com.example.s_parking.dto.response.NotificationResponse;
 import com.example.s_parking.dto.response.SessionResponse;
 import com.example.s_parking.entity.*;
 import com.example.s_parking.service.*;
+import com.example.s_parking.utils.CalculateUtil;
 import com.example.s_parking.value.ParkingStatus;
 import com.example.s_parking.value.SessionType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.*;
@@ -85,114 +88,99 @@ public class SessionController {
         return ResponseEntity.ok(myCurrentSessionResponse);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/check-in-out")
-    public ResponseEntity<?> checkInOut(@RequestBody InOutRequest request) {
+    @Transactional
+    public ResponseEntity<?> checkInOut(@RequestBody InOutRequest request, Authentication authentication) {
 
         String username = request.getUsername();
         String licensePlate = request.getLicensePlate();
 
-        Optional<User> user = userService.findByUsername(username);
-        if (user.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Không có người dùng này");
+        Optional<User> userOpt = userService.findByUsername(username);
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không có người dùng này");
         }
 
-        if (!user.get().getLicensePlate().equals(licensePlate)) {
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
-                    .body("Không phải xe của người dùng này");
+        User user = userOpt.get();
+        if (!user.getLicensePlate().equals(licensePlate)) {
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Không phải xe của người dùng này");
         }
+
+        Optional<Session> lastSessionOpt = Optional.ofNullable(sessionService.getMyCurrentSession(username));
+        boolean isCheckIn = lastSessionOpt.isEmpty() || lastSessionOpt.get().getCheckOut() != null;
 
         Notification notification;
-        MyCurrentSessionResponse currentSessionResponse;
+        ResponseEntity<?> response;
 
-        // Kiểm tra là check in hay check out
-        Session lastSession;
-        Session session;
-        lastSession = sessionService.getMyCurrentSession(user.get().getUsername());
-        if (lastSession == null || lastSession.getCheckOut() != null) {
-            // check in
-            // Nếu có đặt trước
-            Optional<Booking> booking = bookingService.findByUsernameAndDate(username.trim(), LocalDate.now());
-            if (booking.isPresent()) {
-                session = new Session(null, LocalDateTime.now(), null, licensePlate, SessionType.RESERVED, 0,
-                        booking.get().getUser(), booking.get().getParking(), booking.get().getPayment());
+        if (isCheckIn) {
+            response = handleCheckIn(username, licensePlate, user);
+            if (response.getStatusCode() == HttpStatus.NOT_ACCEPTABLE) {
+                return response;
             }
-            // Nếu không đặt trước
-            else {
-                Optional<ParkingLot> optionalSlot  = parkingLotService.getSlot();
-                if (optionalSlot.isEmpty()) {
-                    return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
-                            .body("Hết chỗ");
-                }
 
-                session = new Session(null, LocalDateTime.now(), null, licensePlate, SessionType.NOT_RESERVED, 0,
-                        user.get(), optionalSlot.get(), null);
-                optionalSlot.get().setStatus(ParkingStatus.UNAVAILABLE);
-                parkingLotService.updateParkingLot(optionalSlot.get());
-            }
-            // thao tác với csdl và thông báo
-            sessionService.createSession(session);
-            notification = new Notification(null, "Check In", "Xe của bạn đã được đổ ở: " + session.getParking().getLocation(), LocalDateTime.now(), false, user.get());
+            Session session = (Session) response.getBody();
+            notification = new Notification(null, "Check In", "Xe của bạn đã được đổ ở: " + session.getParking().getLocation(),
+                    LocalDateTime.now(), false, user);
 
+        } else {
+            Session lastSession = lastSessionOpt.get();
+            handleCheckOut(lastSession);
+            notification = new Notification(null, "Check Out", "Xe của bạn đã được lấy thành công",
+                    LocalDateTime.now(), false, user);
         }
-        else {
-            //check out
-            // Nếu có đặt trước
-            if (lastSession.getType().equals(SessionType.RESERVED)) {
-                lastSession.setCheckOut(LocalDateTime.now());
-            }
-            // Nếu không có đặt trước
-            else {
-                lastSession.setCheckOut(LocalDateTime.now());
-                lastSession.setFee(calculateParkingFee(lastSession.getCheckIn(), lastSession.getCheckOut()));
-                ParkingLot parkingLot = lastSession.getParking();
-                parkingLot.setStatus(ParkingStatus.AVAILABLE);
-                parkingLotService.updateParkingLot(parkingLot);
-            }
-            // thao tác với csdl và thông báo
-            sessionService.updateSession(lastSession);
-            notification = new Notification(null, "Check Out", "Xe của bạn đã được lấy thành công", LocalDateTime.now(), false, user.get());
-
-        }
-
-        parkingAreaService.updateSlots();
-        currentSessionResponse = sessionService.convertToDTO(lastSession);
 
         notificationService.createNewNotificatioin(notification);
         NotificationResponse notificationResponse = notificationService.convertToDto(notification);
 
-        parkingSocketController.sendCheckInOutNotification(username, currentSessionResponse);
         parkingSocketController.sendUserNotification(username, notificationResponse);
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(notificationResponse.getTitle());
+        return ResponseEntity.ok(notificationResponse.getTitle());
     }
 
-    public float calculateParkingFee(LocalDateTime checkIn, LocalDateTime checkOut) {
-        // Nếu quá 21h cùng ngày → 50.000đ
-        if (checkOut.toLocalTime().isAfter(LocalTime.of(21, 0)) &&
-                checkIn.toLocalDate().equals(checkOut.toLocalDate())) {
-            return 50000;
-        }
+    /**
+     * Xử lý Check In
+     */
+    private ResponseEntity<?> handleCheckIn(String username, String licensePlate, User user) {
+        Optional<Booking> bookingOpt = bookingService.findByUsernameAndDate(username.trim(), LocalDate.now());
+        Session session;
 
-        // Nếu gửi > 12 tiếng → 9.000đ
-        long durationInMinutes = Duration.between(checkIn, checkOut).toMinutes();
-        if (durationInMinutes > 12 * 60) {
-            return 9000;
-        }
-
-        // Nếu gửi vào Chủ nhật → 5.000đ
-        if (checkIn.getDayOfWeek() == DayOfWeek.SUNDAY) {
-            return 5000;
-        }
-
-        // Từ Thứ 2 → Thứ 7
-        if (checkOut.toLocalTime().isAfter(LocalTime.of(18, 30))) {
-            return 5_000;
+        if (bookingOpt.isPresent()) {
+            Booking booking = bookingOpt.get();
+            session = new Session(null, LocalDateTime.now(), null, licensePlate, SessionType.RESERVED, 0,
+                    booking.getUser(), booking.getParking(), booking.getPayment());
         } else {
-            return 4_000;
+            Optional<ParkingLot> optionalSlot = parkingLotService.getSlot();
+            if (optionalSlot.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Hết chỗ");
+            }
+
+            ParkingLot slot = optionalSlot.get();
+            slot.setStatus(ParkingStatus.UNAVAILABLE);
+            parkingLotService.updateParkingLot(slot);
+
+            session = new Session(null, LocalDateTime.now(), null, licensePlate, SessionType.NOT_RESERVED, 0,
+                    user, slot, null);
         }
+
+        sessionService.createSession(session);
+        return ResponseEntity.ok(session);
     }
+
+    private void handleCheckOut(Session lastSession) {
+        lastSession.setCheckOut(LocalDateTime.now());
+
+        if (lastSession.getType().equals(SessionType.NOT_RESERVED)) {
+            float fee = CalculateUtil.calculateParkingFee(lastSession.getCheckIn(), lastSession.getCheckOut());
+            lastSession.setFee( fee);
+
+            ParkingLot parkingLot = lastSession.getParking();
+            parkingLot.setStatus(ParkingStatus.AVAILABLE);
+            parkingLotService.updateParkingLot(parkingLot);
+        }
+
+        sessionService.updateSession(lastSession);
+    }
+
     @PostMapping("/unpaid")
     public ResponseEntity<?> getUnpaidSessions(@RequestBody UsernameRequest request, Authentication authentication) {
         String username = request.getUsername();

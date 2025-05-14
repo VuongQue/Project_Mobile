@@ -29,7 +29,7 @@
             android:paddingStart="12dp">
 
             <TextView
-                android:id="@+id/txtTitle"
+                android:id="@+id/tvLocationName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="A - L1"
@@ -38,7 +38,7 @@
                 android:textStyle="bold"/>
 
             <TextView
-                android:id="@+id/txtTimeIn"
+                android:id="@+id/tvBookingDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="9/3/2025"
@@ -48,7 +48,7 @@
 
         <!-- Giá tiền -->
         <TextView
-            android:id="@+id/txtFee"
+            android:id="@+id/tvFee"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="4.000 đ"

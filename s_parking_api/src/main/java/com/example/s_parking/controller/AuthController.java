@@ -41,6 +41,7 @@ public class AuthController {
         } catch (BadCredentialsException ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Sai tài khoản hoặc mật khẩu");
         } catch (Exception ex) {
+            ex.printStackTrace(); // In ra console để dễ debug
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi hệ thống");
         }
     }
