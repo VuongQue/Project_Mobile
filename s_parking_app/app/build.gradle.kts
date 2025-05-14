@@ -61,5 +61,6 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     implementation (libs.core.v352)
     implementation (libs.zxing.android.embedded.v430)
+    implementation("androidx.security:security-crypto:1.1.0-alpha06")
 
 }

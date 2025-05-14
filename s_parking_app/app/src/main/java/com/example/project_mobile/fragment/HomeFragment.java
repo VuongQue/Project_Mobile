@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.example.project_mobile.HistoryActivity;
+import com.example.project_mobile.LoginActivity;
 import com.example.project_mobile.ParkingActivity;
 import com.example.project_mobile.PaymentActivity;
 import com.example.project_mobile.R;
@@ -40,10 +41,13 @@ import com.example.project_mobile.dto.ParkingAreaResponse;
 import com.example.project_mobile.dto.UsernameRequest;
 import com.example.project_mobile.model.Image;
 import com.example.project_mobile.socket.WebSocketManager;
+import com.example.project_mobile.storage.GuestManager;
+import com.google.gson.reflect.TypeToken;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
 import com.smarteist.autoimageslider.SliderView;
 
+import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +63,7 @@ public class HomeFragment extends Fragment {
     private SharedPreferences sharedPreferences;
     private ArrayList<Image> imageList;
     private ArrayList<ParkingAreaResponse> parkingAreaResponseArrayList;
+    private boolean isGuest;
 
     public HomeFragment() {
     }
@@ -84,19 +89,27 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        String fullName = requireActivity().getSharedPreferences("UserInfo", MODE_PRIVATE).getString("FullName", "");
-        binding.fullName.setText(fullName);
-        String avatarUrl = requireActivity().getSharedPreferences("UserInfo", MODE_PRIVATE).getString("Avatar_Url", "");
 
-        if (!avatarUrl.isEmpty()) {
-            Glide.with(requireContext())
-                    .load(Uri.parse(avatarUrl))  // Tải ảnh từ URL
-                    .into(binding.avatar);  // Gán vào ImageView
-        } else {
-            // Nếu không có URL hợp lệ, có thể sử dụng ảnh mặc định
-            Glide.with(requireContext())
-                    .load(android.R.drawable.sym_def_app_icon)  // Sử dụng ảnh mặc định từ drawable
-                    .into(binding.avatar);
+        isGuest = GuestManager.isGuest(requireContext());
+
+        if (!isGuest)
+        {
+            String fullName = requireActivity().getSharedPreferences("UserInfo", MODE_PRIVATE).getString("FullName", "");
+            binding.fullName.setText(fullName);
+            String avatarUrl = requireActivity().getSharedPreferences("UserInfo", MODE_PRIVATE).getString("Avatar_Url", "");
+
+            if (!avatarUrl.isEmpty()) {
+                Glide.with(requireContext())
+                        .load(Uri.parse(avatarUrl))  // Tải ảnh từ URL
+                        .into(binding.avatar);  // Gán vào ImageView
+            } else {
+                // Nếu không có URL hợp lệ, có thể sử dụng ảnh mặc định
+                Glide.with(requireContext())
+                        .load(android.R.drawable.sym_def_app_icon)  // Sử dụng ảnh mặc định từ drawable
+                        .into(binding.avatar);
+            }
+
+            loadCurrentSession();
         }
 
         parkingAreaResponseArrayList = new ArrayList<>();
@@ -109,7 +122,7 @@ public class HomeFragment extends Fragment {
 
         parkingAreaAdapter.notifyDataSetChanged();
 
-        loadCurrentSession();
+
         loadParkingArea();
         loadNotificationImg();
 
@@ -163,16 +176,19 @@ public class HomeFragment extends Fragment {
 
     private void loadParkingArea() {
         ApiService apiService = ApiClient.getInstance(getContext());
-        apiService.getParkingAreas().enqueue(new Callback<>() {
+        apiService.getParkingAreas().enqueue(new Callback<List<ParkingAreaResponse>>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onResponse(@NonNull Call<List<ParkingAreaResponse>> call, @NonNull Response<List<ParkingAreaResponse>> response) {
-                if (response.isSuccessful() & response.body() != null) {
+                if (response.isSuccessful() && response.body() != null) {
                     parkingAreaResponseArrayList.clear();
                     parkingAreaResponseArrayList.addAll(response.body());
-
                     parkingAreaAdapter.notifyDataSetChanged();
-                    startWebSocketUpdates();
+
+                    // WebSocket chỉ được khởi tạo lần đầu
+                    if (socket == null) {
+                        startWebSocketUpdates();
+                    }
 
                 } else {
                     Log.e("API_ERROR", "Code: " + response.code());
@@ -185,34 +201,51 @@ public class HomeFragment extends Fragment {
             }
         });
     }
-    private void startWebSocketUpdates() {
-        WebSocketManager<ParkingAreaResponse> socket =
-                new WebSocketManager<>(ParkingAreaResponse.class, "/topic/parkingArea");
 
-        socket.connect(new WebSocketManager.OnMessageCallback<ParkingAreaResponse>() {
+    private WebSocketManager<List<ParkingAreaResponse>> socket;
+
+    private void startWebSocketUpdates() {
+        Type listType = new TypeToken<List<ParkingAreaResponse>>() {}.getType();
+
+        socket = new WebSocketManager<>(listType, "/topic/parkingArea");
+
+        socket.connect(new WebSocketManager.OnMessageCallback<List<ParkingAreaResponse>>() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
-            public void onMessage(ParkingAreaResponse updatedArea) {
+            public void onMessage(List<ParkingAreaResponse> updatedAreas) {
                 requireActivity().runOnUiThread(() -> {
-                    boolean updated = false;
-                    for (int i = 0; i < parkingAreaResponseArrayList.size(); i++) {
-                        ParkingAreaResponse current = parkingAreaResponseArrayList.get(i);
-                        if (current.getIdArea().equals(updatedArea.getIdArea())) {
-                            parkingAreaResponseArrayList.set(i, updatedArea);
-                            updated = true;
-                            break;
+                    Log.d("WebSocket", "Received Data: " + updatedAreas);
+
+                    for (ParkingAreaResponse newItem : updatedAreas) {
+                        boolean isUpdated = false;
+
+                        for (int i = 0; i < parkingAreaResponseArrayList.size(); i++) {
+                            ParkingAreaResponse oldItem = parkingAreaResponseArrayList.get(i);
+
+                            // Kiểm tra xem có phần tử nào cần cập nhật không
+                            if (oldItem.getIdArea().equals(newItem.getIdArea())) {
+                                isUpdated = true;
+
+                                // Nếu dữ liệu thực sự thay đổi, cập nhật và thông báo adapter
+                                if (!oldItem.equals(newItem)) {
+                                    parkingAreaResponseArrayList.set(i, newItem);
+                                    parkingAreaAdapter.notifyItemChanged(i);
+                                }
+                                break;
+                            }
+                        }
+
+                        // Nếu không tìm thấy, thêm mới vào danh sách
+                        if (!isUpdated) {
+                            parkingAreaResponseArrayList.add(newItem);
+                            parkingAreaAdapter.notifyItemInserted(parkingAreaResponseArrayList.size() - 1);
                         }
                     }
-
-                    // Nếu không có trong list, thêm mới (optional)
-                    if (!updated) {
-                        parkingAreaResponseArrayList.add(updatedArea);
-                    }
-                    parkingAreaAdapter.notifyDataSetChanged();
                 });
             }
         });
     }
+
 
     @SuppressLint("SetTextI18n")
     private void setUpSession(MyCurrentSessionResponse response) {
@@ -290,44 +323,50 @@ public class HomeFragment extends Fragment {
         binding.imageSlider.setScrollTimeInSec(5);
     }
 
+    private void navigateToLogin() {
+        Intent intent = new Intent(requireContext(), LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        requireActivity().finish();
+    }
+
     private void onClickListener() {
-        if (binding != null) {
-            binding.icReload.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    loadCurrentSession();
-                    loadParkingArea();
-                    loadNotificationImg();
-                }
-            });
-            binding.booking.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(getActivity(), ParkingActivity.class);
-                    startActivity(intent);
-                }
-            });
+        binding.icReload.setOnClickListener(v -> {
+            loadParkingArea();
+            loadNotificationImg();
+        });
 
-            binding.history.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(getActivity(), HistoryActivity.class);
-                    startActivity(intent);
-                }
-            });
+        binding.booking.setOnClickListener(v -> {
+            if (isGuest) {
+                navigateToLogin();
+            } else {
+                startActivity(new Intent(requireContext(), ParkingActivity.class));
+            }
+        });
 
-            binding.qr.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showQRCodeDialog();
-                }
-            });
+        binding.history.setOnClickListener(v -> {
+            if (isGuest) {
+                navigateToLogin();
+            } else {
+                startActivity(new Intent(requireContext(), HistoryActivity.class));
+            }
+        });
 
-            binding.payment.setOnClickListener(v -> {
-                Intent intent = new Intent(getActivity(), PaymentActivity.class);
-                startActivity(intent);
-            });
-        }
+        binding.payment.setOnClickListener(v -> {
+            if (isGuest) {
+                navigateToLogin();
+            } else {
+                startActivity(new Intent(requireContext(), PaymentActivity.class));
+            }
+        });
+
+        binding.qr.setOnClickListener(v -> {
+            if (isGuest) {
+                navigateToLogin();
+            } else {
+                showQRCodeDialog();
+            }
+        });
     }
 
 }

@@ -20,7 +20,7 @@ public interface SessionService {
 
     SessionResponse convertToDto(Session entity);
 
-    MyCurrentSessionResponse convertToDTO(Session entity);
+    MyCurrentSessionResponse convertToMyDto(Session entity);
 
     Session getMyCurrentSession(String username);
 

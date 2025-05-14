@@ -246,7 +246,7 @@
                     android:layout_gravity="bottom"/>
             </LinearLayout>
             <LinearLayout
-                android:id="@+id/key"
+                android:id="@+id/licensePlate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
@@ -273,10 +273,9 @@
                         android:paddingStart="8dp">
 
                         <EditText
-                            android:id="@+id/license_plate"
+                            android:id="@+id/tvLicense_plate"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="HelloMiEm"
                             android:textColor="?attr/textColor"
                             android:textSize="18sp"
                             android:background="@android:color/transparent"/>

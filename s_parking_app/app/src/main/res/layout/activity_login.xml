@@ -7,7 +7,7 @@
     android:padding="16dp"
     android:fitsSystemWindows="true">
 
-    <!-- Ná»™i dung chÃ­nh -->
+    <!-- N?i dung chính -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -50,7 +50,7 @@
             android:layout_height="50dp"
             android:layout_marginTop="16dp"
             android:hint="MSSV"
-            android:background="@drawable/edittext_border"
+            android:background="?attr/editTextBackground"
             android:padding="12dp"
             android:textColor="?attr/textColor"
             android:textColorHint="#8a8a8a"
@@ -63,6 +63,8 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:background="?attr/editTextBackground"
             android:hint="Password"
             android:inputType="textPassword"
             android:background="@drawable/edittext_border"
@@ -137,11 +139,29 @@
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:transitionName="signUpNowTransition" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="YOU DO NOT BELONG TO HCMUTE?"
+                android:textColor="#8a8a8a"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvStartAsAGuest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="START AS A GUEST"
+                android:textColor="#7ED957"
+                android:textSize="14sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
     </LinearLayout>
 
-    <!-- Overlay Layer (Phá»§ Ä‘en toÃ n mÃ n hÃ¬nh) -->
+    <!-- Overlay Layer (Ph? den toàn màn hình) -->
     <View
         android:id="@+id/overlay"
         android:layout_width="match_parent"

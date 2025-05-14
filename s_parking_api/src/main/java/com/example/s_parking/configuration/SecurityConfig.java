@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -17,6 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     @Autowired
@@ -32,14 +34,16 @@ public class SecurityConfig {
                                 "/auth/register",
                                 "/auth/send-otp",
                                 "/auth/verify-otp",
-                                "/auth/update-info",
                                 "/auth/reset-password",
                                 "/ws-parking/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
                                 "/v3/api-docs/**",
-                                "/sessions/check-in-out"
+                                "/parking-lots/available",
+                                "/parking-area/all",
+                                "img/all"
                         ).permitAll()
+                        .requestMatchers("/sessions/check-in-out").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtFilter(jwtServiceImp), UsernamePasswordAuthenticationFilter.class);

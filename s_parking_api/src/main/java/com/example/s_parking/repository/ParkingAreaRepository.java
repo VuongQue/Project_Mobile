@@ -10,6 +10,6 @@ public interface ParkingAreaRepository extends JpaRepository<ParkingArea, Long> 
     @Transactional
     @Modifying
     @Query("UPDATE ParkingArea a SET a.availableSlots = (" +
-            "SELECT COUNT(p) FROM ParkingLot p WHERE p.area = a AND p.status = 'Available')")
+            "SELECT COUNT(p) FROM ParkingLot p WHERE p.area = a AND p.status = 'AVAILABLE')")
     void updateAvailableSlotsForAllAreas();
 }

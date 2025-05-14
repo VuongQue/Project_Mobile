@@ -6,6 +6,7 @@ import com.example.project_mobile.utils.LocalDateTimeDeserializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -19,16 +20,17 @@ import ua.naiksoftware.stomp.dto.StompMessage;
 public class WebSocketManager<T> {
 
     private StompClient stompClient;
-    Gson gson = new GsonBuilder()
+    private Gson gson = new GsonBuilder()
             .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer())
             .create();
+
     private Disposable stompDisposable;
     private Disposable lifecycleDisposable;
 
-    private Class<T> type; // dùng để deserialize JSON
+    private Type type; // Sử dụng Type thay vì Class<T>
     private String topic;
 
-    public WebSocketManager(Class<T> type, String topic) {
+    public WebSocketManager(Type type, String topic) {
         this.type = type;
         this.topic = topic;
     }
@@ -73,6 +75,8 @@ public class WebSocketManager<T> {
                             public void accept(StompMessage stompMessage) throws Exception {
                                 String json = stompMessage.getPayload();
                                 Log.d("WebSocket Payload", json);
+
+                                // Deserialize using Type
                                 T response = gson.fromJson(json, type);
                                 callback.onMessage(response);
                             }

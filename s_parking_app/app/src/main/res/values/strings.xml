@@ -3,7 +3,10 @@
     <string name="login_success">Login Success</string>
     <string name="error_field_required">Thi field cannot be empty</string>
     <string name="error_invalid_email">Invalid email format</string>
-    <string name="error_invalid_password">Password must be longer than 4 characters</string>
+    <string name="error_invalid_password">Password must be longer than 6 characters, it contains at least 1 uppercase, 1 digit and 1 special character</string>
+
+    <string name="logOut">Log out</string>
+    <string name="guest_mode">Guest</string>
 
     <string name="home">Home</string>
     <string name="notification">Notification</string>
