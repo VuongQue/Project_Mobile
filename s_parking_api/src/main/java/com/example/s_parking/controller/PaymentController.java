@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/payment")
 @RequiredArgsConstructor
@@ -18,6 +20,9 @@ public class PaymentController {
 
     private final PaymentService paymentService;
 
+    /**
+     * Thanh toán qua Ngân hàng
+     */
     @PostMapping("/create-transaction")
     public ResponseEntity<?> createPayment(@RequestBody PaymentRequest request, Authentication authentication) {
         try {
@@ -29,14 +34,17 @@ public class PaymentController {
                         .body("Không thể tạo giao dịch mới!");
             }
 
-            return ResponseEntity.ok(paymentResponse); // Trả trực tiếp PaymentResponse
+            return ResponseEntity.ok(paymentResponse);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Đã xảy ra lỗi: " + e.getMessage());
         }
     }
 
-    @PutMapping(value = "/confirm", produces = "application/json")
+    /**
+     * Xác nhận thanh toán ngân hàng
+     */
+    @PutMapping("/confirm")
     public ResponseEntity<SuccessResponse> confirmPayment(@RequestBody ConfirmPaymentRequest request, Authentication authentication) {
         try {
             String username = authentication.getName();
@@ -46,9 +54,57 @@ public class PaymentController {
             return ResponseEntity.ok(response);
 
         } catch (RuntimeException e) {
-            return ResponseEntity.status(400).body(new SuccessResponse(false, e.getMessage()));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new SuccessResponse(false, e.getMessage()));
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(new SuccessResponse(false, "Lỗi hệ thống: " + e.getMessage()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new SuccessResponse(false, "Lỗi hệ thống: " + e.getMessage()));
+        }
+    }
+
+    /**
+     * Tạo giao dịch thanh toán qua MoMo
+     */
+    @PostMapping("/momo/create-transaction")
+    public ResponseEntity<?> createMomoPayment(@RequestBody PaymentRequest request, Authentication authentication) {
+        try {
+            String username = authentication.getName();
+            PaymentResponse response = paymentService.createMomoPayment(request, username);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi MoMo: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Xử lý callback từ MoMo
+     */
+    @PostMapping("/momo/notify")
+    public ResponseEntity<String> handleMomoNotification(@RequestBody Map<String, Object> requestBody) {
+        try {
+            System.out.println("MoMo Notification Received: " + requestBody);
+
+            String orderId = String.valueOf(requestBody.get("orderId"));
+            Integer resultCode = Integer.parseInt(String.valueOf(requestBody.get("resultCode")));
+            String transId = String.valueOf(requestBody.get("transId"));
+
+            // Kiểm tra dữ liệu
+            if (orderId == null || transId == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid data received");
+            }
+
+            if (resultCode == 0) {
+                // Thanh toán thành công, cập nhật trạng thái đơn hàng
+                paymentService.updatePaymentStatus(orderId, "PAID");
+                return ResponseEntity.ok("Success");
+            } else {
+                // Thanh toán thất bại
+                paymentService.updatePaymentStatus(orderId, "FAILED");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Payment failed");
+            }
+
+        } catch (NumberFormatException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Data parsing error: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error: " + e.getMessage());
         }
     }
 

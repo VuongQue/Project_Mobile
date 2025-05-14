@@ -1,27 +1,29 @@
 package com.example.project_mobile.dto;
 
 public class PaymentRequest {
-    private double amount;
+    private String amount;
     private String method;
     private String status;
     private String transactionId;
+    private String orderInfo;
 
     public PaymentRequest() {
     }
 
-    public PaymentRequest(double amount, String method, String status, String transactionId) {
+    public PaymentRequest(String amount, String method, String status, String transactionId, String orderInfo) {
         this.amount = amount;
         this.method = method;
         this.status = status;
         this.transactionId = transactionId;
+        this.orderInfo = orderInfo;
     }
 
     // Getter - Setter
-    public double getAmount() {
+    public String getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(String amount) {
         this.amount = amount;
     }
 
@@ -47,5 +49,13 @@ public class PaymentRequest {
 
     public void setTransactionId(String transactionId) {
         this.transactionId = transactionId;
+    }
+
+    public String getOrderInfo() {
+        return orderInfo;
+    }
+
+    public void setOrderInfo(String orderInfo) {
+        this.orderInfo = orderInfo;
     }
 }

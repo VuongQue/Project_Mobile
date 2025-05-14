@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,12 +22,15 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.example.project_mobile.LoginActivity;
 import com.example.project_mobile.databinding.FragmentSettingsBinding;
+import com.example.project_mobile.storage.GuestManager;
 import com.example.project_mobile.storage.PreferenceManager;
 import com.example.project_mobile.dto.UserInfoResponse;
 
 public class SettingsFragment extends Fragment {
 
     FragmentSettingsBinding binding;
+
+    Boolean isGuest;
     private PreferenceManager preferenceManager;
 
     private final BroadcastReceiver logoutReceiver = new BroadcastReceiver() {
@@ -55,8 +59,11 @@ public class SettingsFragment extends Fragment {
         setupLanguageSpinner();
         setupModeSwitch();
         setupLogoutButton();
-        loadUserInfo();
+        isGuest = GuestManager.isGuest(requireContext());
 
+        if (!isGuest) {
+            loadUserInfo();
+        }
         return binding.getRoot();
     }
 

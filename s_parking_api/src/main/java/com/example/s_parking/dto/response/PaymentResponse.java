@@ -18,8 +18,14 @@ public class PaymentResponse {
     private String method;
     private String status;
     private LocalDateTime createdAt;
+    private String payUrl;  // Đường dẫn thanh toán MoMo
 
     public PaymentResponse(String transactionId) {
         this.transactionId = transactionId;
+    }
+
+    public PaymentResponse(String transactionId, String payUrl) {
+        this.transactionId = transactionId;
+        this.payUrl = payUrl;
     }
 }
