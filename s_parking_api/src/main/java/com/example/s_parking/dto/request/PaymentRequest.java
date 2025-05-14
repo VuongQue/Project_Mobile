@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PaymentRequest {
-    private double amount;   // số tiền
-    private String method;   // phương thức thanh toán (BANK_TRANSFER, MOMO, ZALO_PAY,...)
+    private String amount;   // Số tiền
+    private String method;   // Phương thức thanh toán (BANK_TRANSFER, MOMO, ZALO_PAY, ...)
+    private String orderInfo; // Thông tin đơn hàng (ví dụ: "Thanh toán đặt chỗ xe")
 }

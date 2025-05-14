@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,7 +16,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="40dp"/>
+        android:layout_marginTop="40dp"
+        android:transitionName="logoTransition"/>
 
     <!-- Title -->
     <TextView
@@ -29,7 +31,8 @@
         app:layout_constraintTop_toBottomOf="@id/ivLogo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="16dp"
+        android:transitionName="titleTransition"/>
 
     <!-- Subtitle -->
     <TextView
@@ -42,7 +45,8 @@
         app:layout_constraintTop_toBottomOf="@id/tvTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginTop="8dp"
+        android:transitionName="subTitleTransition"/>
 
     <!-- Student ID Input -->
     <EditText
@@ -57,7 +61,8 @@
         app:layout_constraintTop_toBottomOf="@id/tvSubTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="24dp"/>
+        android:layout_marginTop="24dp"
+        android:transitionName="studentIdTransition"/>
 
     <!-- Sign Up Button -->
     <com.google.android.material.button.MaterialButton
@@ -73,7 +78,8 @@
         app:layout_constraintTop_toBottomOf="@id/edtStudentId"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="24dp"/>
+        android:layout_marginTop="24dp"
+        android:transitionName="signUpButtonTransition"/>
 
     <!-- Redirect Text -->
     <TextView
@@ -86,7 +92,8 @@
         app:layout_constraintTop_toBottomOf="@id/btnSign"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="32dp"/>
+        android:layout_marginTop="32dp"
+        android:transitionName="alreadyAccountTransition"/>
 
     <!-- Sign In Here -->
     <TextView
@@ -100,6 +107,6 @@
         app:layout_constraintTop_toBottomOf="@id/tvAlreadyAccount"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp"/>
-
+        android:layout_marginTop="8dp"
+        android:transitionName="signInHereTransition"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

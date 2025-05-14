@@ -1,9 +1,14 @@
 package com.example.project_mobile;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,7 +26,6 @@ import com.example.project_mobile.dto.UsernameRequest;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -70,7 +74,7 @@ public class PaymentActivity extends AppCompatActivity {
             if (selectedSessions.isEmpty()) {
                 Toast.makeText(this, "Vui lòng chọn ít nhất 1 lượt gửi xe để thanh toán!", Toast.LENGTH_SHORT).show();
             } else {
-                createPayment();
+                showPaymentOptionsDialog();
             }
         });
     }
@@ -106,10 +110,33 @@ public class PaymentActivity extends AppCompatActivity {
         binding.txtTotal.setText("Tổng tiền: " + (int) totalAmount + " đ");
     }
 
-    private void createPayment() {
+    private void showPaymentOptionsDialog() {
+        Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_payment_options);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setCancelable(true);
+
+        Button btnBankTransfer = dialog.findViewById(R.id.btnBankTransfer);
+        Button btnMomo = dialog.findViewById(R.id.btnMomo);
+
+        btnBankTransfer.setOnClickListener(v -> {
+            dialog.dismiss();
+            createPayment("BANK_TRANSFER");
+        });
+
+        btnMomo.setOnClickListener(v -> {
+            dialog.dismiss();
+            createPayment("MOMO");
+        });
+
+        dialog.show();
+    }
+
+    private void createPayment(String method) {
         PaymentRequest paymentRequest = new PaymentRequest();
         paymentRequest.setAmount(totalAmount);
-        paymentRequest.setMethod("BANK_TRANSFER");
+        paymentRequest.setMethod(method);
 
         apiService.createPayment(paymentRequest).enqueue(new Callback<PaymentResponse>() {
             @Override
@@ -120,18 +147,16 @@ public class PaymentActivity extends AppCompatActivity {
                         Toast.makeText(PaymentActivity.this, "Không nhận được mã giao dịch!", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    // Tạo 1 list ID từ các session đã chọn
-                    ArrayList<Long> selectedSessionIds = new ArrayList<>();
-                    for (SessionResponse session : selectedSessions) {
-                        selectedSessionIds.add(session.getId());
+
+                    if (method.equals("MOMO")) {
+                        openMomoApp(response.body().getPayUrl());
+                    } else {
+                        Intent intent = new Intent(PaymentActivity.this, QRPaymentActivity.class);
+                        intent.putExtra("transactionId", transactionId);
+                        intent.putExtra("amount", totalAmount);
+                        startActivity(intent);
                     }
 
-                    // Chuyển màn sang QRPaymentActivity
-                    Intent intent = new Intent(PaymentActivity.this, QRPaymentActivity.class);
-                    intent.putExtra("transactionId", transactionId);
-                    intent.putExtra("amount", totalAmount);
-                    intent.putExtra("selectedSessionIds", selectedSessionIds); // <-- Truyền list id
-                    startActivity(intent);
                 } else {
                     Toast.makeText(PaymentActivity.this, "Tạo giao dịch thất bại!", Toast.LENGTH_SHORT).show();
                 }
@@ -142,5 +167,14 @@ public class PaymentActivity extends AppCompatActivity {
                 Toast.makeText(PaymentActivity.this, "Lỗi mạng!", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void openMomoApp(String payUrl) {
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW, android.net.Uri.parse(payUrl));
+            startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(this, "MoMo chưa được cài đặt trên thiết bị", Toast.LENGTH_SHORT).show();
+        }
     }
 }

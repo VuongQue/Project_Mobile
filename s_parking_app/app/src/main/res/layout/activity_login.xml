@@ -20,7 +20,8 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:src="@drawable/ic_logo"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:transitionName="logoTransition" />
 
         <!-- Welcome Text -->
         <TextView
@@ -30,7 +31,8 @@
             android:text="Welcome to ...!"
             android:textColor="?attr/textColor"
             android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:transitionName="welcomeTextTransition" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -38,7 +40,8 @@
             android:layout_marginBottom="32dp"
             android:text="The Best Parking Solution for Students"
             android:textColor="?attr/textColor"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:transitionName="subTitleTransition" />
 
         <!-- Input MSSV -->
         <EditText
@@ -51,7 +54,8 @@
             android:padding="12dp"
             android:textColor="?attr/textColor"
             android:textColorHint="#8a8a8a"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:transitionName="usernameTransition" />
 
         <!-- Password -->
         <EditText
@@ -65,7 +69,8 @@
             android:padding="12dp"
             android:textColor="?attr/textColor"
             android:textColorHint="#8a8a8a"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:transitionName="passwordTransition" />
 
         <!-- Remember Me & Forgot Password -->
         <LinearLayout
@@ -73,7 +78,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:orientation="horizontal"
-            android:paddingHorizontal="16dp">
+            android:paddingHorizontal="16dp"
+            android:transitionName="rememberForgotTransition">
 
             <CheckBox
                 android:id="@+id/cbRememberMe"
@@ -88,7 +94,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:text="Forgot Password?"
-                android:textColor="#8a8a8a" />
+                android:textColor="#8a8a8a"
+                android:transitionName="forgotPasswordTransition" />
         </LinearLayout>
 
         <!-- Sign In Button -->
@@ -101,7 +108,8 @@
             android:textColor="@color/white"
             app:cornerRadius="16dp"
             android:background="@drawable/gradient_button"
-            app:backgroundTint="@null" />
+            app:backgroundTint="@null"
+            android:transitionName="signInButtonTransition" />
 
         <!-- Sign Up Redirect -->
         <LinearLayout
@@ -109,7 +117,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:transitionName="signUpSectionTransition">
 
             <TextView
                 android:id="@+id/tvDontHaveAccount"
@@ -126,7 +135,8 @@
                 android:text=" SIGN UP NOW"
                 android:textColor="#7ED957"
                 android:textSize="14sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:transitionName="signUpNowTransition" />
         </LinearLayout>
 
     </LinearLayout>
@@ -148,6 +158,6 @@
         android:visibility="gone"
         app:indicatorColor="@color/primaryColor"
         app:indicatorSize="60dp"
-        app:trackThickness="4dp"/>
-
+        app:trackThickness="4dp"
+        android:transitionName="progressIndicatorTransition"/>
 </FrameLayout>

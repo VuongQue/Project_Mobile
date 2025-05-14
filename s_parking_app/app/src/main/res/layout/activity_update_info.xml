@@ -13,13 +13,16 @@
         android:orientation="vertical"
         android:gravity="center_horizontal">
 
+        <!-- Logo -->
         <ImageView
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:src="@drawable/ic_logo"
             android:layout_marginTop="20dp"
-            android:layout_gravity="start" />
+            android:layout_gravity="start"
+            android:transitionName="logoTransition" />
 
+        <!-- Title -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -27,8 +30,10 @@
             android:textSize="24sp"
             android:textColor="?attr/textColor"
             android:textStyle="bold"
-            android:layout_marginTop="24dp" />
+            android:layout_marginTop="24dp"
+            android:transitionName="titleTransition" />
 
+        <!-- Full Name Input -->
         <EditText
             android:id="@+id/edtFullname"
             android:layout_width="match_parent"
@@ -36,8 +41,10 @@
             android:background="@drawable/edittext_border"
             android:hint="Full Name"
             android:padding="12dp"
-            android:layout_marginTop="24dp" />
+            android:layout_marginTop="24dp"
+            android:transitionName="fullnameTransition" />
 
+        <!-- Phone Input -->
         <EditText
             android:id="@+id/edtPhone"
             android:layout_width="match_parent"
@@ -46,8 +53,10 @@
             android:hint="Phone"
             android:inputType="phone"
             android:padding="12dp"
-            android:layout_marginTop="12dp" />
+            android:layout_marginTop="12dp"
+            android:transitionName="phoneTransition" />
 
+        <!-- Security Key Input -->
         <EditText
             android:id="@+id/edtSecurityKey"
             android:layout_width="match_parent"
@@ -55,8 +64,10 @@
             android:background="@drawable/edittext_border"
             android:hint="Security Key"
             android:padding="12dp"
-            android:layout_marginTop="12dp" />
+            android:layout_marginTop="12dp"
+            android:transitionName="securityKeyTransition" />
 
+        <!-- Password Input -->
         <EditText
             android:id="@+id/edtPassword"
             android:layout_width="match_parent"
@@ -65,8 +76,10 @@
             android:hint="New Password"
             android:inputType="textPassword"
             android:padding="12dp"
-            android:layout_marginTop="12dp" />
+            android:layout_marginTop="12dp"
+            android:transitionName="passwordTransition" />
 
+        <!-- Confirm Button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnUpdateInfo"
             android:layout_width="match_parent"
@@ -77,6 +90,7 @@
             android:layout_marginTop="24dp"
             android:background="@drawable/gradient_button"
             app:backgroundTint="@null"
-            app:cornerRadius="10dp" />
+            app:cornerRadius="10dp"
+            android:transitionName="confirmButtonTransition" />
     </LinearLayout>
 </ScrollView>

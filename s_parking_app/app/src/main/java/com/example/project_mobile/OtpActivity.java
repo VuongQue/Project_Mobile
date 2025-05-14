@@ -4,10 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.util.Pair;
 
 import com.example.project_mobile.api.ApiClient;
 import com.example.project_mobile.api.ApiService;
@@ -43,9 +46,12 @@ public class OtpActivity extends AppCompatActivity {
 
         apiService = ApiClient.getInstance(this);
 
-        findViewById(R.id.btnVerifyOtp).setOnClickListener(v -> verifyOtp());
+        findViewById(R.id.btnVerifyOtp).setOnClickListener(v -> verifyOtp(v));
     }
 
+    /**
+     * Thiết lập focus tự động cho các ô OTP
+     */
     private void setupOtpInput() {
         EditText[] otpFields = {otp1, otp2, otp3, otp4, otp5, otp6};
 
@@ -58,10 +64,8 @@ public class OtpActivity extends AppCompatActivity {
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if (!s.toString().isEmpty()) {
-                        if (currentIndex < otpFields.length - 1) {
-                            otpFields[currentIndex + 1].requestFocus();
-                        }
+                    if (!s.toString().isEmpty() && currentIndex < otpFields.length - 1) {
+                        otpFields[currentIndex + 1].requestFocus();
                     }
                 }
 
@@ -75,7 +79,10 @@ public class OtpActivity extends AppCompatActivity {
         }
     }
 
-    private void verifyOtp() {
+    /**
+     * Xác thực OTP và chuyển Activity kèm hiệu ứng
+     */
+    private void verifyOtp(View view) {
         String otp = otp1.getText().toString().trim() +
                 otp2.getText().toString().trim() +
                 otp3.getText().toString().trim() +
@@ -95,6 +102,7 @@ public class OtpActivity extends AppCompatActivity {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(OtpActivity.this, "Xác thực thành công", Toast.LENGTH_SHORT).show();
+
                     Intent intent;
                     if ("FORGOT_PASSWORD".equalsIgnoreCase(purpose)) {
                         intent = new Intent(OtpActivity.this, ResetPasswordActivity.class);
@@ -102,7 +110,17 @@ public class OtpActivity extends AppCompatActivity {
                         intent = new Intent(OtpActivity.this, UpdateInfoActivity.class);
                     }
                     intent.putExtra("username", username);
-                    startActivity(intent);
+
+                    // Tạo các Pair cho Transition Animation
+                    Pair<View, String> p1 = Pair.create(view, "btnVerifyOtp");
+                    Pair<View, String> p2 = Pair.create((View) otp1, "otp1");
+                    Pair<View, String> p3 = Pair.create((View) otp6, "otp6");
+
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                            OtpActivity.this, p1, p2, p3
+                    );
+
+                    startActivity(intent, options.toBundle());
                     finish();
                 } else {
                     Toast.makeText(OtpActivity.this, "OTP không hợp lệ hoặc đã hết hạn", Toast.LENGTH_SHORT).show();
@@ -114,5 +132,11 @@ public class OtpActivity extends AppCompatActivity {
                 Toast.makeText(OtpActivity.this, "Lỗi kết nối", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
     }
 }

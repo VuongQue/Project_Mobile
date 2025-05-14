@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.util.Pair;
 
 import com.example.project_mobile.api.ApiClient;
 import com.example.project_mobile.api.ApiService;
@@ -81,9 +84,22 @@ public class SignUpActivity extends AppCompatActivity {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(SignUpActivity.this, "OTP đã gửi về email", Toast.LENGTH_SHORT).show();
+
+                    // Thiết lập hiệu ứng chuyển Activity
                     Intent intent = new Intent(SignUpActivity.this, OtpActivity.class);
                     intent.putExtra("username", studentId);
-                    startActivity(intent);
+
+                    // Tạo hiệu ứng chuyển Activity
+                    Pair<View, String> p1 = Pair.create((View) btnSign, "btnSign");
+                    Pair<View, String> p2 = Pair.create((View) tvSignInHere, "tvSignInHere");
+
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                            SignUpActivity.this,
+                            p1,
+                            p2
+                    );
+
+                    startActivity(intent, options.toBundle());
                 } else {
                     Toast.makeText(SignUpActivity.this, "Lỗi gửi OTP", Toast.LENGTH_SHORT).show();
                 }
@@ -95,5 +111,11 @@ public class SignUpActivity extends AppCompatActivity {
                 Log.e("SignUpActivity", "Error: " + t.getMessage());
             }
         });
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
     }
 }

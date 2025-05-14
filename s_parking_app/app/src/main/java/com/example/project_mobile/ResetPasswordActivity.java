@@ -7,7 +7,10 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.util.Pair;
 
 import com.example.project_mobile.api.ApiClient;
 import com.example.project_mobile.api.ApiService;
@@ -33,7 +36,8 @@ public class ResetPasswordActivity extends AppCompatActivity {
         edtNewPassword = findViewById(R.id.edtNewPassword);
         edtConfirmPassword = findViewById(R.id.edtConfirmPassword);
         rootView = findViewById(android.R.id.content);
-        findViewById(R.id.btnResetPassword).setOnClickListener(v -> handleResetPassword());
+
+        findViewById(R.id.btnResetPassword).setOnClickListener(v -> handleResetPassword(v));
 
         username = getIntent().getStringExtra("username");
         apiService = ApiClient.getInstance(this);
@@ -49,16 +53,16 @@ public class ResetPasswordActivity extends AppCompatActivity {
         Animation slideIn = AnimationUtils.loadAnimation(this, R.anim.slide_in_left);
         Animation bounce = AnimationUtils.loadAnimation(this, R.anim.bounce);
 
-        // Áp dụng fadeIn cho toàn bộ màn hình
         rootView.startAnimation(fadeIn);
-
-        // Áp dụng slideIn và bounce cho từng thành phần
         edtNewPassword.startAnimation(slideIn);
         edtConfirmPassword.startAnimation(slideIn);
         findViewById(R.id.btnResetPassword).startAnimation(bounce);
     }
 
-    private void handleResetPassword() {
+    /**
+     * Xử lý đặt lại mật khẩu và áp dụng hiệu ứng chuyển Activity
+     */
+    private void handleResetPassword(View view) {
         String newPassword = edtNewPassword.getText().toString().trim();
         String confirmPassword = edtConfirmPassword.getText().toString().trim();
 
@@ -79,7 +83,19 @@ public class ResetPasswordActivity extends AppCompatActivity {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(ResetPasswordActivity.this, "Đổi mật khẩu thành công", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(ResetPasswordActivity.this, LoginActivity.class));
+
+                    Intent intent = new Intent(ResetPasswordActivity.this, LoginActivity.class);
+
+                    // Tạo hiệu ứng chuyển Activity
+                    Pair<View, String> p1 = Pair.create(findViewById(R.id.edtNewPassword), "newPasswordTransition");
+                    Pair<View, String> p2 = Pair.create(findViewById(R.id.edtConfirmPassword), "confirmPasswordTransition");
+                    Pair<View, String> p3 = Pair.create(findViewById(R.id.btnResetPassword), "resetButtonTransition");
+
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                            ResetPasswordActivity.this, p1, p2, p3
+                    );
+
+                    startActivity(intent, options.toBundle());
                     finishAffinity();
                 } else {
                     Toast.makeText(ResetPasswordActivity.this, "Không thể đặt lại mật khẩu", Toast.LENGTH_SHORT).show();

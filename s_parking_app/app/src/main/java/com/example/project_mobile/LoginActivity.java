@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.util.Pair;
 
 import com.example.project_mobile.api.ApiClient;
 import com.example.project_mobile.api.ApiService;
@@ -43,14 +45,26 @@ public class LoginActivity extends AppCompatActivity {
         // Sự kiện nhấn Sign In
         binding.btnSignIn.setOnClickListener(v -> handleSignInClick());
 
-        // Sự kiện nhấn Sign Up
+        // Sự kiện nhấn Sign Up với hiệu ứng chuyển
         binding.tvSignUpNow.setOnClickListener(v -> {
-            startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
+            Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
+
+            Pair<View, String> p1 = Pair.create(binding.tvSignUpNow, "tvSignUpNow");
+            Pair<View, String> p2 = Pair.create(binding.btnSignIn, "btnSignIn");
+
+            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(LoginActivity.this, p1, p2);
+            startActivity(intent, options.toBundle());
         });
 
-        // Sự kiện nhấn Forgot Password
+        // Sự kiện nhấn Forgot Password với hiệu ứng chuyển
         binding.tvForgotPassword.setOnClickListener(v -> {
-            startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
+            Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+
+            Pair<View, String> p1 = Pair.create(binding.tvForgotPassword, "tvForgotPassword");
+            Pair<View, String> p2 = Pair.create(binding.btnSignIn, "btnSignIn");
+
+            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(LoginActivity.this, p1, p2);
+            startActivity(intent, options.toBundle());
         });
     }
 
@@ -63,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
         // Hiển thị lớp phủ và vòng quay
         binding.overlay.setVisibility(View.VISIBLE);
         binding.circularProgress.setVisibility(View.VISIBLE);
-        binding.circularProgress.setIndeterminate(true);  // Bắt đầu quay
+        binding.circularProgress.setIndeterminate(true);
 
         // Animation cho nút Sign In
         Animation buttonAnim = AnimationUtils.loadAnimation(this, R.anim.button_scale);
@@ -121,10 +135,18 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (response.isSuccessful() && response.body() != null) {
                     new PreferenceManager(LoginActivity.this).saveToken(response.body().getToken());
-
                     Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
 
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    // Hiệu ứng chuyển Activity với Animation
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+
+                    Pair<View, String> p1 = Pair.create(binding.btnSignIn, "btnSignIn");
+                    Pair<View, String> p2 = Pair.create(binding.etUsername, "etUsername");
+                    Pair<View, String> p3 = Pair.create(binding.etPassword, "etPassword");
+
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(LoginActivity.this, p1, p2, p3);
+                    startActivity(intent, options.toBundle());
+
                     finish();
                 } else {
                     Toast.makeText(LoginActivity.this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
@@ -147,5 +169,11 @@ public class LoginActivity extends AppCompatActivity {
         binding.circularProgress.setVisibility(View.GONE);
         binding.circularProgress.setIndeterminate(false);
         binding.btnSignIn.setEnabled(true);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
     }
 }
