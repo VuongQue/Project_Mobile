@@ -1,13 +1,9 @@
 package com.example.s_parking.dto.request;
 
-import javax.validation.constraints.NotNull;
-
 public class BookingRequest{
 
-    @NotNull(message = "ID bãi đậu xe không được để trống")
     private Long idParking;
 
-    @NotNull(message = "Tên người dùng không được để trống")
     private String username;
 
     public BookingRequest() {
