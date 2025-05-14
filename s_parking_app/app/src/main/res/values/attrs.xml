@@ -5,7 +5,7 @@
     <attr name="editTextColor" format="color" />
     <attr name="navColor" format="color" />
     <attr name="iconColor" format="color"/>
-    <attr name="navIconColor" format="color"/>
+    <attr name="bwIconColor" format="color"/>
     <attr name="backgroundIconColor" format="color" />
-    <attr name="backgroundSession" format="color" />
+    <attr name="backgroundItem" format="color" />
 </resources>
