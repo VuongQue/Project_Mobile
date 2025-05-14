@@ -25,6 +25,7 @@ import com.example.project_mobile.dto.UserInfoResponse;
 import com.example.project_mobile.dto.UsernameRequest;
 import com.example.project_mobile.storage.GuestManager;
 import com.example.project_mobile.storage.PreferenceManager;
+import com.example.project_mobile.utils.SetUp;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -35,6 +36,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class LoginActivity extends AppCompatActivity {
 
     ActivityLoginBinding binding;
+
+    private PreferenceManager preferenceManager;
+    private SetUp setUp;
     SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,6 +46,12 @@ public class LoginActivity extends AppCompatActivity {
 
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        preferenceManager = new PreferenceManager(this);
+        setUp = new SetUp(this);
+
+        setUp.loadLocale();
+        setUp.loadTheme();
 
         sharedPreferences = getSharedPreferences("LoginDetails", MODE_PRIVATE);
 

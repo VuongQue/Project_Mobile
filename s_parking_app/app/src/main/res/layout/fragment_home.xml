@@ -163,13 +163,15 @@
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/ic_money_bag" />
+                android:src="@drawable/ic_money_bag"
+                app:tint="?attr/iconColor" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/payment"
-                android:textColor="#FFFFFF"
+                android:textColor="?attr/iconColor"
+                android:textStyle="bold"
                 android:textSize="12sp" />
         </LinearLayout>
 
@@ -187,14 +189,16 @@
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/ic_booking" />
+                android:src="@drawable/ic_booking"
+                app:tint="?attr/iconColor" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/book"
-                android:textColor="#FFFFFF"
-                android:textSize="12sp" />
+                android:textColor="?attr/iconColor"
+                android:textSize="12sp"
+                android:textStyle="bold"/>
         </LinearLayout>
 
         <!-- QR -->
@@ -211,14 +215,16 @@
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/ic_qr_code" />
+                android:src="@drawable/ic_qr_code"
+                app:tint="?attr/iconColor" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="QR"
-                android:textColor="#FFFFFF"
-                android:textSize="12sp" />
+                android:textColor="?attr/iconColor"
+                android:textSize="12sp"
+                android:textStyle="bold"/>
         </LinearLayout>
 
         <!-- Lịch sử  -->
@@ -236,14 +242,15 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:src="@android:drawable/ic_lock_idle_alarm"
-                app:tint="@color/white" />
+                app:tint="?attr/iconColor"  />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/history"
-                android:textColor="#FFFFFF"
-                android:textSize="12sp" />
+                android:textColor="?attr/iconColor"
+                android:textSize="12sp"
+                android:textStyle="bold"/>
         </LinearLayout>
 
         <!-- More -->

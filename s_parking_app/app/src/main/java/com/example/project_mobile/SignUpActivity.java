@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +23,7 @@ import retrofit2.Response;
 public class SignUpActivity extends AppCompatActivity {
 
     private EditText edtStudentId;
+    private TextView tvSignIn;
     private ApiService apiService;
 
     @SuppressLint("MissingInflatedId")
@@ -30,8 +33,16 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
 
         edtStudentId = findViewById(R.id.edtStudentId);
+        tvSignIn = findViewById(R.id.tvSignIn);
         findViewById(R.id.btnSign).setOnClickListener(v -> sendOtp());
         apiService = ApiClient.getInstance(this);
+
+        tvSignIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void sendOtp() {

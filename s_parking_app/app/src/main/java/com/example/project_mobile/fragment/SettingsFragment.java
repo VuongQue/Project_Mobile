@@ -25,6 +25,7 @@ import com.example.project_mobile.databinding.FragmentSettingsBinding;
 import com.example.project_mobile.storage.GuestManager;
 import com.example.project_mobile.storage.PreferenceManager;
 import com.example.project_mobile.dto.UserInfoResponse;
+import com.example.project_mobile.utils.SetUp;
 
 public class SettingsFragment extends Fragment {
 
@@ -32,6 +33,7 @@ public class SettingsFragment extends Fragment {
 
     Boolean isGuest;
     private PreferenceManager preferenceManager;
+    private SetUp setUp;
 
     private final BroadcastReceiver logoutReceiver = new BroadcastReceiver() {
         @Override
@@ -117,14 +119,10 @@ public class SettingsFragment extends Fragment {
         binding.themSw.setChecked(darkModeOn);
 
         binding.themSw.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked != darkModeOn) {
-                preferenceManager.setDarkMode(isChecked);
-                new Handler().postDelayed(() -> {
-                    if (isAdded() && !requireActivity().isFinishing()) {
-                        requireActivity().recreate();
-                    }
-                }, 100);
-            }
+            preferenceManager.setDarkMode(isChecked);
+
+            setUp = new SetUp(getContext());
+            setUp.loadTheme();
         });
     }
 

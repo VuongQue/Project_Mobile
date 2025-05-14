@@ -32,7 +32,8 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:adjustViewBounds="true"
-                android:src="@drawable/ic_home" />
+                android:src="@drawable/ic_home"
+                app:tint="?attr/navIconColor" />
             <TextView
                 android:id="@+id/homeTxt"
                 android:layout_width="wrap_content"
@@ -40,7 +41,7 @@
                 android:text="@string/home"
                 android:layout_marginStart="10dp"
                 android:textSize="16sp"
-                android:textColor="@color/white"
+                android:textColor="?attr/navIconColor"
                 android:textStyle="bold"/>
 
         </LinearLayout>
@@ -58,7 +59,8 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:adjustViewBounds="true"
-                android:src="@drawable/ic_notification" />
+                android:src="@drawable/ic_notification"
+                app:tint="?attr/navIconColor"/>
             <TextView
                 android:id="@+id/notificationTxt"
                 android:visibility="gone"
@@ -67,7 +69,7 @@
                 android:text="@string/notification"
                 android:layout_marginStart="10dp"
                 android:textSize="16sp"
-                android:textColor="@color/white"
+                android:textColor="?attr/navIconColor"
                 android:textStyle="bold"/>
 
         </LinearLayout>
@@ -86,7 +88,8 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:adjustViewBounds="true"
-                android:src="@drawable/ic_profile" />
+                android:src="@drawable/ic_profile"
+                app:tint="?attr/navIconColor"/>
             <TextView
                 android:id="@+id/profileTxt"
                 android:visibility="gone"
@@ -95,7 +98,7 @@
                 android:text="@string/profile"
                 android:layout_marginStart="10dp"
                 android:textSize="16sp"
-                android:textColor="@color/white"
+                android:textColor="?attr/navIconColor"
                 android:textStyle="bold"/>
 
         </LinearLayout>
@@ -114,7 +117,8 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:adjustViewBounds="true"
-                android:src="@drawable/ic_settings" />
+                android:src="@drawable/ic_settings"
+                app:tint="?attr/navIconColor"/>
             <TextView
                 android:id="@+id/settingsTxt"
                 android:visibility="gone"
@@ -123,11 +127,10 @@
                 android:text="@string/settings"
                 android:layout_marginStart="10dp"
                 android:textSize="16sp"
-                android:textColor="@color/white"
+                android:textColor="?attr/navIconColor"
                 android:textStyle="bold"/>
 
         </LinearLayout>
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>
-

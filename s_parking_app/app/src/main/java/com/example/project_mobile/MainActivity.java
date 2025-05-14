@@ -29,8 +29,6 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private BottomNavBinding bottomNavBinding;
     private SwitchFragmentAdapter switchFragmentAdapter;
-    private PreferenceManager preferenceManager;
-    private SetUp setUp;
     private int selectedTab = 1;
     private boolean isGuest;
 
@@ -49,12 +47,6 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         bottomNavBinding = BottomNavBinding.bind(binding.bottomNav.getRoot());
-
-        preferenceManager = new PreferenceManager(this);
-        setUp = new SetUp(this);
-
-        setUp.loadLocale();
-        setUp.loadTheme();
 
         isGuest = GuestManager.isGuest(this);
 
@@ -130,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (selectedIndex >= 1 && selectedIndex <= layouts.length) {
             texts[selectedIndex - 1].setVisibility(View.VISIBLE);
-            layouts[selectedIndex - 1].setBackgroundResource(R.drawable.selected_icon);
+            layouts[selectedIndex - 1].setBackgroundResource(R.drawable.gradient_background);
             animateView(layouts[selectedIndex - 1]);
         }
     }
@@ -166,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
                 if (selectedTab != selectedIndex) {
                     resetTabs(texts, layouts);
                     texts[index].setVisibility(View.VISIBLE);
-                    layouts[index].setBackgroundResource(R.drawable.selected_icon);
+                    layouts[index].setBackgroundResource(R.drawable.gradient_background);
                     animateView(layouts[index]);
 
                     selectedTab = selectedIndex;
