@@ -69,6 +69,13 @@ public class SettingsFragment extends Fragment {
         return binding.getRoot();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Gọi lại hàm loadUserInfo mỗi khi Fragment quay lại
+        loadUserInfo();
+    }
+
     private void loadUserInfo() {
         UserInfoResponse userInfo = preferenceManager.getUserInfo();
         binding.tvName.setText(userInfo != null ? userInfo.getFullName() : "Guest");
