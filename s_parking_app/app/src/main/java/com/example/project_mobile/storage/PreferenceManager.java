@@ -53,6 +53,17 @@ public class PreferenceManager {
 
         return username;
     }
+    public String getPassword() {
+        SharedPreferences loginPrefs = getEncryptedSharedPreferences(LOGIN_PREF);
+        return loginPrefs.getString(KEY_PASSWORD, "");
+    }
+
+    public boolean getRememberMeStatus() {
+        SharedPreferences loginPrefs = getEncryptedSharedPreferences(LOGIN_PREF);
+        return loginPrefs.getBoolean(KEY_STATUS, false);  // Mặc định false nếu chưa lưu
+    }
+
+
 
     /**
      * Lấy SharedPreferences cho Settings (không mã hóa)
@@ -106,7 +117,7 @@ public class PreferenceManager {
         editor.putString(KEY_USERNAME, username);
         editor.putString(KEY_PASSWORD, password);
         editor.putBoolean(KEY_STATUS, status);
-        editor.apply();
+        editor.commit();
     }
 
     /**
@@ -134,7 +145,7 @@ public class PreferenceManager {
         editor.putString(KEY_LICENSE_PLATE, userInfoResponse.getLicensePlate());
         editor.putString(KEY_AVATAR_URL, userInfoResponse.getAvatarUrl());
         editor.putBoolean(KEY_IS_LOADED, true);
-        editor.apply();
+        editor.commit();
     }
 
     /**

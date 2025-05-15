@@ -37,38 +37,33 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
+        // Khởi tạo các view và binding
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         bottomNavBinding = BottomNavBinding.bind(binding.bottomNav.getRoot());
 
+        // Khôi phục trạng thái tab đã chọn
+        SharedPreferences tabPref = getSharedPreferences("tabState", MODE_PRIVATE);
+        selectedTab = tabPref.getInt("currentTab", 1); // Mặc định là tab đầu tiên (Home)
+
         isGuest = GuestManager.isGuest(this);
 
+        selectedTab = 1;
+
+        // Set ViewPager2 adapter
         FragmentManager fragmentManager = getSupportFragmentManager();
         switchFragmentAdapter = new SwitchFragmentAdapter(fragmentManager, getLifecycle());
         binding.viewPager2.setAdapter(switchFragmentAdapter);
 
-        // Lấy tab đã chọn trước khi recreate
-        SharedPreferences tabPref = getSharedPreferences("tabState", MODE_PRIVATE);
-        selectedTab = tabPref.getInt("currentTab", 1);
+        // Đảm bảo ViewPager2 hiển thị Fragment đầu tiên (hoặc tab đã chọn trước đó)
+        binding.viewPager2.setCurrentItem(selectedTab - 1, false);  // false để không có animation khi chuyển tab
 
-        // Nếu là Guest và đang ở Notification hoặc Profile, chuyển về Home
-        if (isGuest && (selectedTab == 2 || selectedTab == 3)) {
-            selectedTab = 1;
-        }
-
-        binding.viewPager2.setCurrentItem(selectedTab - 1, false);
+        // Thiết lập Bottom Navigation và các listener
         setupBottomNavigation();
-        setupViewPagerListener(); // Thêm phương thức này
+        setupViewPagerListener();
     }
+
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -157,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
             final int selectedIndex = i + 1;
 
             layouts[i].setOnClickListener(view -> {
+                // Kiểm tra và xử lý cho Guest
                 if (isGuest && (selectedIndex == 2 || selectedIndex == 3)) {
                     navigateToLogin();
                     return;
@@ -170,12 +166,12 @@ public class MainActivity extends AppCompatActivity {
 
                     selectedTab = selectedIndex;
 
-                    // Lưu trạng thái tab
+                    // Lưu trạng thái tab vào SharedPreferences
                     SharedPreferences.Editor editor = getSharedPreferences("tabState", MODE_PRIVATE).edit();
                     editor.putInt("currentTab", selectedTab);
                     editor.apply();
 
-                    binding.viewPager2.setCurrentItem(index, true);
+                    binding.viewPager2.setCurrentItem(index, true);  // Chuyển đến tab đã chọn
                 }
             });
         }

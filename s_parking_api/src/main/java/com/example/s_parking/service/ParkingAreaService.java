@@ -12,7 +12,5 @@ public interface ParkingAreaService {
 
     List<ParkingAreaResponse> convertAllToDto(List<ParkingArea> list);
 
-    void updateParkingArea(ParkingArea area);
-
     void updateSlots();
 }

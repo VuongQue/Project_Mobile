@@ -73,7 +73,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        preferenceManager = new PreferenceManager(requireContext());
     }
 
     @Nullable
@@ -90,35 +90,24 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        // Gọi lại hàm loadUserInfo mỗi khi Fragment quay lại
-        loadUserInfo();
+        isGuest = GuestManager.isGuest(requireContext());
+
+        if (!isGuest)
+        {
+            loadUserInfo();
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        preferenceManager = new PreferenceManager(requireContext());
 
         isGuest = GuestManager.isGuest(requireContext());
 
         if (!isGuest)
         {
-            String fullName = requireActivity().getSharedPreferences("UserInfo", MODE_PRIVATE).getString("FullName", "");
-            binding.fullName.setText(fullName);
-            String avatarUrl = requireActivity().getSharedPreferences("UserInfo", MODE_PRIVATE).getString("Avatar_Url", "");
-
-            if (!avatarUrl.isEmpty()) {
-                Glide.with(requireContext())
-                        .load(Uri.parse(avatarUrl))  // Tải ảnh từ URL
-                        .into(binding.avatar);  // Gán vào ImageView
-            } else {
-                // Nếu không có URL hợp lệ, có thể sử dụng ảnh mặc định
-                Glide.with(requireContext())
-                        .load(android.R.drawable.sym_def_app_icon)  // Sử dụng ảnh mặc định từ drawable
-                        .into(binding.avatar);
-            }
-
+            loadUserInfo();
             loadCurrentSession();
         }
 
@@ -132,7 +121,6 @@ public class HomeFragment extends Fragment {
 
         parkingAreaAdapter.notifyDataSetChanged();
 
-
         loadParkingArea();
         loadNotificationImg();
 
@@ -142,18 +130,24 @@ public class HomeFragment extends Fragment {
 
     private void loadUserInfo() {
         UserInfoResponse userInfo = preferenceManager.getUserInfo();
-        String fullName = userInfo.getFullName();
-        String avatarUrl = userInfo.getAvatarUrl();
-        binding.fullName.setText(fullName);
-        if (!avatarUrl.isEmpty()) {
-            Glide.with(requireContext())
-                    .load(Uri.parse(avatarUrl))  // Tải ảnh từ URL
-                    .into(binding.avatar);  // Gán vào ImageView
-        } else {
-            // Nếu không có URL hợp lệ, có thể sử dụng ảnh mặc định
-            Glide.with(requireContext())
-                    .load(android.R.drawable.sym_def_app_icon)  // Sử dụng ảnh mặc định từ drawable
-                    .into(binding.avatar);
+        if (userInfo != null)
+        {
+            String fullName = userInfo.getFullName();
+            String avatarUrl = userInfo.getAvatarUrl();
+            binding.fullName.setText(fullName);
+            if (!avatarUrl.isEmpty()) {
+                Glide.with(requireContext())
+                        .load(Uri.parse(avatarUrl))  // Tải ảnh từ URL
+                        .into(binding.avatar);  // Gán vào ImageView
+            } else {
+                // Nếu không có URL hợp lệ, có thể sử dụng ảnh mặc định
+                Glide.with(requireContext())
+                        .load(android.R.drawable.sym_def_app_icon)  // Sử dụng ảnh mặc định từ drawable
+                        .into(binding.avatar);
+            }
+        }
+        else {
+            Toast.makeText(getContext(), "NULl", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -243,31 +237,9 @@ public class HomeFragment extends Fragment {
                 requireActivity().runOnUiThread(() -> {
                     Log.d("WebSocket", "Received Data: " + updatedAreas);
 
-                    for (ParkingAreaResponse newItem : updatedAreas) {
-                        boolean isUpdated = false;
-
-                        for (int i = 0; i < parkingAreaResponseArrayList.size(); i++) {
-                            ParkingAreaResponse oldItem = parkingAreaResponseArrayList.get(i);
-
-                            // Kiểm tra xem có phần tử nào cần cập nhật không
-                            if (oldItem.getIdArea().equals(newItem.getIdArea())) {
-                                isUpdated = true;
-
-                                // Nếu dữ liệu thực sự thay đổi, cập nhật và thông báo adapter
-                                if (!oldItem.equals(newItem)) {
-                                    parkingAreaResponseArrayList.set(i, newItem);
-                                    parkingAreaAdapter.notifyItemChanged(i);
-                                }
-                                break;
-                            }
-                        }
-
-                        // Nếu không tìm thấy, thêm mới vào danh sách
-                        if (!isUpdated) {
-                            parkingAreaResponseArrayList.add(newItem);
-                            parkingAreaAdapter.notifyItemInserted(parkingAreaResponseArrayList.size() - 1);
-                        }
-                    }
+                    parkingAreaResponseArrayList.clear();
+                    parkingAreaResponseArrayList.addAll(updatedAreas);
+                    parkingAreaAdapter.notifyDataSetChanged();
                 });
             }
         });

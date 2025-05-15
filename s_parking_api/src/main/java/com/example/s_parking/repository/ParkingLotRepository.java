@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ParkingLotRepository extends JpaRepository<ParkingLot, Long>, JpaSpecificationExecutor<ParkingLot> {
-    Optional<ParkingLot> findFirstByStatus(ParkingStatus status);
+    Optional<ParkingLot> findFirstByAreaIdAreaAndStatus(String areaId, ParkingStatus status);
 
 
     List<ParkingLot> findByStatus(ParkingStatus available);

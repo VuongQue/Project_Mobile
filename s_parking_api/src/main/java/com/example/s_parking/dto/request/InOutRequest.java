@@ -6,4 +6,5 @@ import lombok.Data;
 public class InOutRequest {
     String username;
     String licensePlate;
+    String areaId;
 }

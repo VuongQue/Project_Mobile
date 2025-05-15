@@ -45,7 +45,7 @@ public class SessionController {
     private final ParkingAreaService parkingAreaService;
 
     @Autowired
-    private ParkingSocketController parkingSocketController;
+    private ParkingSocketService parkingSocketService;
 
     @Autowired
     private NotificationService notificationService;
@@ -95,6 +95,7 @@ public class SessionController {
 
         String username = request.getUsername();
         String licensePlate = request.getLicensePlate();
+        String areaId = request.getAreaId();
 
         Optional<User> userOpt = userService.findByUsername(username);
         if (userOpt.isEmpty()) {
@@ -113,7 +114,7 @@ public class SessionController {
         ResponseEntity<?> response;
 
         if (isCheckIn) {
-            response = handleCheckIn(username, licensePlate, user);
+            response = handleCheckIn(username, licensePlate, areaId, user);
             if (response.getStatusCode() == HttpStatus.NOT_ACCEPTABLE) {
                 return response;
             }
@@ -129,17 +130,16 @@ public class SessionController {
                     LocalDateTime.now(), false, user);
         }
 
-        parkingAreaService.updateSlots();
-
         notificationService.createNewNotificatioin(notification);
         NotificationResponse notificationResponse = notificationService.convertToDto(notification);
 
         Session myCurrentSession = sessionService.getMyCurrentSession(username);
         MyCurrentSessionResponse myCurrentSessionResponse = sessionService.convertToMyDto(myCurrentSession);
 
-        parkingSocketController.updateSlots();
-        parkingSocketController.sendUserNotification(username, notificationResponse);
-        parkingSocketController.sendCheckInOutNotification(username, myCurrentSessionResponse);
+        parkingAreaService.updateSlots();
+
+        parkingSocketService.sendUserNotification(username, notificationResponse);
+        parkingSocketService.sendCheckInOutNotification(username, myCurrentSessionResponse);
 
         return ResponseEntity.ok(notificationResponse.getTitle());
     }
@@ -147,7 +147,7 @@ public class SessionController {
     /**
      * Xử lý Check In
      */
-    private ResponseEntity<?> handleCheckIn(String username, String licensePlate, User user) {
+    private ResponseEntity<?> handleCheckIn(String username, String licensePlate, String areaId, User user) {
         Optional<Booking> bookingOpt = bookingService.findByUsernameAndDate(username.trim(), LocalDate.now());
         Session session;
 
@@ -156,7 +156,7 @@ public class SessionController {
             session = new Session(null, LocalDateTime.now(), null, licensePlate, SessionType.RESERVED, 0,
                     booking.getUser(), booking.getParking(), booking.getPayment());
         } else {
-            Optional<ParkingLot> optionalSlot = parkingLotService.getSlot();
+            Optional<ParkingLot> optionalSlot = parkingLotService.getSlotByAreaId(areaId);
             if (optionalSlot.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Hết chỗ");
             }

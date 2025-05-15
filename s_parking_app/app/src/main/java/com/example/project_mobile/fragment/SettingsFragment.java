@@ -77,13 +77,20 @@ public class SettingsFragment extends Fragment {
     public void onResume() {
         super.onResume();
         // Gọi lại hàm loadUserInfo mỗi khi Fragment quay lại
-        loadUserInfo();
+        preferenceManager = new PreferenceManager(requireContext());
+
+        isGuest = GuestManager.isGuest(requireContext());
+
+        if (!isGuest)
+        {
+            loadUserInfo();
+        }
     }
 
     private void loadUserInfo() {
         UserInfoResponse userInfo = preferenceManager.getUserInfo();
-        binding.tvName.setText(userInfo != null ? userInfo.getFullName() : "Guest");
 
+        binding.tvName.setText(userInfo != null ? userInfo.getFullName() : "Guest");
         String avatarUrl = userInfo != null ? userInfo.getAvatarUrl() : null;
         Glide.with(requireContext())
                 .load(avatarUrl != null ? Uri.parse(avatarUrl) : android.R.drawable.sym_def_app_icon)

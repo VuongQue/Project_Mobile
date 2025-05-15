@@ -90,7 +90,7 @@ public class ProfileFragment extends Fragment {
         LoadFromAPI();
 
         binding.btnUpdate.setOnClickListener(v -> {
-            String username = requireActivity().getSharedPreferences("LoginDetails", MODE_PRIVATE).getString("Username", "");
+            String username = preferenceManager.getUsername();
 
             if (username.isEmpty()) {
                 Toast.makeText(getActivity(), "Không tìm thấy tài khoản", Toast.LENGTH_SHORT).show();
@@ -127,6 +127,7 @@ public class ProfileFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Log.d("ProfileFragment", "onResume - Gọi LoadFromAPI để cập nhật dữ liệu mới");
+        preferenceManager = new PreferenceManager(requireContext());
         LoadFromAPI();
     }
     private void sendToServer(String url) {
@@ -248,27 +249,30 @@ public class ProfileFragment extends Fragment {
         }
     }
 
-
     private void LoadFromAPI() {
-        String username = requireActivity().getSharedPreferences("LoginDetails", MODE_PRIVATE).getString("Username", "");
-        ApiService apiService = ApiClient.getInstance(getContext());
-        apiService.getUserInfo(new UsernameRequest(username)).enqueue(new Callback<>() {
-            @Override
-            public void onResponse(@NonNull Call<UserInfoResponse> call, @NonNull Response<UserInfoResponse> response) {
-                if (response.isSuccessful() & response.body() != null) {
-                    preferenceManager.saveUserInfo(response.body());
+        if (preferenceManager !=null)
+        {
+            String username = preferenceManager.getUsername();
+            ApiService apiService = ApiClient.getInstance(getContext());
+            apiService.getUserInfo(new UsernameRequest(username)).enqueue(new Callback<>() {
+                @Override
+                public void onResponse(@NonNull Call<UserInfoResponse> call, @NonNull Response<UserInfoResponse> response) {
+                    if (response.isSuccessful() & response.body() != null) {
+                        preferenceManager.saveUserInfo(response.body());
 
-                    Load();
-                } else {
-                    Log.e("API_ERROR", "Code: " + response.code());
+                        Load();
+                    } else {
+                        Log.e("API_ERROR", "Code: " + response.code());
+                    }
                 }
-            }
-            @Override
-            public void onFailure(@NonNull Call<UserInfoResponse> call, @NonNull Throwable t) {
-                Log.e("API_ERROR", "Failed to fetch data", t);
-            }
-        });
+                @Override
+                public void onFailure(@NonNull Call<UserInfoResponse> call, @NonNull Throwable t) {
+                    Log.e("API_ERROR", "Failed to fetch data", t);
+                }
+            });
+        }
+        else {
+            Log.e("ProfileFragment", "PreferenceManager is null");
+        }
     }
-
-
 }

@@ -50,5 +50,41 @@
     <string name="save">Save</string>
     <string name="reload">Reload</string>
 
+    <string name="bookingHistory">Booking History</string>
+    <string name="forgotPassword">Forgot Password</string>
+    <string name="confirmStudentId">Confirm your Student Id</string>
+    <string name="studentId">Student ID</string>
+    <string name="confirm">Confirm</string>
+    <string name="alreadyActivatedYourAccount">ALREADY ACTIVATED YOUR ACCOUNT?</string>
+    <string name="signIn">SIGN IN</string>
+
+    <string name="welcomeTo">Welcome To...</string>
+    <string name="passsword">Password</string>
+    <string name="rememberMe">Remember me</string>
+    <string name="youHaventActivateYourAccountYet">YOU HAVE NOT ACTIVATE YOUR ACCOUNT YET?</string>
+    <string name="signUp">SIGN UP</string>
+    <string name="youDoNotBelongToHCMUTE">YOU DO NOT BELONG TO HCMUTE?</string>
+    <string name="startAsAGuest">START AS A GUEST</string>
+
+    <string name="enterOTP">Enter OTP</string>
+    <string name="weHaveSend6digitOTP">We’ve sent a 6-digit OTP to your email</string>
+    <string name="verify">VERIFY</string>
+
+    <string name="selectAll">Select all</string>
+    <string name="totalAmount">Total amount</string>
+
+    <string name="resetPassword">Reset password</string>
+    <string name="enterNewPassword">Enter a new password</string>
+    <string name="oldPassword">Old password</string>
+    <string name="newPassword">New password</string>
+    <string name="repeatNewPassword">Repeat new password</string>
+
+    <string name="activateYourAccount">Activate Your Account</string>
+
+    <string name="updateYourProfile">Update Your Profile</string>
+
+    <string name="chooseImage">Choose image</string>
+    <string name="upload">Upload</string>
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
