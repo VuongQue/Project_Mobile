@@ -216,7 +216,7 @@ public class PaymentActivity extends AppCompatActivity {
 
         ImageButton btnBankTransfer = dialog.findViewById(R.id.btnBankTransfer);
         ImageButton btnMomo = dialog.findViewById(R.id.btnMomo);
-        Button btnZaloPay = dialog.findViewById(R.id.btnZaloPay);
+        ImageButton btnZaloPay = dialog.findViewById(R.id.btnZaloPay);
 
         btnBankTransfer.setOnClickListener(v -> {
             dialog.dismiss();
