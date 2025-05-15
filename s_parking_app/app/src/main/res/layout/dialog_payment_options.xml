@@ -22,5 +22,13 @@
         android:id="@+id/btnMomo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Thanh toán bằng MoMo"/>
+        android:text="Thanh toán bằng MoMo"
+        android:layout_marginBottom="16dp"/>
+
+    <Button
+        android:id="@+id/btnZaloPay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Thanh toán bằng ZaloPay"/>
+
 </LinearLayout>

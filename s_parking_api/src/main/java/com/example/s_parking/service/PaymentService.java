@@ -12,4 +12,6 @@ public interface PaymentService {
     String confirmPayment(ConfirmPaymentRequest request, String username);
 
     String updatePaymentStatus(String transactionId, String status);
+    PaymentResponse createZaloPayPayment(PaymentRequest request, String username);
+
 }

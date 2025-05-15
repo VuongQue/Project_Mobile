@@ -50,6 +50,11 @@ dependencies {
     implementation(libs.logging.interceptor)
     implementation(libs.core)
     implementation(libs.zxing.android.embedded)
+    implementation(fileTree(mapOf(
+        "dir" to "D:\\VUONG_LAP_QUE\\Nam3\\HKII\\lapTrinhDiDong\\Project\\Project_Mobile\\s_parking_app\\app\\libs",
+        "include" to listOf("*.aar", "*.jar"),
+        "exclude" to listOf("")
+    )))
     testImplementation(libs.junit)
     implementation(libs.jbcrypt)
     implementation(libs.cloudinary.cloudinary.android)

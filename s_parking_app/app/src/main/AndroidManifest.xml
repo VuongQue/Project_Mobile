@@ -25,7 +25,6 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -33,7 +32,18 @@
         <activity android:name=".HistoryActivity"/>
         <activity android:name=".MainActivity"/>
         <activity android:name=".BookingHistoryActivity"/>
-        <activity android:name=".PaymentActivity"/>
+        <activity android:name=".PaymentActivity"
+            android:launchMode="singleTask"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- Thay YOUR_APP_SCHEME bằng scheme của bạn đã đăng ký với ZaloPay -->
+                <data android:scheme="myapp" android:host="payment_result" />
+            </intent-filter>
+        </activity>
         <activity android:name=".QRPaymentActivity"/>
         <activity android:name=".SignUpActivity"/>
         <activity android:name=".OtpActivity"/>
