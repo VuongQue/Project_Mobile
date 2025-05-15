@@ -87,7 +87,6 @@ public class NotificationFragment extends Fragment {
 
     /**
      * Tải thông báo cho người dùng.
-     * Khách (Guest) chỉ có thể tải dữ liệu qua phương thức GET.
      */
     private void loadNotifications() {
         ApiService apiService = ApiClient.getInstance(getContext());
@@ -116,7 +115,6 @@ public class NotificationFragment extends Fragment {
 
     /**
      * Cập nhật trạng thái thông báo.
-     * Chỉ cho phép với người dùng đã đăng nhập.
      */
     private void updateNotificationStatus(NotificationResponse notificationResponse, int position) {
         ApiService apiService = ApiClient.getInstance(getContext());

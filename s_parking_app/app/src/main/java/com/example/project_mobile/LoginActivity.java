@@ -1,8 +1,5 @@
 package com.example.project_mobile;
 
-import static com.example.project_mobile.api.ApiClient.BASE_URL;
-import static com.example.project_mobile.utils.Validate.isPasswordValid;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -32,8 +29,6 @@ import com.example.project_mobile.utils.SetUp;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -41,7 +36,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private PreferenceManager preferenceManager;
     private SetUp setUp;
-    SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,11 +50,9 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        sharedPreferences = getSharedPreferences("LoginDetails", MODE_PRIVATE);
-
-        binding.etUsername.setText(sharedPreferences.getString("Username", ""));
-        binding.etPassword.setText(sharedPreferences.getString("Password", ""));
-        binding.cbRememberMe.setChecked(sharedPreferences.getBoolean("Status", false));
+        binding.etUsername.setText(preferenceManager.getUsername());
+        binding.etPassword.setText(preferenceManager.getPassword());
+        binding.cbRememberMe.setChecked(preferenceManager.getRememberMeStatus());
 
         binding.btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,8 +110,11 @@ public class LoginActivity extends AppCompatActivity {
         {
             GuestManager.setGuestMode(getApplicationContext(), false);
             login(username, password);
-            if (binding.cbRememberMe.isChecked())
-                new PreferenceManager(this).saveLoginDetails(username, password, true);
+            if (binding.cbRememberMe.isChecked()) {
+                preferenceManager.saveLoginDetails(username, password, true);
+            } else {
+                preferenceManager.clearLoginData();
+            }
         }
     }
 

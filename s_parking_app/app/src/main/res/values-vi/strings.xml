@@ -84,6 +84,7 @@
     <string name="updateYourProfile">Cập Nhật Thông Tin</string>
 
     <string name="chooseImage">Chọn ảnh</string>
+    <string name="upload">Tải lên</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

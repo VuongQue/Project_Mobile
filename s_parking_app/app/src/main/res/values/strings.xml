@@ -84,6 +84,7 @@
     <string name="updateYourProfile">Update Your Profile</string>
 
     <string name="chooseImage">Choose image</string>
+    <string name="upload">Upload</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

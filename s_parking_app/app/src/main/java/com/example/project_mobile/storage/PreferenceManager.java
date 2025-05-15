@@ -53,6 +53,17 @@ public class PreferenceManager {
 
         return username;
     }
+    public String getPassword() {
+        SharedPreferences loginPrefs = getEncryptedSharedPreferences(LOGIN_PREF);
+        return loginPrefs.getString(KEY_PASSWORD, "");
+    }
+
+    public boolean getRememberMeStatus() {
+        SharedPreferences loginPrefs = getEncryptedSharedPreferences(LOGIN_PREF);
+        return loginPrefs.getBoolean(KEY_STATUS, false);  // Mặc định false nếu chưa lưu
+    }
+
+
 
     /**
      * Lấy SharedPreferences cho Settings (không mã hóa)

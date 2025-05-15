@@ -38,9 +38,9 @@ public class ParkingLotAdapter extends RecyclerView.Adapter<ParkingLotAdapter.Vi
         ParkingLotResponse parkingLotResponse = parkingLotResponseList.get(position);
         holder.txtName.setText(parkingLotResponse.getLocation());
 
-        if ("Unavailable".equals(parkingLotResponse.getStatus())) {
+        if ("UNAVAILABLE".equals(parkingLotResponse.getStatus())) {
             holder.vStatus.setBackgroundResource(R.color.red);
-        } else if ("Available".equals(parkingLotResponse.getStatus())) {
+        } else if ("AVAILABLE".equals(parkingLotResponse.getStatus())) {
             holder.vStatus.setBackgroundResource(R.color.green);
         } else {
             holder.vStatus.setBackgroundResource(R.color.gray);
