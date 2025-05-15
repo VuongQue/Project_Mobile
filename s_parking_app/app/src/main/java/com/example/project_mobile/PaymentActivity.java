@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -175,8 +176,8 @@ public class PaymentActivity extends AppCompatActivity {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setCancelable(true);
 
-        Button btnBankTransfer = dialog.findViewById(R.id.btnBankTransfer);
-        Button btnMomo = dialog.findViewById(R.id.btnMomo);
+        ImageButton btnBankTransfer = dialog.findViewById(R.id.btnBankTransfer);
+        ImageButton btnMomo = dialog.findViewById(R.id.btnMomo);
 
         btnBankTransfer.setOnClickListener(v -> {
             dialog.dismiss();

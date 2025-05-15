@@ -68,8 +68,8 @@ public class ParkingLotImp implements ParkingLotService {
     }
 
     @Override
-    public Optional<ParkingLot> getSlot() {
-        return parkingLotRepository.findFirstByStatus(ParkingStatus.AVAILABLE);
+    public Optional<ParkingLot> getSlotByAreaId(String areaId) {
+        return parkingLotRepository.findFirstByAreaIdAreaAndStatus(areaId, ParkingStatus.AVAILABLE);
     }
 
     @Override

@@ -15,7 +15,7 @@ public interface ParkingLotService {
     ParkingLot updateParkingLot(ParkingLot parkingLot);
     void deleteParkingLot(Long id);
 
-    Optional<ParkingLot> getSlot();
+    Optional<ParkingLot> getSlotByAreaId(String areaId);
 
     List<ParkingLot> getAvailableParkingLots();
 }
