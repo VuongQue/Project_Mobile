@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/booking")
@@ -55,5 +57,28 @@ public class BookingController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Booking không thành công");
         }
         return ResponseEntity.ok(response);
+    }
+
+    /**
+     * API lấy tất cả các booking chưa thanh toán
+     */
+    @PostMapping("/unpaid")
+    public ResponseEntity<List<BookingResponse>> getUnpaidBookings(@RequestBody UsernameRequest request) {
+        List<Booking> bookings = bookingService.getUnpaidBookings(request.getUsername());
+        List<BookingResponse> bookingResponses = bookings.stream()
+                .map(bookingService::convertToDto)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(bookingResponses);
+    }
+
+    /**
+     * API lấy thông tin booking cụ thể theo ID
+     */
+    @PostMapping("/get")
+    public ResponseEntity<BookingResponse> getBookingById(@RequestBody BookingRequest request) {
+        Optional<Booking> booking = bookingService.getBookingById(request.getId());
+        return booking.map(value -> ResponseEntity.ok(bookingService.convertToDto(value)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

@@ -76,7 +76,7 @@ public interface ApiService {
     Call<PaymentResponse> createMomoPayment(@Body PaymentRequest request);
 
     @PUT("/payment/confirm")
-    Call<SuccessResponse> confirmPayment(@Body ConfirmPaymentRequest paymentRequest);
+    Call<SuccessResponse> confirmPayment(@Body ConfirmPaymentRequest request);
 
     @POST("auth/send-otp")
     Call<ResponseBody> sendOtp(@Body OTPRequest request);
@@ -93,5 +93,11 @@ public interface ApiService {
     @POST("booking/create")
     Call<BookingResponse> createBooking(@Body BookingRequest request);
 
+    @POST("booking/unpaid")
+    Call<List<BookingResponse>> getUnpaidBookings(@Body UsernameRequest request);
+
+    // Lấy thông tin booking cụ thể
+    @POST("booking/get")
+    Call<BookingResponse> getBookingById(@Body BookingRequest request);
 
 }
