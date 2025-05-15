@@ -1,6 +1,7 @@
 package com.example.project_mobile.api;
 
 import com.example.project_mobile.dto.AuthResponse;
+import com.example.project_mobile.dto.BookingRequest;
 import com.example.project_mobile.dto.BookingResponse;
 import com.example.project_mobile.dto.ConfirmPaymentRequest;
 import com.example.project_mobile.dto.LoginRequest;
@@ -88,5 +89,9 @@ public interface ApiService {
 
     @POST("/auth/reset-password")
     Call<ResponseBody> resetPassword(@Body ResetPasswordRequest request);
+
+    @POST("booking/create")
+    Call<BookingResponse> createBooking(@Body BookingRequest request);
+
 
 }

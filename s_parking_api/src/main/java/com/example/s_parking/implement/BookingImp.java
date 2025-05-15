@@ -46,12 +46,13 @@ public class BookingImp implements BookingService {
     @Override
     public BookingResponse createBooking(BookingRequest request) {
         Optional<User> userOpt = userRepository.findByUsername(request.getUsername());
+        Optional<ParkingLot> parkingOpt = parkingLotRepository.findById(request.getIdParking());
+
         if (userOpt.isEmpty()) {
             System.out.println("User không tồn tại: " + request.getUsername());
             return null;
         }
 
-        Optional<ParkingLot> parkingOpt = parkingLotRepository.findById(request.getIdParking());
         if (parkingOpt.isEmpty()) {
             System.out.println("Chỗ đậu xe không tồn tại: " + request.getIdParking());
             return null;
@@ -80,6 +81,7 @@ public class BookingImp implements BookingService {
         Booking savedBooking = bookingRepository.save(booking);
         return convertToDto(savedBooking);
     }
+
 
     @Override
     public Booking createBooking(Booking booking) {
