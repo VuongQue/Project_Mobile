@@ -1,7 +1,9 @@
 package com.example.s_parking.dto.request;
 
 
+import lombok.Getter;
 
+@Getter
 public class BookingRequest{
 
 
@@ -17,16 +19,8 @@ public class BookingRequest{
         this.username = username;
     }
 
-    public Long getIdParking() {
-        return idParking;
-    }
-
     public void setIdParking(Long idParking) {
         this.idParking = idParking;
-    }
-
-    public String getUsername() {
-        return username;
     }
 
     public void setUsername(String username) {

@@ -28,6 +28,8 @@ import com.example.project_mobile.api.ApiClient;
 import com.example.project_mobile.api.ApiService;
 import com.example.project_mobile.databinding.ActivityParkingBinding;
 import com.example.project_mobile.databinding.DialogBookingBinding;
+import com.example.project_mobile.dto.BookingRequest;
+import com.example.project_mobile.dto.BookingResponse;
 import com.example.project_mobile.dto.ParkingLotResponse;
 import com.example.project_mobile.utils.LocalHelper;
 
@@ -194,32 +196,53 @@ public class ParkingActivity extends AppCompatActivity {
                 ViewGroup.LayoutParams.WRAP_CONTENT
         );
 
+        // Lấy username từ SharedPreferences
+        String username = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE)
+                .getString("Username", "");
 
+        // Xử lý sự kiện Đặt chỗ
         bookingBinding.btnPay.setOnClickListener(v -> {
-            // TODO: Xử lý thanh toán ở đây
-            Toast.makeText(this, "Đã nhấn Thanh Toán", Toast.LENGTH_SHORT).show();
-            bookingDialog.dismiss();
+            String date = bookingBinding.etDate.getText().toString().trim();
+
+            if (date.isEmpty()) {
+                Toast.makeText(this, "Vui lòng chọn ngày", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            long idParking = parkingLotResponse.getId();
+            ApiService apiService = ApiClient.getInstance(getApplicationContext());
+            BookingRequest bookingRequest = new BookingRequest(idParking, username);
+
+            apiService.createBooking(bookingRequest).enqueue(new Callback<BookingResponse>() {
+                @Override
+                public void onResponse(@NonNull Call<BookingResponse> call, @NonNull Response<BookingResponse> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        BookingResponse booking = response.body();
+                        Toast.makeText(ParkingActivity.this, "Đặt chỗ thành công!", Toast.LENGTH_SHORT).show();
+                        bookingDialog.dismiss();
+
+                        // Chuyển sang màn hình thanh toán
+                        Intent intent = new Intent(ParkingActivity.this, PaymentActivity.class);
+                        intent.putExtra("bookingId", booking.getId());
+                        intent.putExtra("fee", booking.getFee());
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(ParkingActivity.this, "Đặt chỗ thất bại!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<BookingResponse> call, @NonNull Throwable t) {
+                    Toast.makeText(ParkingActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
         });
 
-        // Gán sự kiện click vào ô Date để chọn ngày
-        bookingBinding.etDate.setOnClickListener(v -> {
-            Calendar calendar = Calendar.getInstance();
-            int year = calendar.get(Calendar.YEAR);
-            int month = calendar.get(Calendar.MONTH);
-            int day = calendar.get(Calendar.DAY_OF_MONTH);
-
-            DatePickerDialog datePickerDialog = new DatePickerDialog(this,
-                    (view, selectedYear, selectedMonth, selectedDay) -> {
-                        String date = selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear;
-                        bookingBinding.etDate.setText(date);
-                    }, year, month, day);
-            datePickerDialog.show();
-        });
-
-        // Hiển thị Dialog
         bookingDialog.show();
-
     }
+
+
+
 
     public void SwitchActivity() {
 
