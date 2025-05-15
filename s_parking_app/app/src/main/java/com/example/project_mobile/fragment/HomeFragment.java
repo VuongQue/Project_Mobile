@@ -95,7 +95,6 @@ public class HomeFragment extends Fragment {
         if (!isGuest)
         {
             loadUserInfo();
-            loadCurrentSession();
         }
     }
 
@@ -238,31 +237,9 @@ public class HomeFragment extends Fragment {
                 requireActivity().runOnUiThread(() -> {
                     Log.d("WebSocket", "Received Data: " + updatedAreas);
 
-                    for (ParkingAreaResponse newItem : updatedAreas) {
-                        boolean isUpdated = false;
-
-                        for (int i = 0; i < parkingAreaResponseArrayList.size(); i++) {
-                            ParkingAreaResponse oldItem = parkingAreaResponseArrayList.get(i);
-
-                            // Kiểm tra xem có phần tử nào cần cập nhật không
-                            if (oldItem.getIdArea().equals(newItem.getIdArea())) {
-                                isUpdated = true;
-
-                                // Nếu dữ liệu thực sự thay đổi, cập nhật và thông báo adapter
-                                if (!oldItem.equals(newItem)) {
-                                    parkingAreaResponseArrayList.set(i, newItem);
-                                    parkingAreaAdapter.notifyItemChanged(i);
-                                }
-                                break;
-                            }
-                        }
-
-                        // Nếu không tìm thấy, thêm mới vào danh sách
-                        if (!isUpdated) {
-                            parkingAreaResponseArrayList.add(newItem);
-                            parkingAreaAdapter.notifyItemInserted(parkingAreaResponseArrayList.size() - 1);
-                        }
-                    }
+                    parkingAreaResponseArrayList.clear();
+                    parkingAreaResponseArrayList.addAll(updatedAreas);
+                    parkingAreaAdapter.notifyDataSetChanged();
                 });
             }
         });

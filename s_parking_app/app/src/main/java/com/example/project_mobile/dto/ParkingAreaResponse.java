@@ -44,4 +44,14 @@ public class ParkingAreaResponse {
         this.availableSlots = availableSlots;
         this.status = status;
     }
+    @Override
+    public String toString() {
+        return "ParkingAreaResponse{" +
+                "idArea='" + idArea + '\'' +
+                ", maxCapacity=" + maxCapacity +
+                ", availableSlots=" + availableSlots +
+                ", status='" + status + '\'' +
+                '}';
+    }
+
 }

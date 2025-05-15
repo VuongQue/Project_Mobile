@@ -36,9 +36,14 @@ public class ParkingAreaAdapter extends RecyclerView.Adapter<ParkingAreaAdapter.
     public void onBindViewHolder(@NonNull ParkingAreaAdapter.ViewHolder holder, int position) {
         ParkingAreaResponse parkingAreaResponse = parkingAreaResponseList.get(position);
         holder.tvId.setText(parkingAreaResponse.getIdArea());
-        holder.progressBar.setMax(parkingAreaResponse.getMaxCapacity());
-        holder.progressBar.setProgress(parkingAreaResponse.getAvailableSlots());
+
+        int maxCapacity = parkingAreaResponse.getMaxCapacity();
+        int availableSlots = parkingAreaResponse.getAvailableSlots();
+
+        holder.progressBar.setMax(maxCapacity);
+        holder.progressBar.setProgress(availableSlots);
     }
+
 
     @Override
     public int getItemCount() {

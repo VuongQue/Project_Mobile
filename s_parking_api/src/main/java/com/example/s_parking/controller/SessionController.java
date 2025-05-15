@@ -45,7 +45,7 @@ public class SessionController {
     private final ParkingAreaService parkingAreaService;
 
     @Autowired
-    private ParkingSocketController parkingSocketController;
+    private ParkingSocketService parkingSocketService;
 
     @Autowired
     private NotificationService notificationService;
@@ -129,17 +129,16 @@ public class SessionController {
                     LocalDateTime.now(), false, user);
         }
 
-        parkingAreaService.updateSlots();
-
         notificationService.createNewNotificatioin(notification);
         NotificationResponse notificationResponse = notificationService.convertToDto(notification);
 
         Session myCurrentSession = sessionService.getMyCurrentSession(username);
         MyCurrentSessionResponse myCurrentSessionResponse = sessionService.convertToMyDto(myCurrentSession);
 
-        parkingSocketController.updateSlots();
-        parkingSocketController.sendUserNotification(username, notificationResponse);
-        parkingSocketController.sendCheckInOutNotification(username, myCurrentSessionResponse);
+        parkingAreaService.updateSlots();
+
+        parkingSocketService.sendUserNotification(username, notificationResponse);
+        parkingSocketService.sendCheckInOutNotification(username, myCurrentSessionResponse);
 
         return ResponseEntity.ok(notificationResponse.getTitle());
     }
