@@ -9,9 +9,9 @@
         <item name="editTextColor">#FFFFFF</item>
         <item name="navColor">#FFFFFF</item>
         <item name="backgroundIconColor">#FFFFFF</item>
-        <item name="backgroundSession">#858585</item>
+        <item name="backgroundItem">#FFFFFF</item>
         <item name="iconColor">#1EBE7E</item>
-        <item name="navIconColor">#000000</item>
+        <item name="bwIconColor">#000000</item>
     </style>
 
     <style name="Theme.Project_Mobile" parent="Base.Theme.Project_Mobile" />

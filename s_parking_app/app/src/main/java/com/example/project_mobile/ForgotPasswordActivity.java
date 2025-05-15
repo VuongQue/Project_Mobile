@@ -1,6 +1,7 @@
 package com.example.project_mobile;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +16,7 @@ import com.example.project_mobile.api.ApiClient;
 import com.example.project_mobile.api.ApiService;
 import com.example.project_mobile.dto.OTPRequest;
 import com.example.project_mobile.dto.UsernameRequest;
+import com.example.project_mobile.utils.LocalHelper;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -45,6 +47,10 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocalHelper.setLocale(newBase));
     }
 
     private void sendOtp() {

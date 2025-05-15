@@ -46,6 +46,8 @@ public class ProfileFragment extends Fragment {
 
     FragmentProfileBinding binding;
     SharedPreferences sharedPreferences;
+
+    PreferenceManager preferenceManager;
     private ImageView selectedImageView;
     Uri selectedImageUri;
     Button uploadButton;
@@ -82,6 +84,8 @@ public class ProfileFragment extends Fragment {
         selectImageButton = dialog.findViewById(R.id.selectImageButton);
         uploadButton = dialog.findViewById(R.id.uploadButton);
 
+        preferenceManager = new PreferenceManager(requireContext());
+
         sharedPreferences = requireActivity().getSharedPreferences("UserInfo", MODE_PRIVATE);
         LoadFromAPI();
 
@@ -97,10 +101,7 @@ public class ProfileFragment extends Fragment {
             intent.putExtra("username", username);  // Truyền username qua Intent
             intent.putExtra("source", "profile_update");
             startActivity(intent);
-
         });
-
-
 
         binding.avatar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,6 +123,12 @@ public class ProfileFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("ProfileFragment", "onResume - Gọi LoadFromAPI để cập nhật dữ liệu mới");
+        LoadFromAPI();
+    }
     private void sendToServer(String url) {
         String username = requireActivity().getSharedPreferences("LoginDetails", MODE_PRIVATE).getString("Username", "");
         ApiService apiService = ApiClient.getInstance(getContext());
@@ -213,27 +220,34 @@ public class ProfileFragment extends Fragment {
 
     private void Load() {
         try {
-            binding.tvName.setText(sharedPreferences.getString("FullName", ""));
-            binding.tvEmail.setText(sharedPreferences.getString("Email", ""));
-            binding.tvPhone.setText(sharedPreferences.getString("Phone", ""));
-            binding.tvLicensePlate.setText(sharedPreferences.getString("License_Plate", ""));
-            String avatarUrl = sharedPreferences.getString("Avatar_Url", ""); // Lấy URL từ SharedPreferences
+            UserInfoResponse userInfoResponse = preferenceManager.getUserInfo();
 
-            if (!avatarUrl.isEmpty()) {
-                Glide.with(getContext())
-                        .load(Uri.parse(avatarUrl))  // Tải ảnh từ URL
-                        .into(binding.avatar);  // Gán vào ImageView
+            if (userInfoResponse != null) {
+                Log.d("Load()", "License Plate: " + userInfoResponse.getLicensePlate());
+                Log.d("Load()", "Full Name: " + userInfoResponse.getFullName());
+
+                binding.tvLicensePlate.setText(userInfoResponse.getLicensePlate());
+                binding.tvName.setText(userInfoResponse.getFullName());
+                binding.tvEmail.setText(userInfoResponse.getEmail());
+                binding.tvPhone.setText(userInfoResponse.getPhone());
+
+                String avatarUrl = userInfoResponse.getAvatarUrl();
+                if (!avatarUrl.isEmpty()) {
+                    Glide.with(requireContext())
+                            .load(Uri.parse(avatarUrl))
+                            .into(binding.avatar);
+                } else {
+                    binding.avatar.setImageResource(android.R.drawable.sym_def_app_icon);
+                }
             } else {
-                // Nếu không có URL hợp lệ, có thể sử dụng ảnh mặc định
-                Glide.with(getContext())
-                        .load(android.R.drawable.sym_def_app_icon)  // Sử dụng ảnh mặc định từ drawable
-                        .into(binding.avatar);
+                Log.e("Load()", "UserInfoResponse is null");
             }
 
-        } catch (IllegalStateException ex) {
-            Log.e("ProfileFragment", "Activity is null (requireActivity threw), fallback to safe handling.");
+        } catch (Exception ex) {
+            Log.e("Load()", "Exception: " + ex.getMessage());
         }
     }
+
 
     private void LoadFromAPI() {
         String username = requireActivity().getSharedPreferences("LoginDetails", MODE_PRIVATE).getString("Username", "");
@@ -242,13 +256,13 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onResponse(@NonNull Call<UserInfoResponse> call, @NonNull Response<UserInfoResponse> response) {
                 if (response.isSuccessful() & response.body() != null) {
-                    new PreferenceManager(getContext()).saveUserInfo(response.body());
+                    preferenceManager.saveUserInfo(response.body());
+
                     Load();
                 } else {
                     Log.e("API_ERROR", "Code: " + response.code());
                 }
             }
-
             @Override
             public void onFailure(@NonNull Call<UserInfoResponse> call, @NonNull Throwable t) {
                 Log.e("API_ERROR", "Failed to fetch data", t);

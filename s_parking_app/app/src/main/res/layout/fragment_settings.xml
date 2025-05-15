@@ -81,7 +81,8 @@
                         android:layout_gravity="center"
                         android:padding="8dp"
                         android:src="@drawable/ic_language"
-                        android:background="@drawable/bg_icon"/>
+                        android:background="@drawable/bg_icon"
+                        app:tint="?attr/bwIconColor" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -142,7 +143,8 @@
                         android:layout_gravity="center"
                         android:padding="8dp"
                         android:src="@drawable/ic_volume_up"
-                        android:background="@drawable/bg_icon"/>
+                        android:background="@drawable/bg_icon"
+                        app:tint="?attr/bwIconColor"/>
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -208,7 +210,8 @@
                         android:layout_gravity="center"
                         android:padding="8dp"
                         android:src="@drawable/ic_dark_mode"
-                        android:background="@drawable/bg_icon"/>
+                        android:background="@drawable/bg_icon"
+                        app:tint="?attr/bwIconColor"/>
 
                     <!-- Thông tin Username -->
                     <LinearLayout

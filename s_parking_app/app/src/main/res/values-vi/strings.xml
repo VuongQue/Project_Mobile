@@ -9,6 +9,7 @@
     <string name="notification">Thông báo</string>
     <string name="profile">Cá nhân</string>
     <string name="settings">Khách</string>
+    <string name="update">Cập nhật</string>
 
     <string name="logOut">Đăng xuất</string>
     <string name="guest_mode">Vị trí</string>

@@ -1,5 +1,6 @@
 package com.example.project_mobile;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.project_mobile.api.ApiClient;
 import com.example.project_mobile.api.ApiService;
 import com.example.project_mobile.dto.OTPRequest;
+import com.example.project_mobile.utils.LocalHelper;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -35,6 +37,10 @@ public class OtpActivity extends AppCompatActivity {
         purpose = getIntent().getStringExtra("purpose"); // Lấy purpose từ intent
 
         apiService = ApiClient.getInstance(this);
+    }
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocalHelper.setLocale(newBase));
     }
 
     private void verifyOtp() {

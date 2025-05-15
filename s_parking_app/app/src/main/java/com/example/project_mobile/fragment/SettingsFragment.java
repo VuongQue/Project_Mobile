@@ -21,10 +21,12 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.project_mobile.LoginActivity;
+import com.example.project_mobile.MainActivity;
 import com.example.project_mobile.databinding.FragmentSettingsBinding;
 import com.example.project_mobile.storage.GuestManager;
 import com.example.project_mobile.storage.PreferenceManager;
 import com.example.project_mobile.dto.UserInfoResponse;
+import com.example.project_mobile.utils.LocalHelper;
 import com.example.project_mobile.utils.SetUp;
 
 public class SettingsFragment extends Fragment {
@@ -58,6 +60,8 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentSettingsBinding.inflate(inflater, container, false);
 
+        setUp = new SetUp(requireContext());
+
         setupLanguageSpinner();
         setupModeSwitch();
         setupLogoutButton();
@@ -67,6 +71,13 @@ public class SettingsFragment extends Fragment {
             loadUserInfo();
         }
         return binding.getRoot();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Gọi lại hàm loadUserInfo mỗi khi Fragment quay lại
+        loadUserInfo();
     }
 
     private void loadUserInfo() {
@@ -102,16 +113,33 @@ public class SettingsFragment extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.languageSpinner.setAdapter(adapter);
 
+        String savedLanguage = preferenceManager.getLanguage();
+        int languagePosition = savedLanguage.equals("en") ? 0 : 1;
+        binding.languageSpinner.setSelection(languagePosition);
+
         binding.languageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedLanguage = position == 0 ? "en" : "vi";
-                preferenceManager.setLanguage(selectedLanguage);
+                String currentLanguage = preferenceManager.getLanguage();
+
+                if (!currentLanguage.equals(selectedLanguage)) {
+                    preferenceManager.setLanguage(selectedLanguage);
+                    changeLanguage(getContext(), selectedLanguage); // sửa lại tham số truyền vào
+                }
             }
+
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
+    }
+
+    public void changeLanguage(Context context, String lang) {
+        LocalHelper.setLocale(context, lang); // Lưu và cập nhật
+        Intent intent = new Intent(context, MainActivity.class); // hoặc Activity hiện tại
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(intent);
     }
 
     private void setupModeSwitch() {

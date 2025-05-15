@@ -10,8 +10,8 @@
         <item name="editTextColor">#FFFFFF</item>
         <item name="navColor">#121212</item>
         <item name="backgroundIconColor">#2B2B2B</item>
-        <item name="backgroundSession">#2B2B2B</item>
+        <item name="backgroundItem">#2B2B2B</item>
         <item name="iconColor">#FFFFFF</item>
-        <item name="navIconColor">#FFFFFF</item>
+        <item name="bwIconColor">#FFFFFF</item>
     </style>
 </resources>

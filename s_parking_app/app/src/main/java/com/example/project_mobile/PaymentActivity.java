@@ -1,6 +1,7 @@
 package com.example.project_mobile;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -20,6 +21,7 @@ import com.example.project_mobile.dto.PaymentRequest;
 import com.example.project_mobile.dto.PaymentResponse;
 import com.example.project_mobile.dto.SessionResponse;
 import com.example.project_mobile.dto.UsernameRequest;
+import com.example.project_mobile.utils.LocalHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +50,10 @@ public class PaymentActivity extends AppCompatActivity {
         setupRecyclerView();
         setupEvents();
         loadDebtSessions();
+    }
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocalHelper.setLocale(newBase));
     }
 
     private void setupRecyclerView() {

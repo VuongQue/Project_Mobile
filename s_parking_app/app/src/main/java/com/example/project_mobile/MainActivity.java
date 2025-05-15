@@ -1,5 +1,6 @@
 package com.example.project_mobile;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import com.example.project_mobile.databinding.ActivityMainBinding;
 import com.example.project_mobile.databinding.BottomNavBinding;
 import com.example.project_mobile.storage.GuestManager;
 import com.example.project_mobile.storage.PreferenceManager;
+import com.example.project_mobile.utils.LocalHelper;
 import com.example.project_mobile.utils.SetUp;
 
 public class MainActivity extends AppCompatActivity {
@@ -66,6 +68,11 @@ public class MainActivity extends AppCompatActivity {
         binding.viewPager2.setCurrentItem(selectedTab - 1, false);
         setupBottomNavigation();
         setupViewPagerListener(); // Thêm phương thức này
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocalHelper.setLocale(newBase));
     }
 
     /**
@@ -122,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (selectedIndex >= 1 && selectedIndex <= layouts.length) {
             texts[selectedIndex - 1].setVisibility(View.VISIBLE);
-            layouts[selectedIndex - 1].setBackgroundResource(R.drawable.gradient_background);
+            layouts[selectedIndex - 1].setBackgroundResource(R.drawable.selected_icon);
             animateView(layouts[selectedIndex - 1]);
         }
     }

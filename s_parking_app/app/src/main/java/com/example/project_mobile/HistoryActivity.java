@@ -1,5 +1,6 @@
 package com.example.project_mobile;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +20,7 @@ import com.example.project_mobile.api.ApiService;
 import com.example.project_mobile.databinding.ActivityHistoryBinding;
 import com.example.project_mobile.dto.UsernameRequest;
 import com.example.project_mobile.dto.SessionResponse;
+import com.example.project_mobile.utils.LocalHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +49,11 @@ public class HistoryActivity extends AppCompatActivity {
 
         Load();
         SwitchActivity();
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocalHelper.setLocale(newBase));
     }
     public void SwitchActivity() {
 

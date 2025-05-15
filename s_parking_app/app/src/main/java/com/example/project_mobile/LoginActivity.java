@@ -4,6 +4,7 @@ import static com.example.project_mobile.api.ApiClient.BASE_URL;
 import static com.example.project_mobile.utils.Validate.isPasswordValid;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import com.example.project_mobile.dto.UserInfoResponse;
 import com.example.project_mobile.dto.UsernameRequest;
 import com.example.project_mobile.storage.GuestManager;
 import com.example.project_mobile.storage.PreferenceManager;
+import com.example.project_mobile.utils.LocalHelper;
 import com.example.project_mobile.utils.SetUp;
 
 import retrofit2.Call;
@@ -44,14 +46,14 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityLoginBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
         preferenceManager = new PreferenceManager(this);
         setUp = new SetUp(this);
 
-        setUp.loadLocale();
         setUp.loadTheme();
+        setUp.loadLocale();
+
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         sharedPreferences = getSharedPreferences("LoginDetails", MODE_PRIVATE);
 
@@ -85,6 +87,11 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocalHelper.setLocale(newBase));
     }
 
     private void attemptLogin() {
@@ -164,6 +171,4 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-
-
 }

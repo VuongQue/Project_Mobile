@@ -8,10 +8,6 @@ public class UserInfoResponse {
     private String licensePlate;
     private String avatarUrl;
 
-    public UserInfoResponse() {
-
-    }
-
     public String getUsername() {
         return username;
     }

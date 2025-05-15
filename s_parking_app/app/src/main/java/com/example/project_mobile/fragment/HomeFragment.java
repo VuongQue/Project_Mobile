@@ -38,10 +38,12 @@ import com.example.project_mobile.databinding.FragmentHomeBinding;
 import com.example.project_mobile.dto.MyCurrentSessionResponse;
 import com.example.project_mobile.dto.NotificationResponse;
 import com.example.project_mobile.dto.ParkingAreaResponse;
+import com.example.project_mobile.dto.UserInfoResponse;
 import com.example.project_mobile.dto.UsernameRequest;
 import com.example.project_mobile.model.Image;
 import com.example.project_mobile.socket.WebSocketManager;
 import com.example.project_mobile.storage.GuestManager;
+import com.example.project_mobile.storage.PreferenceManager;
 import com.google.gson.reflect.TypeToken;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
@@ -60,7 +62,7 @@ public class HomeFragment extends Fragment {
     FragmentHomeBinding binding;
     private SliderAdapter sliderAdapter;
     private ParkingAreaAdapter parkingAreaAdapter;
-    private SharedPreferences sharedPreferences;
+    private PreferenceManager preferenceManager;
     private ArrayList<Image> imageList;
     private ArrayList<ParkingAreaResponse> parkingAreaResponseArrayList;
     private boolean isGuest;
@@ -85,10 +87,18 @@ public class HomeFragment extends Fragment {
         return binding.getRoot();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Gọi lại hàm loadUserInfo mỗi khi Fragment quay lại
+        loadUserInfo();
+    }
+
     @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        preferenceManager = new PreferenceManager(requireContext());
 
         isGuest = GuestManager.isGuest(requireContext());
 
@@ -128,6 +138,23 @@ public class HomeFragment extends Fragment {
 
         onClickListener();
         configSliderView();
+    }
+
+    private void loadUserInfo() {
+        UserInfoResponse userInfo = preferenceManager.getUserInfo();
+        String fullName = userInfo.getFullName();
+        String avatarUrl = userInfo.getAvatarUrl();
+        binding.fullName.setText(fullName);
+        if (!avatarUrl.isEmpty()) {
+            Glide.with(requireContext())
+                    .load(Uri.parse(avatarUrl))  // Tải ảnh từ URL
+                    .into(binding.avatar);  // Gán vào ImageView
+        } else {
+            // Nếu không có URL hợp lệ, có thể sử dụng ảnh mặc định
+            Glide.with(requireContext())
+                    .load(android.R.drawable.sym_def_app_icon)  // Sử dụng ảnh mặc định từ drawable
+                    .into(binding.avatar);
+        }
     }
 
     private void showQRCodeDialog() {

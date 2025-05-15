@@ -3,6 +3,7 @@ package com.example.project_mobile;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -28,6 +29,7 @@ import com.example.project_mobile.api.ApiService;
 import com.example.project_mobile.databinding.ActivityParkingBinding;
 import com.example.project_mobile.databinding.DialogBookingBinding;
 import com.example.project_mobile.dto.ParkingLotResponse;
+import com.example.project_mobile.utils.LocalHelper;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -65,7 +67,10 @@ public class ParkingActivity extends AppCompatActivity {
         Filter();
 
     }
-
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocalHelper.setLocale(newBase));
+    }
 
     public void Filter() {
         areaAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, areaList);

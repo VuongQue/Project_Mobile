@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -10,16 +11,16 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="12dp"
-        android:background="?attr/backgroundSession">
+        android:background="?attr/backgroundItem">
 
         <!-- Icon bên trái -->
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="@drawable/rounded_view"
-            android:backgroundTint="#444444"
             android:padding="8dp"
-            android:src="@drawable/ic_motorbike" />
+            android:src="@drawable/ic_motorbike"
+            app:tint="?attr/bwIconColor" />
 
         <!-- Phần thông tin -->
         <LinearLayout
@@ -34,7 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/fee"
-                android:textColor="@color/white"
+                android:textColor="?attr/textColor"
                 android:textSize="16sp"
                 android:textStyle="bold"/>
 
