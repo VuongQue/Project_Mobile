@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (selectedIndex >= 1 && selectedIndex <= layouts.length) {
             texts[selectedIndex - 1].setVisibility(View.VISIBLE);
-            layouts[selectedIndex - 1].setBackgroundResource(R.drawable.gradient_background);
+            layouts[selectedIndex - 1].setBackgroundResource(R.drawable.selected_icon);
             animateView(layouts[selectedIndex - 1]);
         }
     }
