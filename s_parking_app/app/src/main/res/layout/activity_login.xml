@@ -48,7 +48,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:background="?attr/editTextBackground"
-            android:hint="MSSV"
+            android:hint="@string/studentId"
             android:padding="12dp"
             android:textColor="?attr/textColor"
             android:textColorHint="#8a8a8a"
@@ -64,7 +64,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="16dp"
             android:background="?attr/editTextBackground"
-            android:hint="Password"
+            android:hint="@string/passsword"
             android:inputType="textPassword"
             android:padding="12dp"
             android:textColor="?attr/textColor"
@@ -85,7 +85,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                android:text="Remember me"
+                android:text="@string/rememberMe"
                 android:textColor="#8a8a8a" />
 
             <TextView
@@ -95,7 +95,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:text="Forgot Password?"
+                android:text="@string/forgotPassword"
                 android:textColor="#8a8a8a" />
         </LinearLayout>
 
@@ -108,7 +108,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="30dp"
             android:layout_marginEnd="16dp"
-            android:text="SIGN IN"
+            android:text="@string/signIn"
             android:textColor="@color/white"
             app:cornerRadius="16dp"
             android:background="@drawable/gradient_button"
@@ -126,7 +126,7 @@
                 android:id="@+id/tvDontHaveAccount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="YOU HAVEN'T ACTIVATE YOUR ACCOUNT YET?"
+                android:text="@string/youHaventActivateYourAccountYet"
                 android:textColor="#8a8a8a"
                 android:textSize="14sp" />
 
@@ -136,7 +136,7 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:focusable="true"
-                android:text=" SIGN UP NOW"
+                android:text="@string/signUp"
                 android:textColor="#7ED957"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -144,7 +144,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="YOU DO NOT BELONG TO HCMUTE?"
+                android:text="@string/youDoNotBelongToHCMUTE"
                 android:textColor="#8a8a8a"
                 android:textSize="14sp" />
 
@@ -154,7 +154,7 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:focusable="true"
-                android:text="START AS A GUEST"
+                android:text="@string/startAsAGuest"
                 android:textColor="#7ED957"
                 android:textSize="14sp"
                 android:textStyle="bold" />

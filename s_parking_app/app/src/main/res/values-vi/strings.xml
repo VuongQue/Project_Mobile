@@ -50,5 +50,40 @@
     <string name="save">Lưu</string>
     <string name="reload">Tải lại</string>
 
+    <string name="bookingHistory">Lịch sử đặt chỗ</string>
+    <string name="forgotPassword">Quên mật khẩu</string>
+    <string name="confirmStudentId">Xác nhận mã số sinh viên</string>
+    <string name="studentId">Mã số sinh viên</string>
+    <string name="confirm">Xác nhận</string>
+    <string name="alreadyActivatedYourAccount">ĐÃ KÍCH HOẠT TÀI KHOẢN?</string>
+    <string name="signIn">ĐĂNG NHẬP</string>
+
+    <string name="welcomeTo">Chào mừng đến với...</string>
+    <string name="passsword">Mật khẩu</string>
+    <string name="rememberMe">Ghi nhớ</string>
+    <string name="youHaventActivateYourAccountYet">BẠN CHƯA KÍCH HOẠT TÀI KHOẢN?</string>
+    <string name="signUp">ĐĂNG KÝ</string>
+    <string name="youDoNotBelongToHCMUTE">BẠN KHÔNG PHẢI SINH VIÊN HCMUTE?</string>
+    <string name="startAsAGuest">BẮT ĐẦU VỚI TƯ CÁCH KHÁCH</string>
+
+    <string name="enterOTP">Nhập OTP</string>
+    <string name="weHaveSend6digitOTP">Chúng tôi vừa gửi 1 OTP 6 ký tự về email của bạn</string>
+    <string name="verify">XÁC MINH</string>
+
+    <string name="selectAll">Chọn tất cả</string>
+    <string name="totalAmount">Tổng tiền</string>
+
+    <string name="resetPassword">Đổi mật khẩu</string>
+    <string name="enterNewPassword">Nhập mật khẩu mới</string>
+    <string name="oldPassword">Mật khẩu cũ</string>
+    <string name="newPassword">Mật khẩu mới</string>
+    <string name="repeatNewPassword">Nhập lại mật khẩu mới</string>
+
+    <string name="activateYourAccount">Kích hoạt tài khoản</string>
+
+    <string name="updateYourProfile">Cập Nhật Thông Tin</string>
+
+    <string name="chooseImage">Chọn ảnh</string>
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
