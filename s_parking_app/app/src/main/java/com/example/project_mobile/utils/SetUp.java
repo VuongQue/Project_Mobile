@@ -1,18 +1,22 @@
 package com.example.project_mobile.utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.util.DisplayMetrics;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatDelegate;
 
+import com.example.project_mobile.LoginActivity;
 import com.example.project_mobile.storage.PreferenceManager;
 
 import java.util.Locale;
 
 public class SetUp {
 
-    private final Context context;
+    private Context context;
     private final PreferenceManager preferenceManager;
 
     private static final String KEY_DARK_MODE = "darkMode";
@@ -26,25 +30,7 @@ public class SetUp {
      * Tải ngôn ngữ đã lưu và áp dụng
      */
     public void loadLocale() {
-        String language = preferenceManager.getLanguage();
-        setLocale(language);
-    }
-
-    /**
-     * Thay đổi ngôn ngữ và lưu vào SharedPreferences
-     */
-    public void setLocale(String lang) {
-        Locale locale = new Locale(lang);
-        Locale.setDefault(locale);
-
-        Configuration config = new Configuration();
-        config.setLocale(locale);
-
-        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-        context.getResources().updateConfiguration(config, metrics);
-
-        // Lưu ngôn ngữ đã chọn
-        preferenceManager.setLanguage(lang);
+        LocalHelper.setLocale(context);
     }
 
     /**

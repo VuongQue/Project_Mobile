@@ -1,5 +1,6 @@
 package com.example.project_mobile;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -17,6 +18,7 @@ import com.example.project_mobile.dto.ConfirmPaymentRequest;
 import com.example.project_mobile.dto.PaymentRequest;
 import com.example.project_mobile.dto.SuccessResponse;
 import com.example.project_mobile.dto.VietQRResponse;
+import com.example.project_mobile.utils.LocalHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,6 +69,11 @@ public class QRPaymentActivity extends AppCompatActivity {
         generateVietQR();
 
         btnConfirmTransfer.setOnClickListener(v -> confirmPayment());
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocalHelper.setLocale(newBase));
     }
 
     private void generateVietQR() {

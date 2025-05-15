@@ -1,5 +1,6 @@
 package com.example.project_mobile;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import com.example.project_mobile.api.ApiService;
 import com.example.project_mobile.dto.UpdateInfoRequest;
 import com.example.project_mobile.dto.UserInfoResponse;
 import com.example.project_mobile.storage.PreferenceManager;
+import com.example.project_mobile.utils.LocalHelper;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -61,6 +63,11 @@ public class UpdateInfoActivity extends AppCompatActivity {
         }
 
         findViewById(R.id.btnUpdateInfo).setOnClickListener(v -> updateUserInfo());
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocalHelper.setLocale(newBase));
     }
 
     private void loadUserData() {
