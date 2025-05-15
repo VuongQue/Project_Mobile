@@ -106,7 +106,7 @@ public class PreferenceManager {
         editor.putString(KEY_USERNAME, username);
         editor.putString(KEY_PASSWORD, password);
         editor.putBoolean(KEY_STATUS, status);
-        editor.apply();
+        editor.commit();
     }
 
     /**
@@ -134,7 +134,7 @@ public class PreferenceManager {
         editor.putString(KEY_LICENSE_PLATE, userInfoResponse.getLicensePlate());
         editor.putString(KEY_AVATAR_URL, userInfoResponse.getAvatarUrl());
         editor.putBoolean(KEY_IS_LOADED, true);
-        editor.apply();
+        editor.commit();
     }
 
     /**

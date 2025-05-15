@@ -132,10 +132,7 @@ public class LoginActivity extends AppCompatActivity {
                     PreferenceManager preferenceManager = new PreferenceManager(LoginActivity.this);
                     preferenceManager.saveToken(response.body().getToken());
 
-                    // >>>> Thêm đoạn này để lưu Username
-                    SharedPreferences prefs = getSharedPreferences("LoginDetails", MODE_PRIVATE);
-                    prefs.edit().putString("Username", username).apply();
-
+                    preferenceManager.saveLoginDetails(username, password, true);
                     String username = preferenceManager.getUsername();
                     ApiService apiService = ApiClient.getInstance(getApplicationContext());
                     apiService.getUserInfo(new UsernameRequest(username)).enqueue(new Callback<UserInfoResponse>() {
@@ -144,7 +141,6 @@ public class LoginActivity extends AppCompatActivity {
                         public void onResponse(@NonNull Call<UserInfoResponse> call, @NonNull Response<UserInfoResponse> response) {
                             if (response.isSuccessful() && response.body() != null) {
                                 preferenceManager.saveUserInfo(response.body());
-
                             } else {
                                 Log.e("API_ERROR", "Code: " + response.code());
                             }
