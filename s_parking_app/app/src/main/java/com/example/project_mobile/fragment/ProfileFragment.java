@@ -165,8 +165,17 @@ public class ProfileFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 100 && resultCode == RESULT_OK) {
-            LoadFromAPI();
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            selectedImageUri = data.getData();
+
+            // Sử dụng Glide để load ảnh vào ImageView
+            Glide.with(requireContext())
+                    .load(selectedImageUri)
+                    .into(selectedImageView);
+
+            Log.d("Image Selection", "Selected Image URI: " + selectedImageUri.toString());
+
+            uploadButton.setEnabled(true);
         }
     }
 
