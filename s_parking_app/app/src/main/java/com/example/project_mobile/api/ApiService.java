@@ -100,4 +100,10 @@ public interface ApiService {
     @POST("booking/get")
     Call<BookingResponse> getBookingById(@Body BookingRequest request);
 
+    @POST("payment/zalopay/create-transaction")
+    Call<PaymentResponse> createZaloPayPayment(@Body PaymentRequest request);
+
+    @POST("/payment/zalopay/notify")
+    Call<PaymentResponse> confirmZaloPayment(@Body PaymentRequest request);
+
 }

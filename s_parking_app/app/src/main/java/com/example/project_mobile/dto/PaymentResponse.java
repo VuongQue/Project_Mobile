@@ -6,17 +6,18 @@ public class PaymentResponse {
     private String method;
     private String status;
     private String payUrl;
+    private String orderToken; // Thêm thuộc tính orderToken
 
     public PaymentResponse() {
-        this.transactionId = transactionId;
     }
 
-    public PaymentResponse(String transactionId, double amount, String method, String status, String payUrl) {
+    public PaymentResponse(String transactionId, double amount, String method, String status, String payUrl, String orderToken) {
         this.transactionId = transactionId;
         this.amount = amount;
         this.method = method;
         this.status = status;
         this.payUrl = payUrl;
+        this.orderToken = orderToken;
     }
 
     public String getTransactionId() {
@@ -57,5 +58,13 @@ public class PaymentResponse {
 
     public void setPayUrl(String payUrl) {
         this.payUrl = payUrl;
+    }
+
+    public String getOrderToken() {
+        return orderToken;
+    }
+
+    public void setOrderToken(String orderToken) {
+        this.orderToken = orderToken;
     }
 }
