@@ -310,7 +310,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tvNotification">
 
         <com.smarteist.autoimageslider.SliderView
-            android:id="@+id/imageSlider"
+            android:id="@+id/imageSliderMain"
             android:layout_width="match_parent"
             android:layout_height="300dp"
             app:layout_constraintTop_toTopOf="parent"
