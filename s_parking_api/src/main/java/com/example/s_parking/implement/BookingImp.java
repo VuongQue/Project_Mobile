@@ -35,38 +35,50 @@ public class BookingImp implements BookingService {
 
     @Override
     public List<Booking> getAllBookings() {
-        return List.of();
+        return bookingRepository.findAll();
     }
 
     @Override
     public Optional<Booking> getBookingById(Long id) {
-        return Optional.empty();
+        return bookingRepository.findById(id);
     }
 
     @Override
     public BookingResponse createBooking(BookingRequest request) {
         Optional<User> userOpt = userRepository.findByUsername(request.getUsername());
-        Optional<ParkingLot> parkingOpt = parkingLotRepository.findById(request.getIdParking());
-
-        if (userOpt.isPresent() && parkingOpt.isPresent() && parkingOpt.get().getStatus() == ParkingStatus.AVAILABLE) {
-            Booking booking = new Booking();
-            booking.setCreatedAt(LocalDateTime.now());
-            booking.setDate(LocalDate.now());
-            booking.setFee(FIXED_FEE);
-            booking.setUser(userOpt.get());
-            booking.setParking(parkingOpt.get());
-            booking.setPayment(null);
-
-            // Cập nhật trạng thái chỗ đậu xe
-            ParkingLot parking = parkingOpt.get();
-            parking.setStatus(ParkingStatus.RESERVED);
-            parkingLotRepository.save(parking);
-
-            Booking savedBooking = bookingRepository.save(booking);
-
-            return convertToDto(savedBooking);
+        if (userOpt.isEmpty()) {
+            System.out.println("User không tồn tại: " + request.getUsername());
+            return null;
         }
-        return null;
+
+        Optional<ParkingLot> parkingOpt = parkingLotRepository.findById(request.getIdParking());
+        if (parkingOpt.isEmpty()) {
+            System.out.println("Chỗ đậu xe không tồn tại: " + request.getIdParking());
+            return null;
+        }
+
+        ParkingLot parking = parkingOpt.get();
+
+        if (!ParkingStatus.AVAILABLE.equals(parking.getStatus())) {
+            System.out.println("Chỗ đậu xe không khả dụng: " + parking.getId());
+            return null;
+        }
+
+        // Tạo booking mới
+        Booking booking = new Booking();
+        booking.setCreatedAt(LocalDateTime.now());
+        booking.setDate(LocalDate.now());
+        booking.setFee(FIXED_FEE);
+        booking.setUser(userOpt.get());
+        booking.setParking(parking);
+        booking.setPayment(null);
+
+        // Cập nhật trạng thái chỗ đậu xe
+        parking.setStatus(ParkingStatus.RESERVED);
+        parkingLotRepository.save(parking);
+
+        Booking savedBooking = bookingRepository.save(booking);
+        return convertToDto(savedBooking);
     }
 
     @Override
