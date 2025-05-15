@@ -15,7 +15,6 @@ import com.example.project_mobile.api.ApiClient;
 import com.example.project_mobile.api.ApiService;
 import com.example.project_mobile.api.VietQRService;
 import com.example.project_mobile.dto.ConfirmPaymentRequest;
-import com.example.project_mobile.dto.PaymentRequest;
 import com.example.project_mobile.dto.SuccessResponse;
 import com.example.project_mobile.dto.VietQRResponse;
 import com.example.project_mobile.utils.LocalHelper;
@@ -39,13 +38,14 @@ public class QRPaymentActivity extends AppCompatActivity {
 
     private String transactionId;
     private double amount;
-    private ArrayList<Long> selectedSessionIds; // <-- Bổ sung nhận list id
+    private Long bookingId; // Chỉ có một bookingId
+    private ArrayList<Long> selectedSessionIds; // Có thể là nhiều session
 
     private ApiService apiService;
 
-    private static final String ACCOUNT_NUMBER = "0397405880"; // MB Bank
-    private static final String BANK_BIN = "970422"; // BIN MB
-    private static final String ACCOUNT_NAME = "VUONG LAP QUE"; // Thay bằng tên tài khoản thật
+    private static final String ACCOUNT_NUMBER = "0397405880";
+    private static final String BANK_BIN = "970422";
+    private static final String ACCOUNT_NAME = "VUONG LAP QUE";
     private static final String DESCRIPTION = "THANH TOAN PHI GUI XE";
 
     @Override
@@ -57,9 +57,9 @@ public class QRPaymentActivity extends AppCompatActivity {
         txtTransactionInfo = findViewById(R.id.txtTransactionInfo);
         btnConfirmTransfer = findViewById(R.id.btnConfirmTransfer);
 
-        // Nhận data từ PaymentActivity
         transactionId = getIntent().getStringExtra("transactionId");
         amount = getIntent().getDoubleExtra("amount", 0);
+        bookingId = getIntent().getLongExtra("bookingId", -1); // Mặc định -1 nếu không có bookingId
         selectedSessionIds = (ArrayList<Long>) getIntent().getSerializableExtra("selectedSessionIds");
 
         apiService = ApiClient.getInstance(this);
@@ -111,7 +111,18 @@ public class QRPaymentActivity extends AppCompatActivity {
     }
 
     private void confirmPayment() {
-        ConfirmPaymentRequest request = new ConfirmPaymentRequest(transactionId, selectedSessionIds);
+        String transactionId = getIntent().getStringExtra("transactionId");
+        boolean isFromBooking = getIntent().getBooleanExtra("isFromBooking", false);
+        Long bookingId = getIntent().getLongExtra("bookingId", -1);
+        ArrayList<Long> selectedSessionIds = (ArrayList<Long>) getIntent().getSerializableExtra("selectedSessionIds");
+
+        ConfirmPaymentRequest request;
+
+        if (isFromBooking) {
+            request = new ConfirmPaymentRequest(transactionId, bookingId, null);
+        } else {
+            request = new ConfirmPaymentRequest(transactionId, null, selectedSessionIds);
+        }
 
         apiService.confirmPayment(request).enqueue(new Callback<SuccessResponse>() {
             @Override
@@ -128,9 +139,10 @@ public class QRPaymentActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<SuccessResponse> call, Throwable t) {
-                Toast.makeText(QRPaymentActivity.this, "Lỗi mạng khi xác nhận!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(QRPaymentActivity.this, "Lỗi kết nối!", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
 
 }

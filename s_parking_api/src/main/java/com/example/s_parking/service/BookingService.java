@@ -37,4 +37,8 @@ public interface BookingService {
     List<Booking> getBookingsByIds(List<Long> ids);
 
     void saveAllBookings(List<Booking> bookings);
+    void updateBookingPayment(Long bookingId, Long paymentId);
+    void checkExpiredBookings();
+
+
 }
