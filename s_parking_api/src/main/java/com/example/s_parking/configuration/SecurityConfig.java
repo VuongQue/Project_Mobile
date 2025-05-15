@@ -43,7 +43,8 @@ public class SecurityConfig {
                                 "/parking-lots/available",
                                 "/parking-area/all",
                                 "img/all",
-                                "/payment/momo/notify"
+                                "/payment/momo/notify",
+                                "/payment/zalopay/notify"
                         ).permitAll()
                         .requestMatchers("/sessions/check-in-out").hasRole("ADMIN")
                         .anyRequest().authenticated()

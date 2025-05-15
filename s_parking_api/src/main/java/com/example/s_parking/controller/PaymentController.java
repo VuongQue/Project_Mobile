@@ -6,6 +6,8 @@ import com.example.s_parking.dto.response.PaymentResponse;
 import com.example.s_parking.dto.response.SuccessResponse;
 import com.example.s_parking.service.PaymentService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,9 @@ public class PaymentController {
     @Value("${momo.secretKey}")
     private String secretKey;
 
+    @Value("${zalopay.key2}")
+    private String zaloKey2;
+    private static final Logger logger = LoggerFactory.getLogger(PaymentController.class);
     /**
      * Tạo giao dịch qua Ngân hàng
      */
@@ -165,4 +170,47 @@ public class PaymentController {
 
         return sb.toString();
     }
+
+    @PostMapping("/zalopay/create-transaction")
+    public ResponseEntity<?> createZaloPayPayment(@RequestBody PaymentRequest request, Authentication authentication) {
+        try {
+            String username = authentication.getName();
+            PaymentResponse response = paymentService.createZaloPayPayment(request, username);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi ZaloPay: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/zalopay/notify")
+    public ResponseEntity<Map<String, Object>> notifyZaloPay(@RequestBody Map<String, Object> payload) {
+        try {
+            logger.info("ZaloPay Notify Payload: {}", payload);
+
+            String transactionId = (String) payload.get("transactionId");
+
+            if (transactionId == null || transactionId.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of(
+                        "return_code", -1,
+                        "return_message", "Transaction ID is missing"
+                ));
+            }
+
+            // Cập nhật trạng thái thanh toán thành công
+            paymentService.updatePaymentStatus(transactionId, "PAID");
+
+            return ResponseEntity.ok(Map.of(
+                    "return_code", 1,
+                    "return_message", "Notify success"
+            ));
+        } catch (Exception e) {
+            logger.error("Lỗi khi nhận notify ZaloPay", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                    "return_code", -1,
+                    "return_message", "Internal Server Error"
+            ));
+        }
+    }
+
+
 }

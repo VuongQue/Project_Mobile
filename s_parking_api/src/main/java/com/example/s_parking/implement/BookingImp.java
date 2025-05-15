@@ -138,7 +138,7 @@ public class BookingImp implements BookingService {
     /**
      * Kiểm tra và xoá các booking quá hạn 10 phút
      */
-    @Scheduled(cron = "0 * * * * *")  // Chạy mỗi phút
+    @Scheduled(cron = "0 * * * * *")
     public void checkExpiredBookings() {
         LocalDateTime expirationTime = LocalDateTime.now().minusMinutes(BOOKING_EXPIRATION_MINUTES);
         List<Booking> expiredBookings = bookingRepository.findByPaymentIsNullAndCreatedAtBefore(expirationTime);

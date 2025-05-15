@@ -50,6 +50,11 @@ dependencies {
     implementation(libs.logging.interceptor)
     implementation(libs.core)
     implementation(libs.zxing.android.embedded)
+    implementation(fileTree(mapOf(
+        "dir" to "D:\\VUONG_LAP_QUE\\Nam3\\HKII\\lapTrinhDiDong\\Project\\Project_Mobile\\s_parking_app\\app\\libs",
+        "include" to listOf("*.aar", "*.jar"),
+        "exclude" to listOf("")
+    )))
     testImplementation(libs.junit)
     implementation(libs.jbcrypt)
     implementation(libs.cloudinary.cloudinary.android)
@@ -62,5 +67,7 @@ dependencies {
     implementation (libs.core.v352)
     implementation (libs.zxing.android.embedded.v430)
     implementation("androidx.security:security-crypto:1.1.0-alpha06")
+
+
 
 }

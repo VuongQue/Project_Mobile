@@ -30,7 +30,9 @@ import org.springframework.stereotype.Service;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -62,6 +64,24 @@ public class PaymentImp implements PaymentService {
 
     @Value("${momo.redirectUrl}")
     private String redirectUrl;
+
+    @Value("${zalopay.appId}")
+    private int zaloAppId;
+
+    @Value("${zalopay.key1}")
+    private String zaloKey1;
+
+    @Value("${zalopay.key2}")
+    private String zaloKey2;
+
+    @Value("${zalopay.endpoint}")
+    private String zaloEndpoint;
+
+    @Value("${zalopay.redirectUrl}")
+    private String zaloRedirectUrl;
+
+    @Value("${zalopay.callbackUrl}")
+    private String zaloCallbackUrl;
 
     @Override
     public PaymentResponse createPayment(PaymentRequest request, String username) {
@@ -272,5 +292,111 @@ public class PaymentImp implements PaymentService {
 
     private String generateTransactionId() {
         return "TRANS_" + UUID.randomUUID().toString().replace("-", "").substring(0, 15).toUpperCase();
+    }
+
+    @Override
+    public PaymentResponse createZaloPayPayment(PaymentRequest request, String username) {
+        try {
+            String appUser = username;
+            String appTransId = generateZaloTransactionId(); // sinh mã chuẩn yyMMdd_xxxxxx
+            long amount = Long.parseLong(request.getAmount());
+
+            String embedDataString = "{}";
+            String item = "[]";
+
+            // Lấy thời gian hiện tại dạng timestamp milliseconds
+            long appTime = System.currentTimeMillis();
+
+            // Chuỗi raw data đúng chuẩn theo tài liệu ZaloPay
+            String rawData = zaloAppId + "|" + appTransId + "|" + appUser + "|" + amount + "|" + appTime + "|" + embedDataString + "|" + item;
+
+            // Tạo chữ ký (mac) với key1
+            String mac = generateZaloSignature(rawData, zaloKey1);
+
+            Map<String, Object> requestBody = new HashMap<>();
+            requestBody.put("app_id", zaloAppId);
+            requestBody.put("app_trans_id", appTransId);
+            requestBody.put("app_user", appUser);
+            requestBody.put("amount", amount);
+            requestBody.put("app_time", appTime);
+            requestBody.put("embed_data", embedDataString);
+            requestBody.put("item", item);
+            requestBody.put("description", "Thanh toán đơn hàng " + appTransId);
+            requestBody.put("bank_code", "zalopayapp");
+            requestBody.put("callback_url", zaloCallbackUrl);
+            requestBody.put("redirect_url", "myapp://payment_result");
+            requestBody.put("mac", mac);
+
+            ObjectMapper mapper = new ObjectMapper();
+            String jsonRequest = mapper.writeValueAsString(requestBody);
+
+            HttpPost post = new HttpPost(zaloEndpoint);
+            post.setHeader("Content-Type", "application/json");
+            post.setEntity(new StringEntity(jsonRequest, StandardCharsets.UTF_8));
+            logger.info("ZaloPay Request JSON: {}", jsonRequest);
+
+            try (CloseableHttpClient client = HttpClients.createDefault();
+                 CloseableHttpResponse response = client.execute(post)) {
+
+                String responseBody = EntityUtils.toString(response.getEntity());
+                logger.info("ZaloPay Response Body: {}", responseBody);
+
+                Map<String, Object> responseMap = mapper.readValue(responseBody, HashMap.class);
+
+                int returnCode = (int) responseMap.getOrDefault("return_code", -1);
+                String returnMessage = (String) responseMap.getOrDefault("return_message", "Error");
+
+                logger.info("ZaloPay return_code: {}, return_message: {}", returnCode, returnMessage);
+
+                if (returnCode != 1) {
+                    throw new RuntimeException("ZaloPay Error: " + returnMessage);
+                }
+
+                String orderUrl = (String) responseMap.get("order_url");
+                logger.info("Order URL: {}", orderUrl);
+
+                Payment payment = new Payment();
+                payment.setAmount(amount);
+                payment.setMethod("ZaloPay");
+                payment.setStatus(PaymentStatus.UNPAID);
+                payment.setTransactionId(appTransId);
+                payment.setCreatedAt(LocalDateTime.now());
+
+                paymentRepository.save(payment);
+
+                return PaymentResponse.builder()
+                        .transactionId(appTransId)
+                        .amount((double) amount)
+                        .method("ZaloPay")
+                        .status(PaymentStatus.UNPAID.toString())
+                        .createdAt(LocalDateTime.now())
+                        .payUrl(orderUrl)
+                        .build();
+            }
+        } catch (Exception e) {
+            logger.error("Error creating ZaloPay transaction", e);
+            throw new RuntimeException("Lỗi tạo đơn ZaloPay: " + e.getMessage(), e);
+        }
+    }
+
+    private String generateZaloTransactionId() {
+        String datePart = LocalDate.now().format(DateTimeFormatter.ofPattern("yyMMdd"));
+        String randomPart = UUID.randomUUID().toString().replace("-", "").substring(0, 6);
+        return datePart + "_" + randomPart;
+    }
+
+
+
+    private String generateZaloSignature(String data, String key) throws Exception {
+        Mac hmacSHA256 = Mac.getInstance("HmacSHA256");
+        SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+        hmacSHA256.init(secretKeySpec);
+        byte[] hash = hmacSHA256.doFinal(data.getBytes(StandardCharsets.UTF_8));
+
+        StringBuilder sb = new StringBuilder();
+        for (byte b : hash) {
+            sb.append(String.format("%02x", b));
+        }
+        return sb.toString();
     }
 }
