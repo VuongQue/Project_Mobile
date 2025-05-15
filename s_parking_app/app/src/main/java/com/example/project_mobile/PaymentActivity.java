@@ -35,6 +35,9 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import vn.zalopay.sdk.ZaloPayError;
+import vn.zalopay.sdk.ZaloPaySDK;
+import vn.zalopay.sdk.listeners.PayOrderListener;
 
 public class PaymentActivity extends AppCompatActivity {
 
@@ -57,7 +60,6 @@ public class PaymentActivity extends AppCompatActivity {
         binding = ActivityPaymentBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-
         apiService = ApiClient.getInstance(getApplicationContext());
 
         isFromBooking = getIntent().getBooleanExtra("isFromBooking", false);
@@ -73,12 +75,10 @@ public class PaymentActivity extends AppCompatActivity {
         }
     }
 
+    // Khi quay lại app, kiểm tra và gọi API confirm thanh toán nếu có transactionId lưu trong prefs
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("PaymentActivity", "onResume called");
-        Toast.makeText(this, "onResume called", Toast.LENGTH_SHORT).show();
-
         checkAndNotifyPaymentStatus();
     }
 
@@ -93,11 +93,9 @@ public class PaymentActivity extends AppCompatActivity {
             apiService.confirmZaloPayment(paymentRequest).enqueue(new Callback<PaymentResponse>() {
                 @Override
                 public void onResponse(Call<PaymentResponse> call, Response<PaymentResponse> response) {
-                    Log.d("PaymentActivity", "API confirmZaloPayment onResponse, success: " + response.isSuccessful());
                     if (response.isSuccessful()) {
                         Toast.makeText(PaymentActivity.this, "Cập nhật trạng thái thanh toán thành công", Toast.LENGTH_SHORT).show();
-                        // Xóa transactionId để tránh gọi lại nhiều lần
-                        prefs.edit().remove(KEY_TRANSACTION_ID).apply();
+                        prefs.edit().remove(KEY_TRANSACTION_ID).apply(); // Xóa để không gọi lại nhiều lần
                     } else {
                         Toast.makeText(PaymentActivity.this, "Cập nhật trạng thái thất bại", Toast.LENGTH_SHORT).show();
                     }
@@ -111,7 +109,6 @@ public class PaymentActivity extends AppCompatActivity {
         }
     }
 
-
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocalHelper.setLocale(newBase));
@@ -124,9 +121,7 @@ public class PaymentActivity extends AppCompatActivity {
             bookingAdapter = new BookingAdapter(this, bookingList);
             binding.recyclerView.setAdapter(bookingAdapter);
         } else {
-            sessionAdapter = new SessionSelectAdapter(sessionList, selectedSessions -> {
-                updateTotalAmount();
-            });
+            sessionAdapter = new SessionSelectAdapter(sessionList, selectedSessions -> updateTotalAmount());
             binding.recyclerView.setAdapter(sessionAdapter);
         }
     }
@@ -135,7 +130,7 @@ public class PaymentActivity extends AppCompatActivity {
         binding.btnBack.setOnClickListener(v -> finish());
 
         binding.cbAll.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (!isFromBooking) {
+            if (!isFromBooking && sessionAdapter != null) {
                 sessionAdapter.selectAll(isChecked);
             }
         });
@@ -199,10 +194,8 @@ public class PaymentActivity extends AppCompatActivity {
         });
     }
 
-
     private void updateTotalAmount() {
         totalAmount = 0;
-
         if (isFromBooking && !bookingList.isEmpty()) {
             totalAmount = bookingList.get(0).getFee();
         } else {
@@ -210,7 +203,6 @@ public class PaymentActivity extends AppCompatActivity {
                 totalAmount += session.getFee();
             }
         }
-
         binding.txtTotal.setText("Tổng tiền: " + (int) totalAmount + " đ");
     }
 
@@ -223,7 +215,7 @@ public class PaymentActivity extends AppCompatActivity {
 
         Button btnBankTransfer = dialog.findViewById(R.id.btnBankTransfer);
         Button btnMomo = dialog.findViewById(R.id.btnMomo);
-        Button btnZaloPay = dialog.findViewById(R.id.btnZaloPay);  // Thêm nút ZaloPay
+        Button btnZaloPay = dialog.findViewById(R.id.btnZaloPay);
 
         btnBankTransfer.setOnClickListener(v -> {
             dialog.dismiss();
@@ -242,7 +234,6 @@ public class PaymentActivity extends AppCompatActivity {
 
         dialog.show();
     }
-
 
     private void createBankPayment() {
         PaymentRequest paymentRequest = new PaymentRequest();
@@ -284,51 +275,94 @@ public class PaymentActivity extends AppCompatActivity {
         if (response.isSuccessful() && response.body() != null) {
             PaymentResponse paymentResponse = response.body();
 
-            Intent intent = new Intent(PaymentActivity.this, QRPaymentActivity.class);
-            intent.putExtra("transactionId", paymentResponse.getTransactionId());
-            intent.putExtra("amount", totalAmount);
+            Log.d("PaymentActivity", "Payment successful:");
+            Log.d("PaymentActivity", "TransactionId: " + paymentResponse.getTransactionId());
+            Log.d("PaymentActivity", "Method: " + paymentResponse.getMethod());
+            Log.d("PaymentActivity", "OrderToken: " + paymentResponse.getOrderToken());
+            Log.d("PaymentActivity", "PayUrl: " + paymentResponse.getPayUrl());
+
+            // Lưu transactionId để gọi API confirm khi quay lại app
             SharedPreferences prefs = getSharedPreferences(PREFS_PAYMENT, MODE_PRIVATE);
             prefs.edit().putString(KEY_TRANSACTION_ID, paymentResponse.getTransactionId()).apply();
-            if (isFromBooking) {
-                intent.putExtra("bookingId", bookingId);
-                intent.putExtra("isFromBooking", true);
-            } else {
-                ArrayList<Long> selectedSessionIds = new ArrayList<>();
-                for (SessionResponse session : sessionList) {
-                    selectedSessionIds.add(session.getId());
+
+            if (paymentResponse.getMethod().equalsIgnoreCase("ZaloPay")) {
+                if (paymentResponse.getOrderToken() != null && !paymentResponse.getOrderToken().isEmpty()) {
+                    Log.d("PaymentActivity", "Open ZaloPay SDK with order token");
+                    openZaloPayWithSDK(paymentResponse.getOrderToken());
+                } else if (paymentResponse.getPayUrl() != null && !paymentResponse.getPayUrl().isEmpty()) {
+                    Log.d("PaymentActivity", "Open ZaloPay app with payUrl");
+                    openZaloPayApp(paymentResponse.getPayUrl());
+                } else {
+                    Log.d("PaymentActivity", "No valid orderToken or payUrl found");
+                    Toast.makeText(this, "Không nhận được link thanh toán ZaloPay", Toast.LENGTH_SHORT).show();
                 }
-                intent.putExtra("selectedSessionIds", selectedSessionIds);
-                intent.putExtra("isFromBooking", false);
+            } else {
+                Log.d("PaymentActivity", "Open QRPaymentActivity for method: " + paymentResponse.getMethod());
+                Intent intent = new Intent(PaymentActivity.this, QRPaymentActivity.class);
+                intent.putExtra("transactionId", paymentResponse.getTransactionId());
+                intent.putExtra("amount", totalAmount);
+                if (isFromBooking) {
+                    intent.putExtra("bookingId", bookingId);
+                    intent.putExtra("isFromBooking", true);
+                } else {
+                    ArrayList<Long> selectedSessionIds = new ArrayList<>();
+                    for (SessionResponse session : sessionList) {
+                        selectedSessionIds.add(session.getId());
+                    }
+                    intent.putExtra("selectedSessionIds", selectedSessionIds);
+                    intent.putExtra("isFromBooking", false);
+                }
+                startActivity(intent);
             }
-
-            startActivity(intent);
+        } else {
+            Log.d("PaymentActivity", "Payment failed or response body is null");
+            Toast.makeText(this, "Thanh toán thất bại hoặc dữ liệu không hợp lệ", Toast.LENGTH_SHORT).show();
         }
     }
 
 
-    private void openMomoApp(String payUrl) {
+    // Mở app ZaloPay bằng SDK với orderToken
+    private void openZaloPayWithSDK(String orderToken) {
         try {
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(payUrl));
-            startActivity(intent);
+            ZaloPaySDK.getInstance().payOrder(this, orderToken, "", new PayOrderListener() {
+                @Override
+                public void onPaymentSucceeded(String transToken, String transId, String appTransId) {
+                    Toast.makeText(PaymentActivity.this, "Thanh toán thành công", Toast.LENGTH_SHORT).show();
+                    // Xử lý tiếp theo nếu cần
+                }
+
+                @Override
+                public void onPaymentCanceled(String transToken, String transId) {
+                    Toast.makeText(PaymentActivity.this, "Thanh toán bị hủy", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onPaymentError(ZaloPayError zaloPayError, String transToken, String transId) {
+                    Toast.makeText(PaymentActivity.this, "Lỗi thanh toán: " + zaloPayError.toString(), Toast.LENGTH_SHORT).show();
+                }
+            });
+
         } catch (Exception e) {
-            Toast.makeText(this, "MoMo chưa được cài đặt trên thiết bị", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Không thể mở ZaloPay SDK", Toast.LENGTH_SHORT).show();
         }
     }
-
     private void createZaloPayPayment() {
         PaymentRequest paymentRequest = new PaymentRequest();
         paymentRequest.setAmount(String.valueOf((int) totalAmount));
-        paymentRequest.setMethod("ZALOPAY");  // hoặc "ZALO_PAY", tùy backend bạn nhận thế nào
+        paymentRequest.setMethod("ZALOPAY"); // hoặc "ZALO_PAY"
 
         apiService.createZaloPayPayment(paymentRequest).enqueue(new Callback<PaymentResponse>() {
             @Override
             public void onResponse(Call<PaymentResponse> call, Response<PaymentResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     String payUrl = response.body().getPayUrl();
-                    if (payUrl != null && !payUrl.isEmpty()) {
+                    String orderToken = response.body().getOrderToken(); // nếu có
+                    if (orderToken != null && !orderToken.isEmpty()) {
+                        openZaloPayWithSDK(orderToken);
+                    } else if (payUrl != null && !payUrl.isEmpty()) {
                         openZaloPayApp(payUrl);
                     } else {
-                        Toast.makeText(PaymentActivity.this, "Không nhận được đường link thanh toán ZaloPay", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PaymentActivity.this, "Không nhận được link thanh toán ZaloPay", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(PaymentActivity.this, "Thanh toán ZaloPay thất bại", Toast.LENGTH_SHORT).show();
@@ -351,25 +385,5 @@ public class PaymentActivity extends AppCompatActivity {
         }
     }
 
-    private void sendZaloPayNotify(String transactionId) {
-        PaymentRequest paymentRequest = new PaymentRequest();
-        paymentRequest.setTransactionId(transactionId);
-
-        apiService.confirmZaloPayment(paymentRequest).enqueue(new Callback<PaymentResponse>() {
-            @Override
-            public void onResponse(Call<PaymentResponse> call, Response<PaymentResponse> response) {
-                if (response.isSuccessful()) {
-                    Toast.makeText(PaymentActivity.this, "Đã gửi notify tới server", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(PaymentActivity.this, "Lỗi khi gửi notify", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<PaymentResponse> call, Throwable t) {
-                Toast.makeText(PaymentActivity.this, "Lỗi kết nối khi gửi notify", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 
 }
