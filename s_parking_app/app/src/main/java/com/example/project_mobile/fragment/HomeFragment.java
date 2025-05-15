@@ -311,15 +311,15 @@ public class HomeFragment extends Fragment {
 
     private void configSliderView() {
         sliderAdapter = new SliderAdapter(requireContext(), imageList);
-        binding.imageSlider.setSliderAdapter(sliderAdapter);
+        binding.imageSliderMain.setSliderAdapter(sliderAdapter);
 
         // Cấu hình sliderView
-        binding.imageSlider.setIndicatorAnimation(IndicatorAnimationType.WORM);
-        binding.imageSlider.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_RIGHT);
-        binding.imageSlider.setIndicatorSelectedColor(getResources().getColor(R.color.red));
-        binding.imageSlider.setIndicatorUnselectedColor(Color.GRAY);
-        binding.imageSlider.startAutoCycle();
-        binding.imageSlider.setScrollTimeInSec(5);
+        binding.imageSliderMain.setIndicatorAnimation(IndicatorAnimationType.WORM);
+        binding.imageSliderMain.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_RIGHT);
+        binding.imageSliderMain.setIndicatorSelectedColor(getResources().getColor(R.color.red));
+        binding.imageSliderMain.setIndicatorUnselectedColor(Color.GRAY);
+        binding.imageSliderMain.startAutoCycle();
+        binding.imageSliderMain.setScrollTimeInSec(5);
     }
 
     private void navigateToLogin() {

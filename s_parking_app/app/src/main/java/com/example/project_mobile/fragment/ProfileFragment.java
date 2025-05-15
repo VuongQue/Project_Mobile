@@ -165,13 +165,67 @@ public class ProfileFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 100 && resultCode == RESULT_OK) {
-            LoadFromAPI();
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            selectedImageUri = data.getData();
+
+            // Sử dụng Glide để load ảnh vào ImageView
+            Glide.with(requireContext())
+                    .load(selectedImageUri)
+                    .into(selectedImageView);
+
+            Log.d("Image Selection", "Selected Image URI: " + selectedImageUri.toString());
+
+            uploadButton.setEnabled(true);
         }
     }
 
 
     // Tải ảnh lên Cloudinary
+    private void uploadImageToCloudinary() {
+        if (selectedImageUri == null) {
+            Toast.makeText(getContext(), "Vui lòng chọn ảnh!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        HashMap<String, Object> config = new HashMap<>();
+        config.put("cloud_name", "dbwzloucf");
+        config.put("api_key", "322178371811559");
+
+        MediaManager.init(getContext(), config);
+
+        MediaManager.get().upload(selectedImageUri)
+                .unsigned("mobile_project")
+                .callback(new UploadCallback() {
+                    @Override
+                    public void onStart(String requestId) {
+                        Log.d("UPLOAD", "Bắt đầu upload...");
+                    }
+
+                    @Override
+                    public void onProgress(String requestId, long bytes, long totalBytes) {
+                        // Có thể show tiến trình
+                    }
+
+                    @Override
+                    public void onSuccess(String requestId, Map resultData) {
+                        String avatarUrl = (String) resultData.get("secure_url");
+
+                        Log.d("UPLOAD", "Upload thành công: " + avatarUrl);
+                        sendToServer(avatarUrl);
+                    }
+
+                    @Override
+                    public void onError(String requestId, ErrorInfo error) {
+                        Log.d("UPLOAD", error.getDescription());
+                    }
+
+                    @Override
+                    public void onReschedule(String requestId, ErrorInfo error) {
+                        Log.e("UPLOAD", "Upload bị hoãn lại: " + error.getDescription());
+                    }
+                }).dispatch();
+        LoadFromAPI();
+        dialog.cancel();
+    }
 
 
     private void Load() {
@@ -180,52 +234,7 @@ public class ProfileFragment extends Fragment {
 
             if (userInfoResponse != null) {
                 Log.d("Load()", "License Plate: " + userInfoResponse.getLicensePlate());
-                Log.d("Load()", "Full Name: " + userprivate void uploadImageToCloudinary() {
-                    if (selectedImageUri == null) {
-                        Toast.makeText(getContext(), "Vui lòng chọn ảnh!", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    HashMap<String, Object> config = new HashMap<>();
-                    config.put("cloud_name", "dbwzloucf");
-                    config.put("api_key", "322178371811559");
-
-                    MediaManager.init(getContext(), config);
-
-                    MediaManager.get().upload(selectedImageUri)
-                            .unsigned("mobile_project")
-                            .callback(new UploadCallback() {
-                                @Override
-                                public void onStart(String requestId) {
-                                    Log.d("UPLOAD", "Bắt đầu upload...");
-                                }
-
-                                @Override
-                                public void onProgress(String requestId, long bytes, long totalBytes) {
-                                    // Có thể show tiến trình
-                                }
-
-                                @Override
-                                public void onSuccess(String requestId, Map resultData) {
-                                    String avatarUrl = (String) resultData.get("secure_url");
-
-                                    Log.d("UPLOAD", "Upload thành công: " + avatarUrl);
-                                    sendToServer(avatarUrl);
-                                }
-
-                                @Override
-                                public void onError(String requestId, ErrorInfo error) {
-                                    Log.d("UPLOAD", error.getDescription());
-                                }
-
-                                @Override
-                                public void onReschedule(String requestId, ErrorInfo error) {
-                                    Log.e("UPLOAD", "Upload bị hoãn lại: " + error.getDescription());
-                                }
-                            }).dispatch();
-                    LoadFromAPI();
-                    dialog.cancel();
-                }
-                InfoResponse.getFullName());
+                Log.d("Load()", "Full Name: " + userInfoResponse.getFullName());
 
                 binding.tvLicensePlate.setText(userInfoResponse.getLicensePlate());
                 binding.tvName.setText(userInfoResponse.getFullName());
