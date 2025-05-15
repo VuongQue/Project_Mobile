@@ -196,9 +196,20 @@ public class ParkingActivity extends AppCompatActivity {
                 ViewGroup.LayoutParams.WRAP_CONTENT
         );
 
-        // Lấy username từ SharedPreferences
-        String username = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE)
-                .getString("Username", "");
+        // Gán sự kiện click vào ô Date để chọn ngày
+        bookingBinding.etDate.setOnClickListener(v -> {
+            Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+            DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                    (view, selectedYear, selectedMonth, selectedDay) -> {
+                        String date = selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear;
+                        bookingBinding.etDate.setText(date);
+                    }, year, month, day);
+            datePickerDialog.show();
+        });
 
         // Xử lý sự kiện Đặt chỗ
         bookingBinding.btnPay.setOnClickListener(v -> {
@@ -209,25 +220,31 @@ public class ParkingActivity extends AppCompatActivity {
                 return;
             }
 
+            // Gọi API booking
+            String username = getSharedPreferences("LoginDetails", MODE_PRIVATE)
+                    .getString("Username", "");
+
             long idParking = parkingLotResponse.getId();
+
             ApiService apiService = ApiClient.getInstance(getApplicationContext());
+
             BookingRequest bookingRequest = new BookingRequest(idParking, username);
 
             apiService.createBooking(bookingRequest).enqueue(new Callback<BookingResponse>() {
                 @Override
                 public void onResponse(@NonNull Call<BookingResponse> call, @NonNull Response<BookingResponse> response) {
                     if (response.isSuccessful() && response.body() != null) {
-                        BookingResponse booking = response.body();
                         Toast.makeText(ParkingActivity.this, "Đặt chỗ thành công!", Toast.LENGTH_SHORT).show();
                         bookingDialog.dismiss();
 
                         // Chuyển sang màn hình thanh toán
                         Intent intent = new Intent(ParkingActivity.this, PaymentActivity.class);
-                        intent.putExtra("bookingId", booking.getId());
-                        intent.putExtra("fee", booking.getFee());
+                        intent.putExtra("bookingId", response.body().getId());
+                        intent.putExtra("fee", response.body().getFee());
+                        intent.putExtra("isFromBooking", true);
                         startActivity(intent);
                     } else {
-                        Toast.makeText(ParkingActivity.this, "Đặt chỗ thất bại!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ParkingActivity.this, "Đặt chỗ thất bại: " + response.code(), Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -238,9 +255,9 @@ public class ParkingActivity extends AppCompatActivity {
             });
         });
 
+        // Hiển thị Dialog
         bookingDialog.show();
     }
-
 
 
 

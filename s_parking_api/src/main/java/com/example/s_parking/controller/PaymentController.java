@@ -6,6 +6,7 @@ import com.example.s_parking.dto.response.PaymentResponse;
 import com.example.s_parking.dto.response.SuccessResponse;
 import com.example.s_parking.service.PaymentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -22,7 +23,8 @@ import java.util.Map;
 public class PaymentController {
 
     private final PaymentService paymentService;
-    private final String secretKey = "YOUR_SECRET_KEY";  // Thay bằng secretKey thực tế
+    @Value("${momo.secretKey}")
+    private String secretKey;
 
     /**
      * Tạo giao dịch qua Ngân hàng

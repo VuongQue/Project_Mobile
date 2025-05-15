@@ -3,11 +3,16 @@ package com.example.s_parking.implement;
 import com.example.s_parking.dto.request.ConfirmPaymentRequest;
 import com.example.s_parking.dto.request.PaymentRequest;
 import com.example.s_parking.dto.response.PaymentResponse;
+import com.example.s_parking.entity.Booking;
+import com.example.s_parking.entity.ParkingLot;
 import com.example.s_parking.entity.Payment;
 import com.example.s_parking.entity.Session;
+import com.example.s_parking.repository.BookingRepository;
+import com.example.s_parking.repository.ParkingLotRepository;
 import com.example.s_parking.repository.PaymentRepository;
 import com.example.s_parking.repository.SessionRepository;
 import com.example.s_parking.service.PaymentService;
+import com.example.s_parking.value.ParkingStatus;
 import com.example.s_parking.value.PaymentStatus;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +39,10 @@ public class PaymentImp implements PaymentService {
 
     private final PaymentRepository paymentRepository;
     private final SessionRepository sessionRepository;
+    private final BookingRepository bookingRepository;
+    private final ParkingLotRepository parkingLotRepository;
+
+
     private static final Logger logger = LoggerFactory.getLogger(PaymentImp.class);
 
     @Value("${momo.endpoint}")
@@ -161,6 +170,7 @@ public class PaymentImp implements PaymentService {
     @Override
     public String confirmPayment(ConfirmPaymentRequest request, String username) {
         Optional<Payment> optionalPayment = paymentRepository.findByTransactionId(request.getTransactionId());
+
         if (optionalPayment.isEmpty()) {
             throw new RuntimeException("Không tìm thấy giao dịch.");
         }
@@ -171,24 +181,59 @@ public class PaymentImp implements PaymentService {
             throw new RuntimeException("Giao dịch này đã được thanh toán trước đó.");
         }
 
-        List<Session> sessions = sessionRepository.findAllById(request.getSessionIds());
-        boolean isUserOwner = sessions.stream()
-                .allMatch(session -> session.getUser().getUsername().equals(username));
+        // Thanh toán cho Booking (chỉ 1 Booking)
+        if (request.getBookingId() != null) {
+            Optional<Booking> optionalBooking = bookingRepository.findById(request.getBookingId());
 
-        if (!isUserOwner) {
-            throw new RuntimeException("Bạn không có quyền xác nhận giao dịch.");
+            if (optionalBooking.isPresent()) {
+                Booking booking = optionalBooking.get();
+
+                // Kiểm tra thời gian hết hạn
+                LocalDateTime expiryTime = booking.getCreatedAt().plusMinutes(10);
+                if (LocalDateTime.now().isAfter(expiryTime)) {
+                    // Hủy booking và cập nhật lại chỗ đậu xe
+                    ParkingLot parkingLot = booking.getParking();
+                    if (parkingLot != null) {
+                        parkingLot.setStatus(ParkingStatus.AVAILABLE);
+                        parkingLotRepository.save(parkingLot);
+                    }
+                    bookingRepository.delete(booking);
+                    return "Booking đã quá thời hạn thanh toán và đã bị hủy!";
+                }
+
+                // Cập nhật payment
+                booking.setPayment(payment);
+                bookingRepository.save(booking);
+
+                // Cập nhật trạng thái chỗ đậu xe
+                ParkingLot parkingLot = booking.getParking();
+                if (parkingLot != null) {
+                    parkingLot.setStatus(ParkingStatus.RESERVED);
+                    parkingLotRepository.save(parkingLot);
+                }
+            } else {
+                throw new RuntimeException("Không tìm thấy booking.");
+            }
         }
 
-        for (Session session : sessions) {
-            session.setPayment(payment);
-        }
-        sessionRepository.saveAll(sessions);
+        // Thanh toán cho Session (nhiều Session)
+        if (request.getSessionIds() != null && !request.getSessionIds().isEmpty()) {
+            List<Session> sessions = sessionRepository.findAllById(request.getSessionIds());
 
+            for (Session session : sessions) {
+                session.setPayment(payment);
+            }
+            sessionRepository.saveAll(sessions);
+        }
+
+        // Cập nhật trạng thái payment
         payment.setStatus(PaymentStatus.PAID);
         paymentRepository.save(payment);
 
-        return "Đã xác nhận thanh toán thành công.";
+        return "Thanh toán thành công!";
     }
+
+
 
     @Override
     public String updatePaymentStatus(String transactionId, String status) {
