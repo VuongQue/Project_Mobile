@@ -104,7 +104,7 @@ public class BookingImp implements BookingService {
 
     @Override
     public Optional<Booking> findByUsernameAndDate(String username, LocalDate date) {
-        return Optional.empty();
+        return Optional.ofNullable(bookingRepository.findTopByUserUsernameAndDateOrderByCreatedAtDesc(username, date));
     }
 
     @Override
@@ -185,7 +185,7 @@ public class BookingImp implements BookingService {
 
     @Override
     public Booking getMyCurrentBooking(String username) {
-        return null;
+        return bookingRepository.findTopByUserUsernameOrderByCreatedAtDesc(username);
     }
 
     @Override

@@ -301,7 +301,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onMessage(NotificationResponse notificationResponse) {
                 requireActivity().runOnUiThread(() -> {
-                    Toast.makeText(getContext(), notificationResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(), notificationResponse.getMessage(), Toast.LENGTH_SHORT).show();
                 });
             }
         });

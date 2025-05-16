@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.*;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @RestController
 
@@ -114,6 +115,7 @@ public class SessionController {
         ResponseEntity<?> response;
 
         if (isCheckIn) {
+
             response = handleCheckIn(username, licensePlate, areaId, user);
             if (response.getStatusCode() == HttpStatus.NOT_ACCEPTABLE) {
                 return response;
@@ -155,6 +157,7 @@ public class SessionController {
             Booking booking = bookingOpt.get();
             session = new Session(null, LocalDateTime.now(), null, licensePlate, SessionType.RESERVED, 0,
                     booking.getUser(), booking.getParking(), booking.getPayment());
+            System.out.println("Yes");
         } else {
             Optional<ParkingLot> optionalSlot = parkingLotService.getSlotByAreaId(areaId);
             if (optionalSlot.isEmpty()) {
