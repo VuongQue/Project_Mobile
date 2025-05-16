@@ -28,6 +28,7 @@ import com.example.project_mobile.dto.PaymentRequest;
 import com.example.project_mobile.dto.PaymentResponse;
 import com.example.project_mobile.dto.SessionResponse;
 import com.example.project_mobile.dto.UsernameRequest;
+import com.example.project_mobile.storage.PreferenceManager;
 import com.example.project_mobile.utils.LocalHelper;
 
 import java.util.ArrayList;
@@ -45,6 +46,7 @@ public class PaymentActivity extends AppCompatActivity {
     private ActivityPaymentBinding binding;
     private BookingAdapter bookingAdapter;
     private SessionSelectAdapter sessionAdapter;
+    private PreferenceManager preferenceManager;
     private final List<BookingResponse> bookingList = new ArrayList<>();
     private final List<SessionResponse> sessionList = new ArrayList<>();
     private double totalAmount = 0.0;
@@ -65,6 +67,8 @@ public class PaymentActivity extends AppCompatActivity {
 
         isFromBooking = getIntent().getBooleanExtra("isFromBooking", false);
         bookingId = getIntent().getLongExtra("bookingId", -1);
+
+        preferenceManager = new PreferenceManager(getApplicationContext());
 
         setupRecyclerView();
         setupEvents();
@@ -155,7 +159,7 @@ public class PaymentActivity extends AppCompatActivity {
     }
 
     private void loadUnpaidSessions() {
-        String username = getSharedPreferences("LoginDetails", MODE_PRIVATE).getString("Username", "");
+        String username = preferenceManager.getUsername();
         UsernameRequest request = new UsernameRequest(username);
 
         apiService.getUnpaidSessions(request).enqueue(new Callback<List<SessionResponse>>() {

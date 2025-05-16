@@ -17,6 +17,7 @@ import com.example.project_mobile.api.ApiService;
 import com.example.project_mobile.databinding.ActivityBookingHistoryBinding;
 import com.example.project_mobile.dto.BookingResponse;
 import com.example.project_mobile.dto.UsernameRequest;
+import com.example.project_mobile.storage.PreferenceManager;
 import com.example.project_mobile.utils.LocalHelper;
 
 import java.util.ArrayList;
@@ -32,11 +33,13 @@ public class BookingHistoryActivity extends AppCompatActivity {
     BookingAdapter adapter;
     List<BookingResponse> bookingResponseList;
     String username;
+    PreferenceManager preferenceManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        username = getSharedPreferences("LoginDetails", MODE_PRIVATE).getString("Username", "");
+        preferenceManager = new PreferenceManager(getApplicationContext());
+        username = preferenceManager.getUsername();
         binding = ActivityBookingHistoryBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 

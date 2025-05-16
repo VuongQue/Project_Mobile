@@ -20,6 +20,7 @@ import com.example.project_mobile.api.ApiService;
 import com.example.project_mobile.databinding.ActivityHistoryBinding;
 import com.example.project_mobile.dto.UsernameRequest;
 import com.example.project_mobile.dto.SessionResponse;
+import com.example.project_mobile.storage.PreferenceManager;
 import com.example.project_mobile.utils.LocalHelper;
 
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ import retrofit2.Response;
 public class HistoryActivity extends AppCompatActivity {
     private SessionAdapter adapter;
     private List<SessionResponse> sessionResponseList;
+    PreferenceManager preferenceManager;
     ActivityHistoryBinding binding;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,8 @@ public class HistoryActivity extends AppCompatActivity {
         });
         binding = ActivityHistoryBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        preferenceManager = new PreferenceManager(getApplicationContext());
 
         Load();
         SwitchActivity();
@@ -79,7 +83,7 @@ public class HistoryActivity extends AppCompatActivity {
         binding.recyclerView.setAdapter(adapter);
 
         ApiService apiService = ApiClient.getInstance(getApplicationContext());
-        String username = getSharedPreferences("LoginDetails", MODE_PRIVATE).getString("Username", "");
+        String username = preferenceManager.getUsername();
         apiService.getSession(new UsernameRequest(username)).enqueue(new Callback<List<SessionResponse>>() {
             @Override
             public void onResponse(Call<List<SessionResponse>> call, Response<List<SessionResponse>> response) {

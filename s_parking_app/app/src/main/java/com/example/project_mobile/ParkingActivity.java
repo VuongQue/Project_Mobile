@@ -31,6 +31,7 @@ import com.example.project_mobile.databinding.DialogBookingBinding;
 import com.example.project_mobile.dto.BookingRequest;
 import com.example.project_mobile.dto.BookingResponse;
 import com.example.project_mobile.dto.ParkingLotResponse;
+import com.example.project_mobile.storage.PreferenceManager;
 import com.example.project_mobile.utils.LocalHelper;
 
 import java.util.ArrayList;
@@ -48,6 +49,7 @@ public class ParkingActivity extends AppCompatActivity {
     private ArrayAdapter<String> areaAdapter, rowAdapter, posAdapter;
     private List<String> areaList, rowList, posList;
 
+    PreferenceManager preferenceManager;
     ActivityParkingBinding binding;
     private List<ParkingLotResponse> parkingLotResponseList;
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,8 @@ public class ParkingActivity extends AppCompatActivity {
 
         binding = ActivityParkingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        preferenceManager = new PreferenceManager(getApplicationContext());
 
         SwitchActivity();
         Load();
@@ -221,8 +225,7 @@ public class ParkingActivity extends AppCompatActivity {
             }
 
             // Gọi API booking
-            String username = getSharedPreferences("LoginDetails", MODE_PRIVATE)
-                    .getString("Username", "");
+            String username = preferenceManager.getUsername();
 
             long idParking = parkingLotResponse.getId();
 

@@ -131,7 +131,7 @@ public class ProfileFragment extends Fragment {
         LoadFromAPI();
     }
     private void sendToServer(String url) {
-        String username = requireActivity().getSharedPreferences("LoginDetails", MODE_PRIVATE).getString("Username", "");
+        String username = preferenceManager.getUsername();
         ApiService apiService = ApiClient.getInstance(getContext());
         UpdateAvatarRequest request = new UpdateAvatarRequest(username, url);
         apiService.updateAvatar(request).enqueue(new Callback<>() {

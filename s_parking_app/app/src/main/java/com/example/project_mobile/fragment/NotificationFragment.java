@@ -23,6 +23,7 @@ import com.example.project_mobile.dto.NotificationRequest;
 import com.example.project_mobile.dto.NotificationResponse;
 import com.example.project_mobile.dto.SuccessResponse;
 import com.example.project_mobile.dto.UsernameRequest;
+import com.example.project_mobile.storage.PreferenceManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,11 +41,14 @@ public class NotificationFragment extends Fragment {
     private String username;
     private boolean isGuest;
 
+    PreferenceManager preferenceManager;
+
     public NotificationFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        preferenceManager = new PreferenceManager(requireContext());
         isGuest = GuestManager.isGuest(requireContext());
     }
 
@@ -65,7 +69,7 @@ public class NotificationFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        username = requireActivity().getSharedPreferences("LoginDetails", MODE_PRIVATE).getString("Username", "");
+        username = preferenceManager.getUsername();
         notificationList = new ArrayList<>();
 
         adapter = new NotificationAdapter(getContext(), notificationList, new NotificationAdapter.OnItemClickListener() {

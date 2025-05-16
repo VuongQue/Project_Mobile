@@ -156,7 +156,7 @@ public class HomeFragment extends Fragment {
         Dialog qrDialog = new Dialog(requireContext());
         qrDialog.setContentView(R.layout.dialog_qr_code);
 
-        String textToEncode = requireActivity().getSharedPreferences("LoginDetails", MODE_PRIVATE).getString("Username", "");
+        String textToEncode = preferenceManager.getUsername();
         try {
             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
             Bitmap bitmap = barcodeEncoder.encodeBitmap(textToEncode, com.google.zxing.BarcodeFormat.QR_CODE, 400, 400);
@@ -261,7 +261,7 @@ public class HomeFragment extends Fragment {
         }
     }
     private void loadCurrentSession() {
-        String username = requireActivity().getSharedPreferences("LoginDetails", MODE_PRIVATE).getString("Username", "");
+        String username = preferenceManager.getUsername();
         ApiService apiService = ApiClient.getInstance(getContext());
         apiService.getMyCurrentSession(new UsernameRequest(username)).enqueue(new Callback<MyCurrentSessionResponse>() {
             @Override
