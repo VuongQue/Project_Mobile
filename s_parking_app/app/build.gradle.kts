@@ -51,9 +51,8 @@ dependencies {
     implementation(libs.core)
     implementation(libs.zxing.android.embedded)
     implementation(fileTree(mapOf(
-        "dir" to "D:\\VUONG_LAP_QUE\\Nam3\\HKII\\lapTrinhDiDong\\Project\\Project_Mobile\\s_parking_app\\app\\libs",
-        "include" to listOf("*.aar", "*.jar"),
-        "exclude" to listOf("")
+        "dir" to "${project.rootDir}/app/libs",
+        "include" to listOf("*.aar", "*.jar")
     )))
     testImplementation(libs.junit)
     implementation(libs.jbcrypt)

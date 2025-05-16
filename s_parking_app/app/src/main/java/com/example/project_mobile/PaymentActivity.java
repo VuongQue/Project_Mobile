@@ -78,8 +78,11 @@ public class PaymentActivity extends AppCompatActivity {
 
     // Khi quay lại app, kiểm tra và gọi API confirm thanh toán nếu có transactionId lưu trong prefs
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        ZaloPaySDK.getInstance().onResult(intent);
+
+        // Kiểm tra và xác nhận thanh toán khi quay về
         checkAndNotifyPaymentStatus();
     }
 
@@ -325,23 +328,47 @@ public class PaymentActivity extends AppCompatActivity {
     // Mở app ZaloPay bằng SDK với orderToken
     private void openZaloPayWithSDK(String orderToken) {
         try {
-            ZaloPaySDK.getInstance().payOrder(this, orderToken, "", new PayOrderListener() {
+            ZaloPaySDK.getInstance().payOrder(this, orderToken, "myapp://payment_result", new PayOrderListener() {
                 @Override
-                public void onPaymentSucceeded(String transToken, String transId, String appTransId) {
-                    Toast.makeText(PaymentActivity.this, "Thanh toán thành công", Toast.LENGTH_SHORT).show();
-                    // Xử lý tiếp theo nếu cần
+                public void onPaymentSucceeded(final String transToken, final String transId, final String appTransId) {
+                    Log.d("ZaloPay", "onPaymentSucceeded called - transToken: " + transToken + ", transId: " + transId + ", appTransId: " + appTransId);
+                    runOnUiThread(() -> {
+                        Toast.makeText(PaymentActivity.this, "Thanh toán thành công", Toast.LENGTH_LONG).show();
+                    });
+
+                    // Gọi API confirm thanh toán
+                    PaymentRequest confirmRequest = new PaymentRequest();
+                    confirmRequest.setTransactionId(appTransId);
+                    apiService.confirmZaloPayment(confirmRequest).enqueue(new Callback<PaymentResponse>() {
+                        @Override
+                        public void onResponse(Call<PaymentResponse> call, Response<PaymentResponse> response) {
+                            if (response.isSuccessful()) {
+                                Log.d("PaymentActivity", "Xác nhận thanh toán thành công");
+                            } else {
+                                Log.d("PaymentActivity", "Xác nhận thanh toán thất bại");
+                            }
+                        }
+                        @Override
+                        public void onFailure(Call<PaymentResponse> call, Throwable t) {
+                            Log.d("PaymentActivity", "Lỗi xác nhận thanh toán: " + t.getMessage());
+                        }
+                    });
                 }
+
 
                 @Override
                 public void onPaymentCanceled(String transToken, String transId) {
-                    Toast.makeText(PaymentActivity.this, "Thanh toán bị hủy", Toast.LENGTH_SHORT).show();
+                    Log.d("ZaloPay", "onPaymentCanceled called - transToken: " + transToken + ", transId: " + transId);
+                    runOnUiThread(() -> Toast.makeText(PaymentActivity.this, "Thanh toán bị hủy", Toast.LENGTH_SHORT).show());
                 }
 
                 @Override
                 public void onPaymentError(ZaloPayError zaloPayError, String transToken, String transId) {
-                    Toast.makeText(PaymentActivity.this, "Lỗi thanh toán: " + zaloPayError.toString(), Toast.LENGTH_SHORT).show();
+                    Log.d("ZaloPay", "onPaymentError called - error: " + zaloPayError + ", transToken: " + transToken + ", transId: " + transId);
+                    runOnUiThread(() -> Toast.makeText(PaymentActivity.this, "Lỗi thanh toán: " + zaloPayError.toString(), Toast.LENGTH_SHORT).show());
                 }
             });
+
 
         } catch (Exception e) {
             Toast.makeText(this, "Không thể mở ZaloPay SDK", Toast.LENGTH_SHORT).show();
@@ -361,7 +388,7 @@ public class PaymentActivity extends AppCompatActivity {
                     if (orderToken != null && !orderToken.isEmpty()) {
                         openZaloPayWithSDK(orderToken);
                     } else if (payUrl != null && !payUrl.isEmpty()) {
-                        openZaloPayApp(payUrl);
+//                        openZaloPayApp(payUrl);
                     } else {
                         Toast.makeText(PaymentActivity.this, "Không nhận được link thanh toán ZaloPay", Toast.LENGTH_SHORT).show();
                     }

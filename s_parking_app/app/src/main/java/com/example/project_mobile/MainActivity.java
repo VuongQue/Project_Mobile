@@ -26,6 +26,9 @@ import com.example.project_mobile.storage.PreferenceManager;
 import com.example.project_mobile.utils.LocalHelper;
 import com.example.project_mobile.utils.SetUp;
 
+import vn.zalopay.sdk.Environment;
+import vn.zalopay.sdk.ZaloPaySDK;
+
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
@@ -37,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ZaloPaySDK.init(554, Environment.SANDBOX);
+
 
         // Khởi tạo các view và binding
         binding = ActivityMainBinding.inflate(getLayoutInflater());
