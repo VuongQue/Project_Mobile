@@ -40,7 +40,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <!-- Thay YOUR_APP_SCHEME bằng scheme của bạn đã đăng ký với ZaloPay -->
                 <data android:scheme="myapp" android:host="payment_result" />
             </intent-filter>
         </activity>
@@ -51,5 +50,7 @@
         <activity android:name=".ForgotPasswordActivity"/>
         <activity android:name=".ResetPasswordActivity"/>
     </application>
+
+
 
 </manifest>

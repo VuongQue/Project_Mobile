@@ -36,8 +36,8 @@ public class WebSocketManager<T> {
     }
 
     public void connect(OnMessageCallback<T> callback) {
-        String url = "ws://10.0.2.2:8080/ws-parking/websocket";
-//        String url = "ws://192.168.1.102:8080/ws-parking/websocket";
+//        String url = "ws://10.0.2.2:8080/ws-parking/websocket";
+        String url = "ws://192.168.43.165:8080/ws-parking/websocket";
 
         if (stompClient != null && stompClient.isConnected()) {
             Log.d("WebSocket", "Đã kết nối rồi, không reconnect.");

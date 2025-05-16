@@ -353,6 +353,7 @@ public class PaymentImp implements PaymentService {
                 }
 
                 String orderUrl = (String) responseMap.get("order_url");
+                String orderToken = (String) responseMap.get("order_token");
                 logger.info("Order URL: {}", orderUrl);
 
                 Payment payment = new Payment();
@@ -364,6 +365,8 @@ public class PaymentImp implements PaymentService {
 
                 paymentRepository.save(payment);
 
+
+
                 return PaymentResponse.builder()
                         .transactionId(appTransId)
                         .amount((double) amount)
@@ -371,6 +374,7 @@ public class PaymentImp implements PaymentService {
                         .status(PaymentStatus.UNPAID.toString())
                         .createdAt(LocalDateTime.now())
                         .payUrl(orderUrl)
+                        .orderToken(orderToken)
                         .build();
             }
         } catch (Exception e) {

@@ -1,6 +1,5 @@
 package com.example.s_parking.dto.response;
 
-import com.example.s_parking.value.PaymentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +17,8 @@ public class PaymentResponse {
     private String method;
     private String status;
     private LocalDateTime createdAt;
-    private String payUrl;  // Đường dẫn thanh toán MoMo
+    private String payUrl;      // Đường dẫn thanh toán MoMo hoặc ZaloPay
+    private String orderToken;  // Token để gọi ZaloPay SDK
 
     public PaymentResponse(String transactionId) {
         this.transactionId = transactionId;
