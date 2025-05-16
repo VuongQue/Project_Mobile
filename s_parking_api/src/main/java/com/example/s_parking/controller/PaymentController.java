@@ -183,10 +183,8 @@ public class PaymentController {
     }
 
     @PostMapping("/zalopay/notify")
-    public ResponseEntity<Map<String, Object>> notifyZaloPay(@RequestBody Map<String, Object> payload) {
+    public ResponseEntity<Map<String, Object>> notifyZaloPay(@RequestBody Map<String, Object> payload, Authentication authentication) {
         try {
-            logger.info("ZaloPay Notify Payload: {}", payload);
-
             String transactionId = (String) payload.get("transactionId");
 
             if (transactionId == null || transactionId.isEmpty()) {
@@ -196,8 +194,14 @@ public class PaymentController {
                 ));
             }
 
-            // Cập nhật trạng thái thanh toán thành công
-            paymentService.updatePaymentStatus(transactionId, "PAID");
+            String username = (authentication != null) ? authentication.getName() : null;
+            logger.info("Authentication username: {}", username);
+            logger.info("TranId : {}", transactionId);
+            ConfirmPaymentRequest confirmRequest = new ConfirmPaymentRequest();
+            confirmRequest.setTransactionId(transactionId);
+
+
+            paymentService.confirmPayment(confirmRequest, username);
 
             return ResponseEntity.ok(Map.of(
                     "return_code", 1,
@@ -211,6 +215,7 @@ public class PaymentController {
             ));
         }
     }
+
 
 
 }
