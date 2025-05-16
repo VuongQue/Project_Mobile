@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -108,13 +109,30 @@ public class BookingImp implements BookingService {
 
     @Override
     public List<Booking> getBookingByUserUsername(String username) {
-        return List.of();
+        return bookingRepository.getBookingsByUserUsername(username);
     }
 
     @Override
     public List<BookingResponse> convertAllToDto(List<Booking> bookingList) {
-        return List.of();
+        if (bookingList == null || bookingList.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return bookingList.stream()
+                .map(booking -> {
+                    BookingResponse dto = new BookingResponse();
+                    dto.setId(booking.getId());
+                    dto.setCreatedAt(booking.getCreatedAt());
+                    dto.setDate(booking.getDate());
+                    dto.setFee(booking.getFee());
+                    dto.setIdParking(booking.getParking().getId());
+                    dto.setUsername(booking.getUser().getUsername());
+                    dto.setIdPayment(booking.getPayment().getId());
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
+
 
     @Override
     public void updateBookingPayment(Long bookingId, Long paymentId) {

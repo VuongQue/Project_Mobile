@@ -39,6 +39,8 @@ public class BookingController {
         List<Booking> bookingList = bookingService.getBookingByUserUsername(username);
         List<BookingResponse> bookingResponseList = bookingService.convertAllToDto(bookingList);
 
+        System.out.println("bookingResponseList: " + bookingList.size());
+
         if (bookingResponseList == null || bookingResponseList.isEmpty()) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)

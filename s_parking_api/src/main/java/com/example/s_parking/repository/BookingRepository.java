@@ -21,6 +21,8 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     Booking findTopByUserOrderByCreatedAtDesc(User user);
 
+    List<Booking> getBookingsByUserUsername(String username);
+
     List<Booking> findByUserAndPaymentIsNull(User user);
     @Query("SELECT b FROM Booking b WHERE b.payment IS NULL AND b.createdAt < :expirationTime")
     List<Booking> findByPaymentIsNullAndCreatedAtBefore(@Param("expirationTime") LocalDateTime expirationTime);
