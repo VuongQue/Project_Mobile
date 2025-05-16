@@ -3,6 +3,7 @@ package com.example.s_parking.service;
 import com.example.s_parking.dto.request.BookingRequest;
 import com.example.s_parking.dto.response.BookingResponse;
 import com.example.s_parking.entity.Booking;
+import com.example.s_parking.entity.Payment;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -37,7 +38,7 @@ public interface BookingService {
     List<Booking> getBookingsByIds(List<Long> ids);
 
     void saveAllBookings(List<Booking> bookings);
-    void updateBookingPayment(Long bookingId, Long paymentId);
+    void updateBookingPayment(Long bookingId, Payment payment);
     void checkExpiredBookings();
 
 

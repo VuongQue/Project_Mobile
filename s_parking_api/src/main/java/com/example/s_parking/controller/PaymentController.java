@@ -4,10 +4,16 @@ import com.example.s_parking.dto.request.ConfirmPaymentRequest;
 import com.example.s_parking.dto.request.PaymentRequest;
 import com.example.s_parking.dto.response.PaymentResponse;
 import com.example.s_parking.dto.response.SuccessResponse;
+import com.example.s_parking.entity.Booking;
+import com.example.s_parking.entity.Payment;
+import com.example.s_parking.entity.Session;
+import com.example.s_parking.service.BookingService;
 import com.example.s_parking.service.PaymentService;
+import com.example.s_parking.service.SessionService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -31,6 +38,12 @@ public class PaymentController {
     @Value("${zalopay.key2}")
     private String zaloKey2;
     private static final Logger logger = LoggerFactory.getLogger(PaymentController.class);
+
+    @Autowired
+    SessionService sessionService;
+
+    @Autowired
+    BookingService bookingService;
     /**
      * Tạo giao dịch qua Ngân hàng
      */
@@ -200,8 +213,19 @@ public class PaymentController {
             ConfirmPaymentRequest confirmRequest = new ConfirmPaymentRequest();
             confirmRequest.setTransactionId(transactionId);
 
+            List<Session> unpaidSessions = sessionService.getUnpaidSessions(username);
+            Booking booking = bookingService.getMyCurrentBooking(username);
 
             paymentService.confirmPayment(confirmRequest, username);
+
+            Payment payment = paymentService.getPaymentByTransactionId(transactionId);
+
+            if (!unpaidSessions.isEmpty()) {
+                sessionService.updateSessionIdPayment(unpaidSessions, payment);
+            }
+            if (booking != null) {
+                bookingService.updateBookingPayment(booking.getId(), payment);
+            }
 
             return ResponseEntity.ok(Map.of(
                     "return_code", 1,

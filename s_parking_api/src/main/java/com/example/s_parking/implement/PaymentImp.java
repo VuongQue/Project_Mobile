@@ -403,4 +403,9 @@ public class PaymentImp implements PaymentService {
         }
         return sb.toString();
     }
+
+    @Override
+    public Payment getPaymentByTransactionId(String transactionId) {
+        return paymentRepository.findByTransactionId(transactionId).get();
+    }
 }

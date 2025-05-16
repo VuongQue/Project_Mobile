@@ -2,6 +2,7 @@ package com.example.s_parking.service;
 
 import com.example.s_parking.dto.response.MyCurrentSessionResponse;
 import com.example.s_parking.dto.response.SessionResponse;
+import com.example.s_parking.entity.Payment;
 import com.example.s_parking.entity.Session;
 
 import java.util.List;
@@ -13,6 +14,7 @@ public interface SessionService {
     Session createSession(Session session);
     Session updateSession(Session session);
     void deleteSession(Long id);
+    void updateSessionIdPayment(List<Session> sessions, Payment payment);
 
     List<Session> getSessionByUsername(String username);
 

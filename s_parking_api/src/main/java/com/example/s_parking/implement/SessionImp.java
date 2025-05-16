@@ -2,6 +2,7 @@ package com.example.s_parking.implement;
 
 import com.example.s_parking.dto.response.MyCurrentSessionResponse;
 import com.example.s_parking.dto.response.SessionResponse;
+import com.example.s_parking.entity.Payment;
 import com.example.s_parking.entity.Session;
 import com.example.s_parking.repository.SessionRepository;
 import com.example.s_parking.service.SessionService;
@@ -50,6 +51,22 @@ public class SessionImp implements SessionService {
     public void deleteSession(Long id) {
         sessionRepository.deleteById(id);
     }
+
+    @Override
+    public void updateSessionIdPayment(List<Session> sessions, Payment payment) {
+        if (sessions == null || sessions.isEmpty()) {
+            return; // Không có session nào cần cập nhật
+        }
+
+        // Cập nhật trường idPayment cho từng session
+        for (Session session : sessions) {
+            session.setPayment(payment);
+        }
+
+        // Lưu danh sách session đã cập nhật
+        sessionRepository.saveAll(sessions);
+    }
+
 
     @Override
     public List<Session> getSessionByUsername(String username) {

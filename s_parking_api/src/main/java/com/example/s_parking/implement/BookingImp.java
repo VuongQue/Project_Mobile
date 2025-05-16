@@ -135,23 +135,16 @@ public class BookingImp implements BookingService {
 
 
     @Override
-    public void updateBookingPayment(Long bookingId, Long paymentId) {
-        Optional<Booking> bookingOpt = bookingRepository.findById(bookingId);
-        Optional<Payment> paymentOpt = paymentRepository.findById(paymentId);
-
-        if (bookingOpt.isPresent() && paymentOpt.isPresent()) {
-            Booking booking = bookingOpt.get();
-            booking.setPayment(paymentOpt.get());
-
-            ParkingLot parkingLot = booking.getParking();
-            if (parkingLot != null) {
-                parkingLot.setStatus(ParkingStatus.RESERVED);
-                parkingLotRepository.save(parkingLot);
-            }
+    public void updateBookingPayment(Long bookingId, Payment payment) {
+        Optional<Booking> bookingOptional = bookingRepository.findById(bookingId);
+        if (bookingOptional.isPresent()) {
+            Booking booking = bookingOptional.get();
+            booking.setPayment(payment); // Giả sử Booking lưu idPayment
 
             bookingRepository.save(booking);
         }
     }
+
 
     /**
      * Kiểm tra và xoá các booking quá hạn 10 phút
